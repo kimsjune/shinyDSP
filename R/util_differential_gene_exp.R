@@ -1,0 +1,141 @@
+design <- shiny::reactive({
+    shiny::req(input$selectedNorm)
+    spe <- eval(parse(text = input$selectedNorm))
+
+
+
+
+    li <- list()
+    li[[1]] <- "~0"
+    li[[2]] <- "Type"
+    li[[3]] <- input$selectedBatch
+
+    if (input$selectedNorm == "speRUV()") {
+        for (i in seq_along(input$k)) {
+            li[[i + 3]] <- paste0("ruv_W", i)
+        }
+    }
+
+    formula <- gsub(" ", " + ", paste(li, collapse = " "))
+    design <- stats::model.matrix(eval(parse(text = formula)),
+                           data = SummarizedExperiment::colData(spe))
+    colnames(design) <- gsub("Type", "", colnames(design))
+    colnames(design) <- gsub(input$selectedBatch, "", colnames(design))
+
+    colnames(design) <- gsub(" ", "_", colnames(design))
+
+
+    return(design)
+})
+
+dge <- shiny::eventReactive(design(), {
+
+    shiny::withProgress(message = "Creating a DGEList object...",{
+    spe <- eval(parse(text = input$selectedNorm))
+
+    dge <- edgeR::SE2DGEList(spe)
+
+    shiny::incProgress(1/4)
+
+    keep <- edgeR::filterByExpr(dge, design())
+
+
+    dge <- dge[keep, , keep.lib.sizes = FALSE]
+    shiny::incProgress(2/4)
+
+
+    dge <- edgeR::estimateDisp(dge, design = design(), robust = TRUE)
+    shiny::incProgress(3/4)
+    })
+    return(dge)
+})
+
+efit <- shiny::eventReactive(dge(), {
+    shiny::req(input$selectedBatch, contrast())
+
+    shiny::withProgress(message = "Performing differential gene expression analysis...", {
+
+    spe <- eval(parse(text = input$selectedNorm))
+
+    block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
+
+    v <- limma::voom(dge(), design())
+    corfit <- limma::duplicateCorrelation(v, design(), block = block_by)
+
+    shiny::incProgress(1/5)
+
+    v2 <- limma::voom(dge(), design(), block = block_by, correlation = corfit$consensus)
+    corfit2 <- limma::duplicateCorrelation(v, design(), block = block_by)
+
+    shiny::incProgress(2/5)
+
+    fit <- limma::lmFit(v, design(), block = block_by, correlation = corfit2$consensus)
+
+    shiny::incProgress(3/5)
+
+    fit_contrast <- limma::contrasts.fit(fit, contrasts = contrast())
+    efit <- limma::eBayes(fit_contrast, robust = TRUE)
+
+    shiny::incProgress(4/5)
+    })
+
+
+    return(efit)
+})
+
+
+
+contrast <- shiny::eventReactive(design(), {
+    # replace space with _
+    selectedTypes_underscore <- gsub(" ", "_", input$selectedTypes)
+
+
+    comparisons <- list()
+
+    # Find the total number of combinations and iterate through
+    # careful!
+    # for (i in 1:(choose(length(selectedTypes_underscore), 2))) {
+    #     comparisons[i] <-
+    #
+    #         # Mathematical description
+    #     # this will suffice
+    #     noquote(
+    #         paste0(
+    #             combn(selectedTypes_underscore, 2, simplify = F)[[i]][1],
+    #             "-",
+    #             combn(selectedTypes_underscore, 2, simplify = F)[[i]][2]
+    #         )
+    #     )
+    # }
+    comparisons <- lapply(seq_len(choose(length(selectedTypes_underscore),2)),
+                          function(i){
+                                  noquote(
+                                      paste0(
+                                          combn(selectedTypes_underscore, 2, simplify = FALSE)[[i]][1],
+                                          "-",
+                                          combn(selectedTypes_underscore, 2, simplify = FALSE)[[i]][2]
+                                      )
+                                  )
+                          })
+
+    con <- limma::makeContrasts(
+        # Must use as.character()
+        contrasts = as.character(unlist(comparisons)),
+        levels = colnames(design())
+    )
+
+    colnames(con) <- sub("-", "_vs_", colnames(con))
+
+    return(con)
+})
+
+
+# efit <- shiny::eventReactive(contrast(), {
+#     fit_contrast <- limma::contrasts.fit(fit(), contrasts = contrast())
+#     efit <- limma::eBayes(fit_contrast, robust = TRUE)
+#     return(efit)
+# })
+
+lfc <- reactive({
+    input$lfc
+})
