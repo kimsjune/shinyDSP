@@ -36,9 +36,12 @@
 \item{UpCol}{from input$UpCol. Determines the colour of upregulated genes.}
 }
 \value{
-A ggplot2 object
+A \link{ggplot2} object
 }
 \description{
 Volcano plot plotting function with ggplot2
+}
+\author{
+Seung J. Kim
 }
 \keyword{internal}

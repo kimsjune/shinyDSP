@@ -14,9 +14,9 @@
 )
 }
 \arguments{
-\item{spe}{A SpatialExperiment output from standR::readGeoMx}
+\item{spe}{A \link{SpatialExperiment} output from \code{\link[standR:readGeoMx]{standR::readGeoMx()}}}
 
-\item{precomputed}{Output from SingleCellExperiment::reducedDim}
+\item{precomputed}{Output from \code{\link[SingleCellExperiment:reducedDims]{SingleCellExperiment::reducedDim()}}}
 
 \item{colourShapeBy}{From input$selected_types}
 
@@ -29,9 +29,12 @@ PCA_customization_batch()}
 PCA_customization_batch()}
 }
 \value{
-A ggplot2 object
+A \link{ggplot2} object
 }
 \description{
 PCA plotting function with ggplot2
+}
+\author{
+Seung J. Kim
 }
 \keyword{internal}

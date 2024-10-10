@@ -24,7 +24,9 @@ Imports:
     grid,
     htmltools,
     limma,
+    magrittr,
     readxl,
+    S4Vectors,
     scales,
     scater,
     shiny,
@@ -42,5 +44,9 @@ biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcrip
 URL: https://kimsjune.github.com/ShinyDSP
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
-    spelling
+    spelling,
+    testthat (>= 3.0.0)
 Language: en-US
+Depends: 
+    R (>= 4.4)
+Config/testthat/edition: 3

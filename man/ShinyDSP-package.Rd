@@ -2,7 +2,6 @@
 % Please edit documentation in R/ShinyDSP-package.R
 \docType{package}
 \name{ShinyDSP-package}
-\alias{ShinyDSP}
 \alias{ShinyDSP-package}
 \title{ShinyDSP: A Shiny App For Visualizing Nanostring GeoMx DSP Data}
 \description{
