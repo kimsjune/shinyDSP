@@ -36,7 +36,7 @@
 \item{UpCol}{from input$UpCol. Determines the colour of upregulated genes.}
 }
 \value{
-A \link{ggplot2} object
+A \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}} object
 }
 \description{
 Volcano plot plotting function with ggplot2

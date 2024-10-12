@@ -24,6 +24,9 @@
       "Load",
       style = "display: inline-block; padding: 4px"
     ),
+    shiny::uiOutput("selectYourExpVar") %>% shinycssloaders::withSpinner(
+      type = 4, size = 0.5, proxy.height = 50
+    ),
     shiny::uiOutput("selectYourType") %>% shinycssloaders::withSpinner(
       type = 4, size = 0.5, proxy.height = 50
     ),

@@ -11,46 +11,62 @@ data <- shiny::eventReactive(input$load, {
   data <- list()
 
   if (input$useSampleData == TRUE) {
-    segProp <- readxl::read_excel(
-      "inst/extdata/Export1_InitialDataset_subset.xlsx",
-      sheet = "SegmentProperties"
-    )
-    bioprob <- readxl::read_excel(
-      "inst/extdata/Export1_InitialDataset_subset.xlsx",
-      sheet = "BioProbeCountMatrix"
-    )
+    eh <- ExperimentHub()
+    AnnotationHub::query(eh, "standR")
+    countFilePath <- eh[["EH7364"]]
+    sampleAnnoFilePath <- eh[["EH7365"]]
+    #featureAnnoFilePath <- eh[["EH7366"]]
+
+    # do NOT set row.names = 1 because 'readGeoMx() expects "TargetName" column
+    # do NOT use read.delim() because sample names contain | which are not
+    # converted well. These strings must match with SegmentDisplayName column
+    # in sampleAnnoFile which retain | characters...
+    countFile <- readr::read_delim(unname(countFilePath))
+    sampleAnnoFile <- readr::read_delim(unname(sampleAnnoFilePath))
+    #featureAnnoFile <- read.delim(unname(featureAnnoFilePath))
+
+
   } else {
-    segProp <- readxl::read_excel(input$uploadedFile$datapath,
-      sheet = "SegmentProperties"
-    )
-    bioprob <- readxl::read_excel(input$uploadedFile$datapath,
-      sheet = "BioProbeCountMatrix"
-    )
+    # segProp <- readxl::read_excel(input$uploadedFile$datapath,
+    #   sheet = "SegmentProperties"
+    # )
+    # bioprob <- readxl::read_excel(input$uploadedFile$datapath,
+    #   sheet = "BioProbeCountMatrix"
+    # )
+    countFile <- readxl::read_excel(input$countFile$datapath)
+    sampleAnnoFile <- readxl::read_excel(input$sampleAnnoFile$datapath)
+    #featureAnnoFile <- readxl::read_excel(input$featureAnnoFile$datapath)
+
   }
 
-  countFile <- as.data.frame(bioprob[, c(3, 13:(dim(bioprob)[2] - 2))])
-  sampleAnnoFile <- as.data.frame(segProp)
-  featureAnnoFile <- as.data.frame(bioprob[, seq_len(12)])
+  # countFile <- as.data.frame(bioprob[, c(3, 13:(dim(bioprob)[2] - 2))])
+  # sampleAnnoFile <- as.data.frame(segProp)
+  # featureAnnoFile <- as.data.frame(bioprob[, seq_len(12)])
 
-  data[[1]] <- countFile
-  data[[2]] <- sampleAnnoFile
-  data[[3]] <- featureAnnoFile
-  data[[4]] <- sampleAnnoFile$Type
-  data[[5]] <- colnames(sampleAnnoFile)
+  data[[1]] <- as.data.frame(countFile)
+  data[[2]] <- as.data.frame(sampleAnnoFile)
+
+  names(data) <- c("countFile","sampleAnnoFile")
+  #data[[3]] <- featureAnnoFile
+  #data[[4]] <- sampleAnnoFile[,ncol(sampleAnnoFile)]
+  #data[[5]] <- colnames(sampleAnnoFile)
 
   return(data)
 })
 # nocov end
 
 # nocov start
-spe <- shiny::eventReactive(c(input$run, input$selectedTypes), {
+spe <- shiny::eventReactive(c(input$run, input$selectedTypes, input$selectedExpVar), {
   spe <- standR::readGeoMx(
     data()[[1]],
-    data()[[2]],
-    data()[[3]]
+    data()[[2]]
   )
+  selectedTypes <- input$selectedTypes
+  selectedExpVar <- input$selectedExpVar
 
-  spe <- spe[, grepl(paste(input$selectedTypes, collapse = "|"), spe$Type)]
+  test <- colData(spe) %>% tibble::as_tibble() %>% pull(selectedExpVar)
+
+  spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), test)]
 
   # if (input$enableQC) {
   # qc <- colData(spe)$AlignedReads/colData(spe)$RawReads >=0.9 & colData(spe)$SequencingSaturation >=90
@@ -58,6 +74,6 @@ spe <- shiny::eventReactive(c(input$run, input$selectedTypes), {
   # spe <- spe[,qc]
   # }
 
-    return(spe)
+  return(spe)
 })
 # nocov end

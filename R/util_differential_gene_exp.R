@@ -54,30 +54,32 @@ efit <- shiny::eventReactive(dge(), {
   shiny::req(input$selectedBatch, contrast())
 
   shiny::withProgress(
-    message = "Performing differential gene expression analysis...", {
-    spe <- eval(parse(text = input$selectedNorm))
+    message = "Performing differential gene expression analysis...",
+    {
+      spe <- eval(parse(text = input$selectedNorm))
 
-    block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
+      block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
 
-    v <- limma::voom(dge(), design())
-    corfit <- limma::duplicateCorrelation(v, design(), block = block_by)
+      v <- limma::voom(dge(), design())
+      corfit <- limma::duplicateCorrelation(v, design(), block = block_by)
 
-    shiny::incProgress(1 / 5)
+      shiny::incProgress(1 / 5)
 
-    v2 <- limma::voom(dge(), design(), block = block_by, correlation = corfit$consensus)
-    corfit2 <- limma::duplicateCorrelation(v, design(), block = block_by)
+      v2 <- limma::voom(dge(), design(), block = block_by, correlation = corfit$consensus)
+      corfit2 <- limma::duplicateCorrelation(v, design(), block = block_by)
 
-    shiny::incProgress(2 / 5)
+      shiny::incProgress(2 / 5)
 
-    fit <- limma::lmFit(v, design(), block = block_by, correlation = corfit2$consensus)
+      fit <- limma::lmFit(v, design(), block = block_by, correlation = corfit2$consensus)
 
-    shiny::incProgress(3 / 5)
+      shiny::incProgress(3 / 5)
 
-    fit_contrast <- limma::contrasts.fit(fit, contrasts = contrast())
-    efit <- limma::eBayes(fit_contrast, robust = TRUE)
+      fit_contrast <- limma::contrasts.fit(fit, contrasts = contrast())
+      efit <- limma::eBayes(fit_contrast, robust = TRUE)
 
-    shiny::incProgress(4 / 5)
-  })
+      shiny::incProgress(4 / 5)
+    }
+  )
 
   return(efit)
 })
@@ -115,4 +117,3 @@ contrast <- shiny::eventReactive(design(), {
   return(con)
 })
 # nocov end
-

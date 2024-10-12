@@ -10,7 +10,7 @@
 #' @param notDEcol from input$notDEcol.
 #' @param UpCol from input$UpCol. Determines the colour of upregulated genes.
 #'
-#' @return A [ggplot2::] object
+#' @return A [ggplot2::geom_point()] object
 #' @keywords internal
 #'
 #' @author Seung J. Kim

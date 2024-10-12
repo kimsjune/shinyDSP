@@ -10,7 +10,7 @@ speRUV_NCGs <- shiny::eventReactive(spe(), {
 # nocov start
 speRUVBatchCorrection <- shiny::eventReactive(list(speRUV_NCGs(), input$k), {
   return(standR::geomxBatchCorrection(speRUV_NCGs(),
-    factors = "Type",
+    factors = input$selectedExpVar,
     NCGs = S4Vectors::metadata(speRUV_NCGs())$NCGs, k = input$k
   ))
 })
@@ -44,10 +44,10 @@ pcaPlotRuv <- shiny::reactive({
   })
 
   pca_plot <- .PCAFunction(
-    speRUV(), speRUV_compute(), "Type",
+    speRUV(), speRUV_compute(), input$selectedExpVar,
     input$selectedTypes, ROIshapes, ROIcolours
   ) +
-    ggplot2::ggtitle("RUV4 - by type")
+    ggplot2::ggtitle(paste0("RUV4 - by ", input$selectedExpVar))
   return(pca_plot)
 })
 # nocov end

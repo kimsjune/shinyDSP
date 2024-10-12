@@ -1,6 +1,8 @@
 # nocov start
-volcano <- shiny::eventReactive(c(input$selectedTypes, input$selectedNorm,
-                                  input$generateVolcano), {
+volcano <- shiny::eventReactive(c(
+  input$selectedTypes, input$selectedNorm,
+  input$generateVolcano
+), {
   shiny::req(efit(), contrast(), input$logFCcutoff, input$PvalCutoff)
 
   shiny::withProgress(message = "Plotting...", {

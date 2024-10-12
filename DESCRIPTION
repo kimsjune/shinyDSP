@@ -1,15 +1,20 @@
-Package: ShinyDSP
+Package: shinyDSP
 Title: A Shiny App For Visualizing Nanostring GeoMx DSP Data
 Version: 0.99.0
 Authors@R: 
-    person("Seung", "Kim", , "seung.kim@lhsc.on.ca", role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0001-5263-0758"))
+    c(person("Seung J.", "Kim" , ,"seung.kim@lhsc.on.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-5263-0758")),
+    person("Angwara", "Nilanont", ,"angwara.nilanont@lhsc.on.ca", role = c("con"),
+            comment = c(ORCID = "0000-0003-4468-9172")),
+    person("Marco", "Mura",  ,"marco.mura@lhsc.on.ca", role = c("fnd"))
+    )           
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
+    AnnotationHub,
     BiocGenerics,
     bsicons,
     bslib,
@@ -17,7 +22,7 @@ Imports:
     dplyr,
     DT,
     edgeR,
-    fontawesome,
+    ExperimentHub,
     ggplot2,
     ggrepel,
     grDevices,
@@ -25,6 +30,7 @@ Imports:
     htmltools,
     limma,
     magrittr,
+    readr,
     readxl,
     S4Vectors,
     scales,
@@ -44,6 +50,7 @@ biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcrip
 URL: https://kimsjune.github.com/ShinyDSP
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
+    shinytest2,
     spelling,
     testthat (>= 3.0.0)
 Language: en-US

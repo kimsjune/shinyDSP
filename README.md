@@ -24,6 +24,6 @@ devtools::install_github("kimsjune/ShinyDSP")
 
 ```r
 library("ShinyDSP")
-app <- build_app()
+app <- ShinyDSP()
 if (interactive()) shiny::runApp(app)
 ```

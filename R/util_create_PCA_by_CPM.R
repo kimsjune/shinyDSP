@@ -28,10 +28,10 @@ pcaPlotCpm <- shiny::reactive({
   })
 
   pcaPlot <- .PCAFunction(
-    speCPM(), speCPM_compute(), "Type",
+    speCPM(), speCPM_compute(), input$selectedExpVar,
     input$selectedTypes, ROIshapes, ROIcolours
   ) +
-    ggplot2::ggtitle("CPM - by type")
+    ggplot2::ggtitle(paste0("CPM - by ", input$selectedExpVar))
 
   return(pcaPlot)
 })

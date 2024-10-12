@@ -12,7 +12,7 @@
 \item{pkgname}{pkgname}
 }
 \value{
-\code{\link[=shiny:addResourcePath]{shiny:addResourcePath()}}
+\code{\link[shiny:resourcePaths]{shiny::addResourcePath()}}
 }
 \description{
 Helper function that exposes .png assets to the Shiny package

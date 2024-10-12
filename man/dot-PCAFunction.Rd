@@ -14,7 +14,7 @@
 )
 }
 \arguments{
-\item{spe}{A \link{SpatialExperiment} output from \code{\link[standR:readGeoMx]{standR::readGeoMx()}}}
+\item{spe}{A \link[SpatialExperiment:SpatialExperiment]{SpatialExperiment::SpatialExperiment} output from \code{\link[standR:readGeoMx]{standR::readGeoMx()}}}
 
 \item{precomputed}{Output from \code{\link[SingleCellExperiment:reducedDims]{SingleCellExperiment::reducedDim()}}}
 

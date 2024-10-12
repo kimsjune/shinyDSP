@@ -29,10 +29,10 @@ pcaPlotQ3 <- shiny::reactive({
   })
 
   pcaPlot <- .PCAFunction(
-    speQ3(), speQ3_compute(), "Type",
+    speQ3(), speQ3_compute(), input$selectedExpVar,
     input$selectedTypes, ROIshapes, ROIcolours
   ) +
-    ggplot2::ggtitle("Q3 - by type")
+    ggplot2::ggtitle(paste0("Q3 - by ", input$selectedExpVar))
   return(pcaPlot)
 })
 # nocov end
