@@ -55,16 +55,36 @@ data <- shiny::eventReactive(input$load, {
 })
 # nocov end
 
+new_sampleAnnoFile <- shiny::eventReactive(input$selectedExpVar,{
+  req(input$selectedExpVar)
+
+  ExpVar <- paste0(input$selectedExpVar, collapse = "_")
+
+
+  if (length(input$selectedExpVar) > 1) {
+    new_sampleAnnoFile <- data()$sampleAnnoFile %>%
+      tidyr::unite(
+        !!ExpVar,
+        input$selectedExpVar,
+        sep = "_"
+      )
+  } else {
+    new_sampleAnnoFile <- data()$sampleAnnoFile
+  }
+  return(new_sampleAnnoFile)
+})
+
 # nocov start
 spe <- shiny::eventReactive(c(input$run, input$selectedTypes, input$selectedExpVar), {
   spe <- standR::readGeoMx(
     data()[[1]],
-    data()[[2]]
+   # data()[[2]]
+   new_sampleAnnoFile()
   )
   selectedTypes <- input$selectedTypes
-  selectedExpVar <- input$selectedExpVar
+  selectedExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
-  test <- colData(spe) %>% tibble::as_tibble() %>% pull(selectedExpVar)
+  test <- colData(spe) %>% tibble::as_tibble() %>% pull(!!selectedExpVar)
 
   spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), test)]
 

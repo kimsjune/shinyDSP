@@ -15,6 +15,7 @@ speCPM_compute <- shiny::eventReactive(speCPM(), {
 # nocov start
 pcaPlotCpm <- shiny::reactive({
   req(speCPM(), speCPM_compute())
+  ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
   # Initialize
   ROIshapes <- list()
@@ -28,10 +29,10 @@ pcaPlotCpm <- shiny::reactive({
   })
 
   pcaPlot <- .PCAFunction(
-    speCPM(), speCPM_compute(), input$selectedExpVar,
+    speCPM(), speCPM_compute(), ExpVar,
     input$selectedTypes, ROIshapes, ROIcolours
   ) +
-    ggplot2::ggtitle(paste0("CPM - by ", input$selectedExpVar))
+    ggplot2::ggtitle(paste0("CPM - by ", ExpVar))
 
   return(pcaPlot)
 })

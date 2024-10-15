@@ -16,6 +16,7 @@ speQ3_compute <- shiny::eventReactive(speQ3(), {
 # nocov start
 pcaPlotQ3 <- shiny::reactive({
   req(speQ3(), speQ3_compute())
+  ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
   # Initialize
   ROIshapes <- list()
@@ -29,10 +30,10 @@ pcaPlotQ3 <- shiny::reactive({
   })
 
   pcaPlot <- .PCAFunction(
-    speQ3(), speQ3_compute(), input$selectedExpVar,
+    speQ3(), speQ3_compute(), ExpVar,
     input$selectedTypes, ROIshapes, ROIcolours
   ) +
-    ggplot2::ggtitle(paste0("Q3 - by ", input$selectedExpVar))
+    ggplot2::ggtitle(paste0("Q3 - by ", ExpVar))
   return(pcaPlot)
 })
 # nocov end

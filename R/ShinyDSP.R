@@ -736,28 +736,40 @@ shinyDSP <- function() {
       shiny::selectInput(
         inputId = "selectedExpVar",
         label = "Choose the main variable",
-        choices = colnames(data()$sampleAnnoFile),
-        multiple = FALSE,
+        choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character)) %>%
+          colnames(),
+        multiple = TRUE,
         selectize = TRUE,
         selected = NULL
       )
+
     })
     # nocov end
+
+    observeEvent(input$run, {
+     # print(head(new_sampleAnnoFile())),
+      print(colData(spe()))
+    }
+    )
+
+
+
+
 
     # nocov start
 
 
     output$selectYourType <- shiny::renderUI({
-      req(data(), input$selectedExpVar)
+      req(new_sampleAnnoFile(), input$selectedExpVar)
 
 
-      ExpVar <- input$selectedExpVar
-      sampleAnnoFile <- data()$sampleAnnoFile
+      ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
       shiny::selectInput(
         inputId = "selectedTypes",
         label = "Choose groups to analyze",
-        choices = data()$sampleAnnoFile %>% pull(input$selectedExpVar) %>% unique(),
+        #choices = data()$sampleAnnoFile %>% pull(input$selectedExpVar) %>% unique(),
+        choices = new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
         multiple = TRUE,
         selectize = TRUE,
         selected = NULL
