@@ -19,7 +19,7 @@ design <- shiny::reactive({
 
   if (input$selectedNorm == "speRUV()") {
     for (i in seq_along(input$k)) {
-      li[[i + length(input$k)]] <- paste0("ruv_W", i)
+      preFormula[[i + length(preFormula)]] <- paste0("ruv_W", i)
     }
   }
 

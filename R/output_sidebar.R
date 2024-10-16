@@ -80,7 +80,7 @@
       # label = "Choose sample batch",
       bslib::tooltip(
         trigger = list(
-          "A batch variable",
+          "Any confounding variables",
           bsicons::bs_icon("info-circle")
         ),
         "For example, sex or age "
@@ -89,7 +89,7 @@
         %>% colnames(),
       multiple = TRUE,
       options = list(
-        placeholder = "Please select an option below",
+        placeholder = "",
         onInitialize = I('function() { this.setValue(""); }')
       )
     )

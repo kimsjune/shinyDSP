@@ -34,7 +34,7 @@ shinyDSP <- function() {
     .interfacePcaNavPanel(),
     .interfaceTableNavPanel(),
     .interfaceVolcanoNavPanel(),
-    # .interfaceHeatmapNavPanel()
+    .interfaceHeatmapNavPanel()
 
 
 
@@ -74,15 +74,16 @@ shinyDSP <- function() {
     options(shiny.maxRequestSize = 50 * 1024^2)
 
 
-    # source("R/util_process_excel.R", local = TRUE)$value
-    # source("R/util_PCA_function.R", local = TRUE)$value
-    # source("R/util_create_PCA_customization.R", local = TRUE)$value
-    # source("R/util_create_PCA_by_CPM.R", local = TRUE)$value
-    # source("R/util_create_PCA_by_Q3.R", local = TRUE)$value
-    # source("R/util_create_PCA_by_RUV4.R", local = TRUE)$value
-    # source("R/util_differential_gene_exp.R", local = TRUE)$value
-    # source("R/util_create_table.R", local = TRUE)$value
-    # source("R/util_create_volcano.R", local = TRUE)$value
+    source("R/util_process_excel.R", local = TRUE)$value
+    source("R/util_PCA_function.R", local = TRUE)$value
+    source("R/util_create_PCA_customization.R", local = TRUE)$value
+    source("R/util_create_PCA_by_CPM.R", local = TRUE)$value
+    source("R/util_create_PCA_by_Q3.R", local = TRUE)$value
+    source("R/util_create_PCA_by_RUV4.R", local = TRUE)$value
+    source("R/util_differential_gene_exp.R", local = TRUE)$value
+    source("R/util_create_table.R", local = TRUE)$value
+    source("R/util_create_volcano.R", local = TRUE)$value
+    source("R/util_create_heatmap.R", local = TRUE)$value
 
 
 
@@ -176,122 +177,42 @@ shinyDSP <- function() {
     #### --------------------Heatmap outputs---------------------------------------
 
 
+    top_n_genes <- shiny::reactive({
+        input$top_n_genes
+    })
 
-    # top_n_genes <- shiny::reactive({
-    #     input$top_n_genes
-    # })
-    #
-    # heatmap_col <- shiny::reactive({
-    #     input$heatmap_col
-    # })
-    #
-    # heatmap_range <- shiny::reactive({
-    #     input$heatmap_range
-    # })
-    #
-    # heatmap_size <- shiny::reactive({
-    #     input$heatmap_size
-    # })
-    #
-    # heatmap_fontsize <- shiny::reactive({
-    #     input$heatmap_fontsize
-    # })
+    heatmap_col <- shiny::reactive({
+        input$heatmap_col
+    })
+
+    heatmap_range <- shiny::reactive({
+        input$heatmap_range
+    })
+
+    heatmap_size <- shiny::reactive({
+        input$heatmap_size
+    })
+
+    heatmap_fontsize <- shiny::reactive({
+        input$heatmap_fontsize
+    })
     #
     #
     #
     #
-    # lcpm_subset_scale <- shiny::reactive({
-    #     mydata <- list()
-    #     for (i in seq_along(shiny::reactiveRun())) {
-    #         mydata[[i]] <- assay(spe_ruv_subset(), 2)[, colData(spe_ruv_subset())$anno_type == shiny::reactiveRun()[i]]
-    #     }
+    observe({
+      print(head(lcpm_subset_scale()))
+    })
+
     #
-    #
-    #     lcpm_subset_scale <- t(scale(t(data.frame(mydata))))
-    #
-    #     return(lcpm_subset_scale)
-    # })
-    #
-    # colnames4heatmap <- shiny::reactive({
-    #     mydata <- list()
-    #     for (i in seq_along(shiny::reactiveRun())) {
-    #         mydata[[i]] <- assay(spe_ruv_subset(), 2)[, colData(spe_ruv_subset())$anno_type == shiny::reactiveRun()[i]]
-    #     }
-    #
-    #
-    #     return(colnames(do.call(cbind, mydata)))
-    # })
-    #
-    #
-    #
-    #
-    # lcpm_subset_scale_topGenes <- shiny::reactive({
-    #     ## BEWARE! top_n() reorders rows by some column value. Must use slice_head() to pick first n rows
-    #     lcpm_subset_scale_topGenes <- lcpm_subset_scale()[topTabDF() %>%
-    #                                                           slice_head(n = top_n_genes()) %>%
-    #                                                           select(Gene) %>%
-    #                                                           unlist() %>%
-    #                                                           unname(), ]
-    #
-    #     return(lcpm_subset_scale_topGenes)
-    # })
-    #
-    #
-    # heatmap <- shiny::reactive({
-    #     col_fun <- colorRamp2(c(heatmap_range()[1], 0, heatmap_range()[2]), hcl_palette = heatmap_col())
-    #
-    #     chm <- Heatmap(lcpm_subset_scale_topGenes(),
-    #                    cluster_columns = F,
-    #                    col = col_fun,
-    #                    # width = unit(dim(lcpm_subset_scale_topGenes())[2]*15, "mm"),
-    #                    # height = unit(dim(lcpm_subset_scale_topGenes())[1]*15, "mm"),
-    #                    width = unit(as.numeric(heatmap_size()) / 2 * dim(lcpm_subset_scale_topGenes())[2], "mm"),
-    #                    height = unit(as.numeric(heatmap_size()) / 2 * dim(lcpm_subset_scale_topGenes())[1], "mm"),
-    #                    heatmap_legend_param = list(
-    #                        border = "black",
-    #                        title = "Z score",
-    #                        title_gp = gpar(fontsize = heatmap_fontsize(), fontface = "plain", fontfamily = "sans"),
-    #                        labels_gp = gpar(fontsize = heatmap_fontsize(), fontface = "plain", fontfamily = "sans"),
-    #                        legend_height = unit(3 * as.numeric(heatmap_size()), "mm")
-    #                    ),
-    #                    top_annotation = HeatmapAnnotation(
-    #                        foo = anno_block(
-    #                            gp = gpar(lty = 0, fill = "transparent"),
-    #                            labels = unlist(shiny::reactiveRun()),
-    #                            labels_gp = gpar(col = "black", fontsize = 14, fontfamily = "sans", fontface = "bold"),
-    #                            labels_rot = 0, labels_just = "center", labels_offset = unit(4.5, "mm")
-    #                        )
-    #                    ),
-    #                    border_gp = gpar(col = "black", lwd = 0.2),
-    #                    row_names_gp = gpar(fontfamily = "sans", fontface = "italic", fontsize = heatmap_fontsize()),
-    #                    show_column_names = F,
-    #
-    #                    # top_annotation= HeatmapAnnotation(
-    #                    #   foo = anno_block(
-    #                    #     gp = gpar(lty=0, fill="transparent"),
-    #                    #     labels = unlist(shiny::reactiveRun()),
-    #                    #     labels_gp = gpar(col="black", fontsize=7, fontfamily = "sans", fontface = "bold"),
-    #                    #     labels_rot = 20, labels_just = "center", labels_offset = unit(4,"mm")
-    #                    #   )
-    #                    # ),
-    #                    column_split = rep(LETTERS[seq_along(shiny::reactiveRun())],
-    #                                       # times = as.numeric(unname(table(colData(spe_ruv_subset())[colnames(lcpm_subset_scale()), "anno_type"])))
-    #                                       times = as.numeric(unname(table(colData(spe_ruv_subset())[colnames4heatmap(), "anno_type"])))
-    #                    ),
-    #                    column_title = NULL
-    #     )
-    #
-    #     return(chm)
-    # })
-    #
-    # output$heatmapUI <- shiny::renderUI({
-    #     shiny::renderPlot(
-    #         heatmap(),
-    #         height = 1.5 * as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[1]
-    #         # height = as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[1],
-    #         # width = as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[2]
-    #     )
-    # })
+    output$heatmapUI <- shiny::renderUI({
+        shiny::renderPlot(
+            heatmap(),
+            height = 1.5 * as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[1]
+            # height = as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[1],
+            # width = as.numeric(heatmap_size()) * dim(lcpm_subset_scale_topGenes())[2]
+        )
+    })
     #
     # output$downloadHeatmap <- shiny::downloadHandler(
     #     filename = function() {

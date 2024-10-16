@@ -18,6 +18,8 @@ Imports:
     BiocGenerics,
     bsicons,
     bslib,
+    circlize,
+    ComplexHeatmap,
     cowplot,
     dplyr,
     DT,
