@@ -735,9 +735,17 @@ shinyDSP <- function() {
 
       shiny::selectInput(
         inputId = "selectedExpVar",
-        label = "Choose the main variable",
-        choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character)) %>%
-          colnames(),
+        #label = "Choose the main variable",
+        label = bslib::tooltip(
+          trigger = list(
+            "Variable(s) of interest",
+            bsicons::bs_icon("info-circle")
+          ),
+          "Pick column(s) that contain biological variables such as genotype and/or
+          treatment."
+        ),
+        choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+        %>% colnames(),
         multiple = TRUE,
         selectize = TRUE,
         selected = NULL
@@ -746,9 +754,11 @@ shinyDSP <- function() {
     })
     # nocov end
 
+
+
     observeEvent(input$run, {
      # print(head(new_sampleAnnoFile())),
-      print(colData(spe()))
+      print(design())
     }
     )
 
@@ -767,7 +777,14 @@ shinyDSP <- function() {
 
       shiny::selectInput(
         inputId = "selectedTypes",
-        label = "Choose groups to analyze",
+        #label = "Choose groups to analyze",
+        label = bslib::tooltip(
+          trigger = list(
+            "Groups of interest",
+            bsicons::bs_icon("info-circle")
+          ),
+          "Pick groups you want to compare such as 'WT' and 'Mutant'"
+        ),
         #choices = data()$sampleAnnoFile %>% pull(input$selectedExpVar) %>% unique(),
         choices = new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
         multiple = TRUE,
@@ -784,12 +801,22 @@ shinyDSP <- function() {
 
       shiny::selectInput(
         inputId = "selectedBatch",
-        label = "Choose sample batch",
-        choices = colnames(data()$sampleAnnoFile),
-        selected = "SlideName"
+        #label = "Choose sample batch",
+        bslib::tooltip(
+          trigger = list(
+            "A batch variable",
+            bsicons::bs_icon("info-circle")
+          ),
+          "For example, sample preparation date "
+        ),
+        choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+        %>%  colnames(),
+        multiple = FALSE
       )
     })
     # nocov end
+
+
 
     ## --------------------PCA nav panel observe---------------------------------
     .observeEvent_pca_nav_panel(input)

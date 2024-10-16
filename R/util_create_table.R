@@ -9,24 +9,24 @@ topTabDF <- shiny::reactive({
       p.value = 0.05, sort.by = "F", adjust.method = "BH",
       lfc = input$lfc
     ) %>%
-      tibble::rownames_to_column(var = "Gene") %>%
-      dplyr::select(!c(
-        "ProbeName", "GeneID", "HUGOSymbol", "ProbeDisplayName",
-        "Accessions", "GenomeBuild", "AnalyteType", "CodeClass",
-        "ProbePool", "TargetGroup"
-      ))
+      tibble::rownames_to_column(var = "Gene") #%>%
+      # dplyr::select(!c(
+      #   "ProbeName", "GeneID", "HUGOSymbol", "ProbeDisplayName",
+      #   "Accessions", "GenomeBuild", "AnalyteType", "CodeClass",
+      #   "ProbePool", "TargetGroup"
+      # ))
   } else {
     dt <- limma::topTable(efit(),
       coef = seq_len(ncol(contrast())), number = Inf,
       p.value = 0.05, sort.by = "P", adjust.method = "BH",
       lfc = input$lfc
     ) %>%
-      tibble::rownames_to_column(var = "Gene") %>%
-      dplyr::select(!c(
-        "ProbeName", "GeneID", "HUGOSymbol", "ProbeDisplayName",
-        "Accessions", "GenomeBuild", "AnalyteType", "CodeClass",
-        "ProbePool", "TargetGroup"
-      ))
+      tibble::rownames_to_column(var = "Gene")# %>%
+      # dplyr::select(!c(
+      #   "ProbeName", "GeneID", "HUGOSymbol", "ProbeDisplayName",
+      #   "Accessions", "GenomeBuild", "AnalyteType", "CodeClass",
+      #   "ProbePool", "TargetGroup"
+      # ))
   }
   return(dt)
 })

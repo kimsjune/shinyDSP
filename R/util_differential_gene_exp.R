@@ -2,10 +2,11 @@
 design <- shiny::reactive({
   shiny::req(input$selectedNorm)
   spe <- eval(parse(text = input$selectedNorm))
+  ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
   li <- list()
   li[[1]] <- "~0"
-  li[[2]] <- "Type"
+  li[[2]] <- ExpVar
   li[[3]] <- input$selectedBatch
 
   if (input$selectedNorm == "speRUV()") {
@@ -18,7 +19,15 @@ design <- shiny::reactive({
   design <- stats::model.matrix(eval(parse(text = formula)),
     data = SummarizedExperiment::colData(spe)
   )
-  colnames(design) <- gsub("Type", "", colnames(design))
+
+  if (!limma::is.fullrank(design)) {
+    formula <- gsub(" ", " + ", paste(li[-3], collapse = " "))
+    design <- stats::model.matrix(eval(parse(text = formula)),
+                                  data = SummarizedExperiment::colData(spe))
+
+  }
+
+  colnames(design) <- gsub(ExpVar, "", colnames(design))
   colnames(design) <- gsub(input$selectedBatch, "", colnames(design))
   colnames(design) <- gsub(" ", "_", colnames(design))
 

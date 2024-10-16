@@ -50,6 +50,7 @@
 #' @importFrom limma contrasts.fit
 #' @importFrom limma duplicateCorrelation
 #' @importFrom limma eBayes
+#' @importFrom limma is.fullrank
 #' @importFrom limma lmFit
 #' @importFrom limma makeContrasts
 #' @importFrom limma topTable
