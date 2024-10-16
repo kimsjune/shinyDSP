@@ -4,24 +4,32 @@ design <- shiny::reactive({
   spe <- eval(parse(text = input$selectedNorm))
   ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
-  li <- list()
-  li[[1]] <- "~0"
-  li[[2]] <- ExpVar
-  li[[3]] <- input$selectedBatch
+  # li <- list()
+  # li[[1]] <- "~0"
+  # li[[2]] <- ExpVar
+ # li[[3]] <- input$selectedBatch
+
+  preFormula <- list()
+
+  preFormula <- lapply(seq_along(input$selectedConfounders), function(i) {
+    input$selectedConfounders[i]
+  })
+
+  preFormula <- c("~0",ExpVar, preFormula)
 
   if (input$selectedNorm == "speRUV()") {
     for (i in seq_along(input$k)) {
-      li[[i + 3]] <- paste0("ruv_W", i)
+      li[[i + length(input$k)]] <- paste0("ruv_W", i)
     }
   }
 
-  formula <- gsub(" ", " + ", paste(li, collapse = " "))
+  formula <- gsub(" ", " + ", paste(preFormula, collapse = " "))
   design <- stats::model.matrix(eval(parse(text = formula)),
     data = SummarizedExperiment::colData(spe)
   )
 
   if (!limma::is.fullrank(design)) {
-    formula <- gsub(" ", " + ", paste(li[-3], collapse = " "))
+    formula <- gsub(" ", " + ", paste(preFormula[c(1,2,tail(preFormula,length(input$k)))], collapse = " "))
     design <- stats::model.matrix(eval(parse(text = formula)),
                                   data = SummarizedExperiment::colData(spe))
 

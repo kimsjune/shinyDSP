@@ -33,6 +33,9 @@
     shiny::uiOutput("selectYourBatch") %>% shinycssloaders::withSpinner(
       type = 4, size = 0.5, proxy.height = 50
     ),
+    shiny::uiOutput("selectYourConfounder") %>% shinycssloaders::withSpinner(
+      type = 4, size = 0.5, proxy.height = 50
+    ),
 
     shiny::actionButton(
       inputId = "run",

@@ -756,7 +756,7 @@ shinyDSP <- function() {
 
 
 
-    observeEvent(input$run, {
+    observe({
      # print(head(new_sampleAnnoFile())),
       print(design())
     }
@@ -812,6 +812,31 @@ shinyDSP <- function() {
         choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
         %>%  colnames(),
         multiple = FALSE
+      )
+    })
+    # nocov end
+
+    # nocov start
+    output$selectYourConfounder <- shiny::renderUI({
+      req(data())
+
+      shiny::selectizeInput(
+        inputId = "selectedConfounders",
+        #label = "Choose sample batch",
+        bslib::tooltip(
+          trigger = list(
+            "A batch variable",
+            bsicons::bs_icon("info-circle")
+          ),
+          "For example, sex or age "
+        ),
+        choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+        %>%  colnames(),
+        multiple = TRUE,
+        options = list(
+          placeholder = 'Please select an option below',
+          onInitialize = I('function() { this.setValue(""); }')
+        )
       )
     })
     # nocov end
