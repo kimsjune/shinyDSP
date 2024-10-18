@@ -26,6 +26,7 @@ Imports:
     edgeR,
     ExperimentHub,
     ggplot2,
+    ggpubr,
     ggrepel,
     grDevices,
     grid,

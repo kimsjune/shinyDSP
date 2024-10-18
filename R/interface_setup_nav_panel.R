@@ -1,0 +1,100 @@
+#' Create the "QC" nav panel
+#'
+#' @return [bslib::nav_panel()]
+#' @keywords internal
+#'
+#' @author Seung J. Kim
+.interfaceSetupNavPanel <- function() {
+    bslib::nav_panel(
+        "Setup",
+        value = "Setup",
+            bslib::layout_sidebar(
+        sidebar = bslib::accordion(
+            bslib::accordion_panel(
+                "",
+            shinyWidgets::prettySwitch(
+              inputId = "useSampleData",
+              label = "Use demo data",
+              value = FALSE,
+              fill = TRUE
+            ),
+
+            shiny::tags$div(style = "text-align: center;",
+                shiny::tags$p("OR")
+            ),
+
+            shinyjs::hidden(
+              shiny::fileInput(
+                inputId = "uploadedCountFile",
+                label = "Upload count file",
+                buttonLabel = tags$img(src = "www/upload.png", height = "24px",
+                                       width = "24px"),
+                accept = c(".csv",".txt")
+              )
+            ),
+            shinyjs::hidden(
+                shiny::fileInput(
+                    inputId = "uploadedSampleAnnoFile",
+                    label = "Upload annotation",
+                    buttonLabel = tags$img(src = "www/upload.png", height = "24px",
+                                           width = "24px"),
+                    accept = c(".csv",".txt"),
+                )
+            ),
+            shiny::actionButton(
+              inputId = "load",
+              "Load data"
+            )
+        )),
+
+        bslib::layout_columns(
+            # thank god this fixed UI elements from overlapping each other
+            fill = FALSE,
+            col_widths = c(12,12
+            ),
+
+            shiny::tags$div(
+                shiny::tags$h3(
+                    "Upload or use demo data, then press 'Load data'.
+                    "
+                )
+            ),
+
+            shiny::uiOutput("countFile") %>% shinycssloaders::withSpinner(type = 4),
+            shiny::uiOutput("sampleAnnoFile") %>% shinycssloaders::withSpinner(type = 4)
+
+        )
+
+
+
+    )
+
+    )
+}
+
+
+# htmlOutput(""),
+# tags$div(class = "row",
+# tags$div(class = "",
+#          tags$h3(""),
+
+# ),
+
+# tags$div(class = "introText",
+#          # tags$div(
+#          tags$h3("Citation"),
+#          # p("If you use this resource, please cite ",
+#          #   a(href="TBD.com", "Kim et. al. 2024")),
+#          # ),
+#          # tags$div(
+#          #  tags$h3("Links"),
+#
+#          # p(
+#          #   a(shiny::icon("github"), " ",
+#          #     style = "padding: 10px; text-decoration: none;",
+#          #     href = "https://github.com/rstudio/shiny")
+#          # a(shiny::icon("linkedin-in")," ",
+#          #   style = "padding: 10px; text-decoration: none;",
+#          #   href= "https://www.linkedin.com/in/joon-kim-7a140b90/")
+#          #   )
+# )
