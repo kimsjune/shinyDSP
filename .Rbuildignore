@@ -2,4 +2,4 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 _\.new\.png$
-^shinyDSP\.R$
+^inst/extdata/testtables$
