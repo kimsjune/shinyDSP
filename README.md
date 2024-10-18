@@ -7,7 +7,7 @@ Please refer to the vignette for details.
 
 ShinyDSP is available on Bioconductor and can be installed with the following:
 
-```
+```r
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -23,7 +23,7 @@ devtools::install_github("kimsjune/ShinyDSP")
 ## Usage
 
 ```r
-library("ShinyDSP")
+library(ShinyDSP)
 app <- ShinyDSP()
 if (interactive()) shiny::runApp(app)
 ```
