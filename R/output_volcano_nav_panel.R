@@ -9,7 +9,7 @@ output$customRange <- shiny::renderUI({
         ),
         shiny::numericInput(
             inputId = "customY",
-            "-log P value", value = 10
+            "-log P value", value = 40
         )
     )
 })
@@ -38,39 +38,48 @@ output$volcanoUI <- shiny::renderUI({
     # )
 
     tabsets <- lapply(names(volcano()), function(name){
-        tabPanel(name,
-                 shiny::plotOutput(outputId = paste0("volcano_", name))
+        shiny::tabPanel(name,
+                 shiny::plotOutput(outputId = paste0("volcano_", name)),
 
 
-        )
-    })
+                 shiny::fluidRow(
+                 lapply(c("png","tiff","pdf","svg"), function(ext){
 
-    tabsetPanel(
+                shiny::column(3,
+                     shiny::downloadButton(paste0("downloadVolcano", name, ext), paste(toupper(ext)))
+                ) })))})
+
+
+    shiny::tabsetPanel(
         type = "tabs",
         !!!tabsets
     )
 })
 
 
-observe({
+shiny::observe({
+lapply(names(volcano()), function(name) {
+
+
+
 lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-    output[[paste0("downloadVolcano", ext)]] <- downloadHandler(
+    output[[paste0("downloadVolcano", name, ext)]] <- downloadHandler(
         filename = function() {
-            paste("volcano", ext, sep = ".")
+            paste("volcano", name, ext, sep = ".")
         },
         content = function(file) {
 
             ggsave(file,
-                   plot = cowplot::plot_grid(
-                       plotlist = volcano(),
+
+                   volcano()[[name]],
 
 
-                       align = 'hv', axis = 'tblr', ncol = 3, nrow = 2
-                   ),
-                   height = 14, width = 14, units = c("in"),
+
+                   height = 4, width = 6, units = c("in"),
                    device = ext)
         }
     )
+})
 })
 
 })

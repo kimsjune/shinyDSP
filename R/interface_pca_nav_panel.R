@@ -37,7 +37,7 @@
 
 
                     lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                        shiny::column(6,downloadButton(paste0("pcaLegend_", ext), paste(toupper(ext))))
+                        shiny::column(6,shiny::downloadButton(paste0("pcaLegend_", ext), paste(toupper(ext))))
                     })
                     )
                     ),

@@ -34,13 +34,20 @@ volcano <- shiny::eventReactive(c(
                     "NO"
                     )
                     )) %>%
-                    dplyr::mutate(deLab = dplyr::case_when(
-                        logFC > quantile(logFC[logFC > 0], 0.9, na.rm = TRUE) ~ Target.name,  # Above 90th percentile of positive values
-                        logFC < quantile(logFC[logFC < 0], 0.9, na.rm = TRUE) ~ Target.name,  # Below 90th percentile of negative values
-                        TRUE ~ NA_character_                                             # Otherwise NA
-                    )
+                dplyr::mutate(logFC_threshold = quantile(abs(logFC), 0.99, na.rm = TRUE),
+                                 pval_threshold = quantile(adj.P.Val, 0.01, na.rm = TRUE),
+                              deLab  = ifelse(abs(logFC) > logFC_threshold & adj.P.Val < pval_threshold
+                                              & abs(logFC) >= input$logFCcutoff & adj.P.Val < input$PvalCutoff, Target.name, NA)
+                )
 
-                    )
+
+                    # dplyr::mutate(deLab = dplyr::case_when(
+                    #     logFC > quantile(logFC[logFC > 0], 0.9, na.rm = TRUE) ~ Target.name,  # Above 90th percentile of positive values
+                    #     logFC < quantile(logFC[logFC < 0], 0.9, na.rm = TRUE) ~ Target.name,  # Below 90th percentile of negative values
+                    #     TRUE ~ NA_character_                                             # Otherwise NA
+                    # )
+
+                    # )
             })
 
 

@@ -17,17 +17,17 @@
                         label = "Run"
                     )
                 ),
-                bslib::accordion_panel(
-                    "Download",
-
-                    shiny::fluidRow(
-
-
-                        lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                            shiny::column(6,downloadButton(paste0("downloadVolcano_", ext), paste(toupper(ext))))
-                        })
-                    )
-                ),
+                # bslib::accordion_panel(
+                #     "Download",
+                #
+                #     shiny::fluidRow(
+                #
+                #
+                #         lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
+                #             shiny::column(6,shiny::downloadButton(paste0("downloadVolcano_", ext), paste(toupper(ext))))
+                #         })
+                #     )
+                # ),
 
 
                 bslib::accordion_panel(
@@ -36,7 +36,7 @@
                         shiny::numericInput(
                             inputId = "maxOverlap",
                             "Density of gene names to show",
-                            min = 0, max = 50, value = 17
+                            min = 0, max = 50, value = 6
                         ),
                         shiny::numericInput(
                             inputId = "delabSize",
