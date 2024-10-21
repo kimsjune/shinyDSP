@@ -1,11 +1,4 @@
-#' Create a group of radio buttons for picking shapes for PCA plots
-#'
-#' @return A list of [shinyWidgets::radioGroupButtons()] and
-#' [shiny::textInput()] pairs
-#' @keywords internal
-#'
-#' @author Seung J. Kim
-.PCAcustomization <- function() {
+PCAcustomization <- shiny::reactive({
     shapes_colours_pca <- list()
     shapes_colours_pca <- lapply(seq_along(input$selectedTypes), function(i) {
         htmltools::div(
@@ -50,15 +43,24 @@
     })
 
 
-    shapes_colours_pca # Show the actual widget,
-}
+    return(shapes_colours_pca) # Show the actual widget,
+})
 
 # nocov start
 PCAcustomizationBatch <- shiny::reactive({
+    ExpVar <- paste0(input$selectedExpVar, collapse = "_")
+
+    selectedTypes <- lapply(seq_along(input$selectedTypes), function(i) {
+        input$selectedTypes[i]
+    })
+
     # must use dplyr for this to work...
-    batchVars <- data()[[2]] %>%
-        dplyr::pull(input$selectedBatch) %>%
-        unique()
+    batchVars <- new_sampleAnnoFile() %>%
+        tibble::as_tibble() %>%
+        # not sure when to use !! or as.name() OR both
+        dplyr::filter(!!as.name(ExpVar) %in% !!selectedTypes) %>%
+        dplyr::pull(input$selectedBatch) %>% sort() %>% unique()
+
 
     # Must be initialized first
     shapes_colours_pca_batch <- list()

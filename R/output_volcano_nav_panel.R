@@ -23,18 +23,51 @@ output$volcanoUI <- shiny::renderUI({
                 shiny::isTruthy(input$selectedTypes) &
                 shiny::isTruthy(input$selectedNorm) &
                 shiny::isTruthy(input$generateVolcano),
-            "Press 'update'!"
+            "Hit 'run'!"
         )
     )
 
-    # Plots as a list can be grouped into a grid and output
-    shiny::renderPlot(
-        # grid.arrange(grobs = plots)
-        cowplot::plot_grid(
-            plotlist = volcano(), ncol = 1, align = "v",
-            axis = "lr"
-        ),
-        height = shiny::reactive(350 * ncol(contrast()))
+    # # Plots as a list can be grouped into a grid and output
+    # shiny::renderPlot(
+    #     # grid.arrange(grobs = plots)
+    #     cowplot::plot_grid(
+    #         plotlist = volcano(), ncol = 1, align = "v",
+    #         axis = "lr"
+    #     ),
+    #     height = shiny::reactive(350 * ncol(contrast()))
+    # )
+
+    tabsets <- lapply(names(volcano()), function(name){
+        tabPanel(name,
+                 shiny::plotOutput(outputId = paste0("volcano_", name))
+
+
+        )
+    })
+
+    tabsetPanel(
+        type = "tabs",
+        !!!tabsets
+    )
+})
+
+lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
+    output[[paste0("downloadVolcano", ext)]] <- downloadHandler(
+        filename = function() {
+            paste("volcano", ext, sep = ".")
+        },
+        content = function(file) {
+
+            ggsave(file,
+                   plot = cowplot::plot_grid(
+                       plotlist = volcano(),
+
+
+                       align = 'hv', axis = 'tblr', ncol = 3, nrow = 2
+                   ),
+                   height = 14, width = 14, units = c("in"),
+                   device = ext)
+        }
     )
 })
 # nocov end

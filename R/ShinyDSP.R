@@ -67,21 +67,6 @@ shinyDSP <- function() {
 
     server <- function(input, output, session) {
         options(shiny.maxRequestSize = 50 * 1024^2)
-
-
-        ## These files need to be sourced unlike interface_* and observeEvent_*
-        source("R/util_process_excel.R", local = TRUE)$value
-        source("R/util_PCA_function.R", local = TRUE)$value
-        source("R/util_PCA_customization.R", local = TRUE)$value
-        source("R/util_PCA_by_CPM.R", local = TRUE)$value
-        source("R/util_PCA_by_Q3.R", local = TRUE)$value
-        source("R/util_PCA_by_RUV4.R", local = TRUE)$value
-        source("R/util_differential_gene_exp.R", local = TRUE)$value
-        source("R/util_table.R", local = TRUE)$value
-        source("R/util_volcano.R", local = TRUE)$value
-        source("R/util_heatmap.R", local = TRUE)$value
-
-
       observe({
         if (is.null(input$selectedTypes)){
           bslib::nav_hide("navpanel", "PCA")
@@ -104,12 +89,22 @@ shinyDSP <- function() {
       }
       )
 
-      observe({
-
-        print(spe())
 
 
-      })
+        ## These files need to be sourced unlike interface_* and observeEvent_*
+        source("R/util_process_excel.R", local = TRUE)$value
+        source("R/util_PCA_function.R", local = TRUE)$value
+        source("R/util_PCA_customization.R", local = TRUE)$value
+        source("R/util_PCA_by_CPM.R", local = TRUE)$value
+        source("R/util_PCA_by_Q3.R", local = TRUE)$value
+        source("R/util_PCA_by_RUV4.R", local = TRUE)$value
+        source("R/util_differential_gene_exp.R", local = TRUE)$value
+        source("R/util_table.R", local = TRUE)$value
+        source("R/util_volcano.R", local = TRUE)$value
+        source("R/util_heatmap.R", local = TRUE)$value
+
+
+
 
 
 
@@ -120,7 +115,7 @@ shinyDSP <- function() {
         #   }
         # })
         ## --------------------Sidebar observe----------------------------------
-        .observeEvent_sidebar(input, output)
+        .observeEvent_sidebar(input)
 
         ## --------------------Sidebar outputs----------------------------------
         source("R/output_sidebar.R", local = TRUE)$value
@@ -144,6 +139,29 @@ shinyDSP <- function() {
         source("R/output_table_nav_panel.R", local = TRUE)$value
         .outputTableNavPanel()
 
+
+        ## --------------------Table observe
+        observe({
+          lapply(names(topTabDF()), function(name) {
+            output[[paste0("table_", name)]] <- DT::renderDataTable({
+              topTabDF()[[name]] %>%
+                dplyr::mutate(dplyr::across(where(is.numeric), ~ ifelse(abs(.) < 1,
+                                              formatC(., format = "e", digits = 3),  # Scientific notation for abs < 1
+                                              formatC(., format = "f", digits = 3)))) %>%
+                DT::datatable()
+            })
+            output[[paste0("downloadTable_", name)]] <- downloadHandler(
+              filename = function() {
+                paste(name, "csv", sep = ".")
+              },
+              content = function(file) {
+                write.csv(topTabDF()[[name]], file, row.names = FALSE)
+              }
+            )
+          }
+          )
+        })
+
         ## --------------------Volcano observe----------------------------------
         # nocov start
         shiny::observeEvent(input$toggleCustomRange, {
@@ -151,9 +169,23 @@ shinyDSP <- function() {
         })
         # nocov end
 
+        observe({
+          lapply(names(volcano()), function(name) {
+            output[[paste0("volcano_", name)]] <- shiny::renderPlot({
+              volcano()[[name]]
+
+            })
+          }
+          )
+        })
+
+
         ## --------------------Volcano outputs----------------------------------
         source("R/output_volcano_nav_panel.R", local = TRUE)$value
         .outputVolcanoNavPanel()
+
+
+
 
 
         #### --------------------Heatmap outputs--------------------------------
@@ -185,9 +217,10 @@ shinyDSP <- function() {
         #
         #
         #
-        # observe({
-        #   print(head(lcpm_subset_scale()))
-        # })
+        observe({
+
+
+        })
 
 
     }

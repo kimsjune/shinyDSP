@@ -1,4 +1,4 @@
-.observeEvent_sidebar <- function(input, output) {
+.observeEvent_sidebar <- function(input) {
     # nocov start
     observeEvent(input$useSampleData, {
         if (input$useSampleData == FALSE) {

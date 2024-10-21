@@ -46,6 +46,7 @@ Imports:
     standR,
     stats,
     SummarizedExperiment,
+    svglite,
     tibble,
     utils,
     withr

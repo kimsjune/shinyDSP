@@ -7,22 +7,41 @@ volcano <- shiny::eventReactive(c(
 
     shiny::withProgress(message = "Plotting...", {
         # make data frame
-        volcanoDF <- lapply(as.list(seq_len(ncol(contrast()))), function(i) {
-            limma::topTable(efit(), coef = i, number = Inf) %>%
-                tibble::rownames_to_column(var = "Target.name") %>%
-                dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
-                dplyr::mutate(de = ifelse(logFC >= input$logFCcutoff &
-                    adj.P.Val < input$PvalCutoff, "UP",
-                ifelse(logFC <= -(input$logFCcutoff) &
-                    adj.P.Val < input$PvalCutoff, "DN",
-                "NO"
-                )
-                )) %>%
-                dplyr::mutate(deLab = ifelse(
-                    quantile(abs(logFC), 0.999, na.rm = TRUE) < abs(logFC), Target.name,
-                    NA
-                ))
-        })
+        # volcanoDF <- lapply(as.list(seq_len(ncol(contrast()))), function(i) {
+        #     limma::topTable(efit(), coef = i, number = Inf) %>%
+        #         tibble::rownames_to_column(var = "Target.name") %>%
+        #         dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
+        #         dplyr::mutate(de = ifelse(logFC >= input$logFCcutoff &
+        #             adj.P.Val < input$PvalCutoff, "UP",
+        #         ifelse(logFC <= -(input$logFCcutoff) &
+        #             adj.P.Val < input$PvalCutoff, "DN",
+        #         "NO"
+        #         )
+        #         )) %>%
+        #         dplyr::mutate(deLab = ifelse(
+        #             quantile(abs(logFC), 0.999, na.rm = TRUE) < abs(logFC), Target.name,
+        #             NA
+        #         ))
+        # })
+        volcanoDF <- lapply(seq_len(ncol(contrast())), function(i) {
+                limma::topTable(efit(), coef = i, number = Inf) %>%
+                    tibble::rownames_to_column(var = "Target.name") %>%
+                    dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
+                    dplyr::mutate(de = ifelse(logFC >= input$logFCcutoff &
+                        adj.P.Val < input$PvalCutoff, "UP",
+                    ifelse(logFC <= -(input$logFCcutoff) &
+                        adj.P.Val < input$PvalCutoff, "DN",
+                    "NO"
+                    )
+                    )) %>%
+                    dplyr::mutate(deLab = dplyr::case_when(
+                        logFC > quantile(logFC[logFC > 0], 0.9, na.rm = TRUE) ~ Target.name,  # Above 90th percentile of positive values
+                        logFC < quantile(logFC[logFC < 0], 0.9, na.rm = TRUE) ~ Target.name,  # Below 90th percentile of negative values
+                        TRUE ~ NA_character_                                             # Otherwise NA
+                    )
+
+                    )
+            })
 
 
         # If not using custom range, determine maximum absolute FC for each plot
@@ -59,6 +78,8 @@ volcano <- shiny::eventReactive(c(
             })
         }
     })
+
+    names(plots) <- names(topTabDF())
 
     return(plots)
 })

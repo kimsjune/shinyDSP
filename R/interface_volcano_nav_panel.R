@@ -14,9 +14,22 @@
                     " ",
                     shiny::actionButton(
                         inputId = "generateVolcano",
-                        label = "Update"
+                        label = "Run"
                     )
                 ),
+                bslib::accordion_panel(
+                    "Download",
+
+                    shiny::fluidRow(
+
+
+                        lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
+                            shiny::column(6,downloadButton(paste0("downloadVolcano_", ext), paste(toupper(ext))))
+                        })
+                    )
+                ),
+
+
                 bslib::accordion_panel(
                     "Volcano options",
                     htmltools::div(
@@ -80,8 +93,7 @@
                 #                  "Download plots")
                 # )
             ),
-            shiny::uiOutput("volcanoUI") %>% shinycssloaders::withSpinner(type = 4),
-            shiny::downloadButton("downloadVolcano")
+            shiny::uiOutput("volcanoUI") %>% shinycssloaders::withSpinner(type = 4)
         )
     )
 }

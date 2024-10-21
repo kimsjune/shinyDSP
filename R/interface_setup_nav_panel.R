@@ -54,7 +54,7 @@
             ),
 
             shiny::tags$div(
-                shiny::tags$h3(
+                shiny::tags$p(
                     "Upload or use demo data, then press 'Load data'.
                     "
                 )

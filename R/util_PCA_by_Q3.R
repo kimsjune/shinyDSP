@@ -15,7 +15,6 @@ speQ3_compute <- shiny::eventReactive(speQ3(), {
 
 # nocov start
 pcaPlotQ3 <- shiny::reactive({
-    req(speQ3(), speQ3_compute())
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     # Initialize
@@ -41,7 +40,6 @@ pcaPlotQ3 <- shiny::reactive({
 
 # nocov start
 pcaPlotQ3Batch <- shiny::reactive({
-    req(speQ3(), speQ3_compute())
 
     batchVars <- data()[[2]] %>%
         dplyr::pull(input$selectedBatch) %>%

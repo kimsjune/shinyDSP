@@ -3,7 +3,7 @@ lcpm_subset_scale <- shiny::eventReactive(input$generateHeatmap, {
     spe <- eval(parse(text = input$selectedNorm))
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
-    mydata <- lapply(seq_along(input$selectedTypes), function(i) {
+    lcpm_subset <- lapply(seq_along(input$selectedTypes), function(i) {
         SummarizedExperiment::assay(spe, 2)[, SummarizedExperiment::colData(spe)
         %>% tibble::as_tibble()
             %>% dplyr::select(ExpVar)
@@ -11,7 +11,7 @@ lcpm_subset_scale <- shiny::eventReactive(input$generateHeatmap, {
     })
 
 
-    lcpm_subset_scale <- t(scale(t(data.frame(mydata))))
+    lcpm_subset_scale <- t(scale(t(data.frame(lcpm_subset))))
 
     return(lcpm_subset_scale)
 })
@@ -27,7 +27,7 @@ colnames4heatmap <- shiny::eventReactive(lcpm_subset_scale(), {
 
 
 
-    return(colnames(do.call(cbind, mydata)))
+    return(do.call(cbind, mydata))
 })
 
 
@@ -47,6 +47,13 @@ lcpm_subset_scale_topGenes <- shiny::eventReactive(lcpm_subset_scale(), {
 
 
 heatmap <- shiny::eventReactive(lcpm_subset_scale_topGenes(), {
+    spe <- eval(parse(text = input$selectedNorm))
+    ExpVar <- paste0(input$selectedExpVar, collapse = "_")
+    splitBy <- lapply(seq_along(input$selectedTypes), function(i) {
+        unlist(sum(SummarizedExperiment::colData(spe) %>% tibble::as_tibble() %>%
+            dplyr::select(ExpVar) == input$selectedTypes[i]))
+    })
+
     col_fun <- circlize::colorRamp2(c(heatmap_range()[1], 0, heatmap_range()[2]), hcl_palette = heatmap_col())
 
     chm <- ComplexHeatmap::Heatmap(lcpm_subset_scale_topGenes(),
@@ -63,14 +70,14 @@ heatmap <- shiny::eventReactive(lcpm_subset_scale_topGenes(), {
             labels_gp = grid::gpar(fontsize = heatmap_fontsize(), fontface = "plain", fontfamily = "sans"),
             legend_height = grid::unit(3 * as.numeric(heatmap_size()), "mm")
         ),
-        # top_annotation = ComplexHeatmap::HeatmapAnnotation(
-        #     foo = ComplexHeatmap::anno_block(
-        #         gp = grid::gpar(lty = 0, fill = "transparent"),
-        #         labels = unlist(input$selectedTypes),
-        #         labels_gp = grid::gpar(col = "black", fontsize = 14, fontfamily = "sans", fontface = "bold"),
-        #         labels_rot = 0, labels_just = "center", labels_offset = grid::unit(4.5, "mm")
-        #     )
-        # ),
+        top_annotation = ComplexHeatmap::HeatmapAnnotation(
+            foo = ComplexHeatmap::anno_block(
+                gp = grid::gpar(lty = 0, fill = "transparent"),
+                labels = unlist(input$selectedTypes),
+                labels_gp = grid::gpar(col = "black", fontsize = 14, fontfamily = "sans", fontface = "bold"),
+                labels_rot = 0, labels_just = "center", labels_offset = grid::unit(4.5, "mm")
+            )
+        ),
         border_gp = grid::gpar(col = "black", lwd = 0.2),
         row_names_gp = grid::gpar(fontfamily = "sans", fontface = "italic", fontsize = heatmap_fontsize()),
         show_column_names = F,
@@ -83,12 +90,13 @@ heatmap <- shiny::eventReactive(lcpm_subset_scale_topGenes(), {
         #     labels_rot = 20, labels_just = "center", labels_offset = grid::unit(4,"mm")
         #   )
         # ),
-        # column_split = rep(LETTERS[seq_along(input$selectedTypes)],
-        #                    # times = as.numeric(unname(table(colData(spe)[colnames(lcpm_subset_scale()), "anno_type"])))
-        #                    times = as.numeric(unname(table(SummarizedExperiment::colData(spe)[colnames4heatmap(), ExpVar])))
-        # ),
-        column_title = NULL
-    )
+        column_split = rep(LETTERS[seq_along(input$selectedTypes)], splitBy)
+
+
+                           # times = as.numeric(unname(table(colData(spe)[colnames(lcpm_subset_scale()), "anno_type"])))
+                           #times = as.numeric(unname(table(SummarizedExperiment::colData(spe)[colnames(lcpm_subset_scale()), ExpVar])))
+
+        )
 
     return(chm)
 })

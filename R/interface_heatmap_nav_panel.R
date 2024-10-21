@@ -9,7 +9,7 @@
                         " ",
                         shiny::actionButton(
                             inputId = "generateHeatmap",
-                            label = "Update"
+                            label = "Run"
                         )
                     ),
                     bslib::accordion_panel(

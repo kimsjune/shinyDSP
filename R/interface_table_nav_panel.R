@@ -9,8 +9,7 @@
         "Table",
         value = "Table",
         bslib::layout_sidebar(
-            shiny::uiOutput("topTable") %>% shinycssloaders::withSpinner(type = 4),
-            shiny::downloadButton("downloadTable", "Save table")
+            shiny::uiOutput("topTable") %>% shinycssloaders::withSpinner(type = 4)
         )
     )
 }

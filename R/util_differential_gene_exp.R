@@ -1,6 +1,7 @@
 # nocov start
 design <- shiny::reactive({
     shiny::req(input$selectedNorm)
+
     spe <- eval(parse(text = input$selectedNorm))
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
@@ -105,7 +106,7 @@ efit <- shiny::eventReactive(dge(), {
 
 
 # nocov start
-contrast <- shiny::eventReactive(design(), {
+contrast <- shiny::eventReactive(c(design(), input$selectedTypes), {
     # replace space with _
     selectedTypes_underscore <- gsub(" ", "_", input$selectedTypes)
 

@@ -14,7 +14,7 @@ speCPM_compute <- shiny::eventReactive(speCPM(), {
 
 # nocov start
 pcaPlotCpm <- shiny::reactive({
-    req(speCPM(), speCPM_compute())
+
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     # Initialize
@@ -40,7 +40,6 @@ pcaPlotCpm <- shiny::reactive({
 
 # nocov start
 pcaPlotCpmBatch <- shiny::reactive({
-    req(speCPM(), speCPM_compute())
 
     batchVars <- data()[[2]] |>
         dplyr::pull(input$selectedBatch) |>

@@ -33,6 +33,7 @@ speRUV_compute <- shiny::eventReactive(speRUV(), {
 
 # nocov start
 pcaPlotRuv <- shiny::reactive({
+
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     # Initialize
@@ -58,7 +59,6 @@ pcaPlotRuv <- shiny::reactive({
 
 # nocov start
 pcaPlotRuvBatch <- shiny::reactive({
-    req(speRUV(), speRUV_compute())
 
     batchVars <- data()[[2]] %>%
         dplyr::pull(input$selectedBatch) %>%
