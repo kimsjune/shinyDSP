@@ -14,7 +14,7 @@
                 "Pick column(s) that contain biological variables such as genotype and/or
           treatment."
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selectize = TRUE,
@@ -64,7 +64,7 @@
                 ),
                 "For example, sample preparation date "
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = FALSE
         )
@@ -85,7 +85,7 @@
                 ),
                 "For example, sex or age "
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(where(is.character))
+            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selected = NULL,

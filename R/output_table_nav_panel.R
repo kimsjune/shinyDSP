@@ -16,7 +16,7 @@
         # )
 
         tabsets <- lapply(names(topTabDF()), function(name){
-            tabPanel(name,
+            shiny::tabPanel(name,
                      DT::dataTableOutput(outputId = paste0("table_",name)),
                      shiny::downloadButton(outputId = paste0("downloadTable_", name), label = "Download table")
 
@@ -24,7 +24,7 @@
                      )
         })
 
-        tabsetPanel(
+        shiny::tabsetPanel(
             type = "tabs",
             !!!tabsets
         )

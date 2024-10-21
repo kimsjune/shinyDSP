@@ -148,15 +148,15 @@
   # # nocov end
 
 
-
+shiny::observe({
   lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-    output[[paste0("pca_", ext)]] <- downloadHandler(
+    output[[paste0("pca_", ext)]] <- shiny::downloadHandler(
       filename = function() {
         paste("plot", ext, sep = ".")
       },
       content = function(file) {
 
-        ggsave(file,
+        ggplot2::ggsave(file,
                plot = cowplot::plot_grid(
 
                  pcaPlotCpm() + ggplot2::theme(legend.position = "none"),
@@ -174,13 +174,13 @@
   })
 
   lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-    output[[paste0("pcaLegend_", ext)]] <- downloadHandler(
+    output[[paste0("pcaLegend_", ext)]] <- shiny::downloadHandler(
       filename = function() {
         paste("plot", ext, sep = ".")
       },
       content = function(file) {
 
-        ggsave(file,
+        ggplot2::ggsave(file,
                                    plot = cowplot::plot_grid(
                                    ggpubr::as_ggplot(
                                      ggpubr::get_legend(
@@ -197,4 +197,6 @@
       }
     )
   })
+
+})
 }

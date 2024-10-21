@@ -78,7 +78,7 @@
                         id = "showCustomRange", style = "display: inline-block;",
                         shiny::uiOutput("customRange")
                     )
-                ),
+                )
 
                 # accordion_panel(
                 #   "Download",

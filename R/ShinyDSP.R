@@ -12,7 +12,7 @@
 #'     shiny::runApp(app)
 #' }
 shinyDSP <- function() {
-    ui <- bslib::page_navbar(
+   ui <- bslib::page_navbar(
         htmltools::tags$head(htmltools::tags$link(
             rel = "shortcut icon",
             href = "favicon.ico/lung.png"
@@ -66,8 +66,22 @@ shinyDSP <- function() {
     )
 
     server <- function(input, output, session) {
+
+      ## These files need to be sourced unlike interface_* and observeEvent_*
+      source("R/util_process_excel.R", local = TRUE)$value
+      source("R/util_PCA_function.R", local = TRUE)$value
+      source("R/util_PCA_customization.R", local = TRUE)$value
+      source("R/util_PCA_by_CPM.R", local = TRUE)$value
+      source("R/util_PCA_by_Q3.R", local = TRUE)$value
+      source("R/util_PCA_by_RUV4.R", local = TRUE)$value
+      source("R/util_differential_gene_exp.R", local = TRUE)$value
+      source("R/util_table.R", local = TRUE)$value
+      source("R/util_volcano.R", local = TRUE)$value
+      source("R/util_heatmap.R", local = TRUE)$value
+
+
         options(shiny.maxRequestSize = 50 * 1024^2)
-      observe({
+      shiny::observe({
         if (is.null(input$selectedTypes)){
           bslib::nav_hide("navpanel", "PCA")
         } else {
@@ -76,7 +90,7 @@ shinyDSP <- function() {
       }
       )
 
-      observe({
+      shiny::observe({
         if (is.null(input$selectedNorm)){
           bslib::nav_hide("navpanel", "Table")
           bslib::nav_hide("navpanel", "Volcano")
@@ -90,18 +104,6 @@ shinyDSP <- function() {
       )
 
 
-
-        ## These files need to be sourced unlike interface_* and observeEvent_*
-        source("R/util_process_excel.R", local = TRUE)$value
-        source("R/util_PCA_function.R", local = TRUE)$value
-        source("R/util_PCA_customization.R", local = TRUE)$value
-        source("R/util_PCA_by_CPM.R", local = TRUE)$value
-        source("R/util_PCA_by_Q3.R", local = TRUE)$value
-        source("R/util_PCA_by_RUV4.R", local = TRUE)$value
-        source("R/util_differential_gene_exp.R", local = TRUE)$value
-        source("R/util_table.R", local = TRUE)$value
-        source("R/util_volcano.R", local = TRUE)$value
-        source("R/util_heatmap.R", local = TRUE)$value
 
 
 
@@ -141,21 +143,21 @@ shinyDSP <- function() {
 
 
         ## --------------------Table observe
-        observe({
+        shiny::observe({
           lapply(names(topTabDF()), function(name) {
             output[[paste0("table_", name)]] <- DT::renderDataTable({
               topTabDF()[[name]] %>%
-                dplyr::mutate(dplyr::across(where(is.numeric), ~ ifelse(abs(.) < 1,
+                dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~ ifelse(abs(.) < 1,
                                               formatC(., format = "e", digits = 3),  # Scientific notation for abs < 1
                                               formatC(., format = "f", digits = 3)))) %>%
                 DT::datatable()
             })
-            output[[paste0("downloadTable_", name)]] <- downloadHandler(
+            output[[paste0("downloadTable_", name)]] <- shiny::downloadHandler(
               filename = function() {
                 paste(name, "csv", sep = ".")
               },
               content = function(file) {
-                write.csv(topTabDF()[[name]], file, row.names = FALSE)
+                utils::write.csv(topTabDF()[[name]], file, row.names = FALSE)
               }
             )
           }
@@ -169,12 +171,14 @@ shinyDSP <- function() {
         })
         # nocov end
 
-        observe({
+        shiny::observe({
           lapply(names(volcano()), function(name) {
             output[[paste0("volcano_", name)]] <- shiny::renderPlot({
               volcano()[[name]]
 
             })
+
+
           }
           )
         })

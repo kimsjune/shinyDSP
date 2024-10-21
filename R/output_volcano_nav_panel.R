@@ -51,6 +51,8 @@ output$volcanoUI <- shiny::renderUI({
     )
 })
 
+
+observe({
 lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
     output[[paste0("downloadVolcano", ext)]] <- downloadHandler(
         filename = function() {
@@ -69,6 +71,8 @@ lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
                    device = ext)
         }
     )
+})
+
 })
 # nocov end
 
