@@ -1,36 +1,49 @@
+.speRuv_NCGs <- function(input, output, session, rv) {
 # nocov start
-speRUV_NCGs <- shiny::eventReactive(spe(), {
-    return(standR::findNCGs(spe(),
+speRuv_NCGs <- shiny::eventReactive(rv$spe(), {
+    return(standR::findNCGs(rv$spe(),
         batch_name = input$selectedBatch,
         top_n = 200
     ))
 })
 # nocov end
+    return(speRuv_NCGs)
+}
 
+.speRuvBatchCorrection <- function(input, output, session, rv) {
 # nocov start
-speRUVBatchCorrection <- shiny::eventReactive(list(speRUV_NCGs(), input$k), {
+speRuvBatchCorrection <- shiny::eventReactive(list(rv$speRuv_NCGs(), input$k), {
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
-    return(standR::geomxBatchCorrection(speRUV_NCGs(),
+    return(standR::geomxBatchCorrection(rv$speRuv_NCGs(),
         factors = ExpVar,
-        NCGs = S4Vectors::metadata(speRUV_NCGs())$NCGs, k = input$k
+        NCGs = S4Vectors::metadata(rv$speRuv_NCGs())$NCGs, k = input$k
     ))
 })
 # nocov end
+    return(speRuvBatchCorrection)
+}
 
+.speRuv <- function(input, output, session, rv) {
 # nocov start
-speRUV <- shiny::eventReactive(speRUVBatchCorrection(), {
-    speRUV <- scater::runPCA(speRUVBatchCorrection())
-    return(speRUV)
+speRuv <- shiny::eventReactive(rv$speRuvBatchCorrection(), {
+    speRuv <- scater::runPCA(rv$speRuvBatchCorrection())
+    return(speRuv)
 })
 # nocov end
+    return(speRuv)
+}
 
+.speRuv_compute <- function(input, output, session, rv) {
 # nocov start
-speRUV_compute <- shiny::eventReactive(speRUV(), {
-    speRUV_compute <- SingleCellExperiment::reducedDim(speRUV(), "PCA")
-    return(speRUV_compute)
+speRuv_compute <- shiny::eventReactive(rv$speRuv(), {
+    speRuv_compute <- SingleCellExperiment::reducedDim(rv$speRuv(), "PCA")
+    return(speRuv_compute)
 })
 # nocov end
+    return(speRuv_compute)
+}
 
+.pcaPlotRuv <- function(input, output, session, rv) {
 # nocov start
 pcaPlotRuv <- shiny::reactive({
 
@@ -48,19 +61,23 @@ pcaPlotRuv <- shiny::reactive({
     })
 
     pca_plot <- .PCAFunction(
-        speRUV(), speRUV_compute(), ExpVar,
+        rv$speRuv(), rv$speRuv_compute(), ExpVar,
         input$selectedTypes, ROIshapes, ROIcolours
     ) +
-        ggplot2::ggtitle(paste0("RUV4 - by ", ExpVar))
+        ggplot2::ggtitle(paste0("Ruv4 - by ", ExpVar))
 
     return(pca_plot)
 })
 # nocov end
+    return(pcaPlotRuv)
+}
 
+
+.pcaPlotRuvBatch <- function(input, output, session, rv) {
 # nocov start
 pcaPlotRuvBatch <- shiny::reactive({
 
-    batchVars <- data()[[2]] %>%
+    batchVars <- rv$data()[[2]] %>%
         dplyr::pull(input$selectedBatch) %>%
         unique()
 
@@ -76,12 +93,14 @@ pcaPlotRuvBatch <- shiny::reactive({
     })
 
     pcaPlot <- .PCAFunction(
-        speRUV(), speRUV_compute(),
+        rv$speRuv(), rv$speRuv_compute(),
         input$selectedBatch, batchVars,
         ROIshapes, ROIcolours
     ) +
-        ggplot2::ggtitle("RUV4 - by batch")
+        ggplot2::ggtitle("Ruv4 - by batch")
 
     return(pcaPlot)
 })
 # nocov end
+    return(pcaPlotRuvBatch)
+}

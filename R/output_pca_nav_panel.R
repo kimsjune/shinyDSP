@@ -1,9 +1,9 @@
-.outputPcaNavPanel <- function() {
+.outputPcaNavPanel <- function(input, output, session, rv) {
   # nocov start
   # Opens a grouped widgets to pick shape and colour
   output$customization <- shiny::renderUI({
     shiny::req(input$selectedTypes)
-    PCAcustomization()
+    rv$pcaCustomization()
   })
   # nocov end
 
@@ -11,7 +11,7 @@
   # Opens a grouped widgets to pick shape and colour
   output$customizationBatch <- shiny::renderUI({
     shiny::req(input$selectedTypes)
-    PCAcustomizationBatch()
+    rv$pcaCustomizationBatch()
   })
   # nocov end
 
@@ -23,7 +23,7 @@
         "Hit 'run' to generate PCA plots."
       )
     )
-    shiny::renderPlot(pcaPlotCpm()+
+    shiny::renderPlot(rv$pcaPlotCpm()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -31,7 +31,7 @@
   # nocov start
   output$pcaPlotQ3 <- shiny::renderUI({
     shiny::req(input$generatePCA, input$selectedTypes)
-    shiny::renderPlot(pcaPlotQ3()+
+    shiny::renderPlot(rv$pcaPlotQ3()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -39,7 +39,7 @@
   # nocov start
   output$pcaPlotRuv <- shiny::renderUI({
     shiny::req(input$generatePCA, input$selectedTypes)
-    shiny::renderPlot(pcaPlotRuv()+
+    shiny::renderPlot(rv$pcaPlotRuv()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -47,7 +47,7 @@
   # nocov start
   output$pcaPlotCpmBatch <- shiny::renderUI({
     shiny::req(input$generatePCA, input$selectedTypes)
-    shiny::renderPlot(pcaPlotCpmBatch()+
+    shiny::renderPlot(rv$pcaPlotCpmBatch()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -55,7 +55,7 @@
   # nocov start
   output$pcaPlotQ3Batch <- shiny::renderUI({
     shiny::req(input$generatePCA, input$selectedTypes)
-    shiny::renderPlot(pcaPlotQ3Batch()+
+    shiny::renderPlot(rv$pcaPlotQ3Batch()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -63,7 +63,7 @@
   # nocov start
   output$pcaPlotRuvBatch <- shiny::renderUI({
     shiny::req(input$generatePCA, input$selectedTypes)
-    shiny::renderPlot(pcaPlotRuvBatch()+
+    shiny::renderPlot(rv$pcaPlotRuvBatch()+
                         ggplot2::theme(legend.position = "none"))
   })
   # nocov end
@@ -74,7 +74,7 @@
     shiny::req(input$generatePCA, input$selectedTypes)
     legend <- ggpubr::as_ggplot(
       ggpubr::get_legend(
-        pcaPlotCpm()
+        rv$pcaPlotCpm()
       )
     )
 
@@ -87,7 +87,7 @@
     shiny::req(input$generatePCA, input$selectedTypes)
     legend <- ggpubr::as_ggplot(
       ggpubr::get_legend(
-        pcaPlotCpmBatch()
+        rv$pcaPlotCpmBatch()
       )
     )
     shiny::renderPlot(legend)
@@ -159,12 +159,12 @@ shiny::observe({
         ggplot2::ggsave(file,
                plot = cowplot::plot_grid(
 
-                 pcaPlotCpm() + ggplot2::theme(legend.position = "none"),
-                 pcaPlotQ3() + ggplot2::theme(legend.position = "none"),
-                 pcaPlotRuv() + ggplot2::theme(legend.position = "none"),
-                 pcaPlotCpmBatch() + ggplot2::theme(legend.position = "none"),
-                 pcaPlotQ3Batch() + ggplot2::theme(legend.position = "none"),
-                 pcaPlotRuvBatch() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotCpm() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotQ3() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotRuv() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotCpmBatch() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotQ3Batch() + ggplot2::theme(legend.position = "none"),
+                 rv$pcaPlotRuvBatch() + ggplot2::theme(legend.position = "none"),
                  align = 'hv', axis = 'tblr', ncol = 3, nrow = 2
                ),
                height = 14, width = 14, units = c("in"),
@@ -184,12 +184,12 @@ shiny::observe({
                                    plot = cowplot::plot_grid(
                                    ggpubr::as_ggplot(
                                      ggpubr::get_legend(
-                                       pcaPlotCpm()
+                                       rv$pcaPlotCpm()
                                      )
                                    ),
                                    ggpubr::as_ggplot(
                                      ggpubr::get_legend(
-                                       pcaPlotCpmBatch()
+                                       rv$pcaPlotCpmBatch()
                                      )
                                    )),
                height = 12, width = 12, units = c("in"),

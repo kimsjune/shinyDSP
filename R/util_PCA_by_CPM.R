@@ -1,17 +1,24 @@
+.speCpm <- function(input, output, session, rv) {
 # nocov start
-speCPM <- shiny::eventReactive(spe(), {
-    speCPM <- scater::runPCA(spe())
-    return(speCPM)
+speCpm <- shiny::eventReactive(rv$spe(), {
+    speCpm <- scater::runPCA(rv$spe())
+    return(speCpm)
 })
 # nocov end
+    return(speCpm)
+}
 
+.speCpm_compute <- function(input, output, session, rv) {
 # nocov start
-speCPM_compute <- shiny::eventReactive(speCPM(), {
-    speCPM_compute <- SingleCellExperiment::reducedDim(speCPM(), "PCA")
-    return(speCPM_compute)
+speCpm_compute <- shiny::eventReactive(rv$speCpm(), {
+    speCpm_compute <- SingleCellExperiment::reducedDim(rv$speCpm(), "PCA")
+    return(speCpm_compute)
 })
 # nocov end
+    return(speCpm_compute)
+}
 
+.pcaPlotCpm <- function(input, output, session, rv) {
 # nocov start
 pcaPlotCpm <- shiny::reactive({
 
@@ -29,7 +36,7 @@ pcaPlotCpm <- shiny::reactive({
     })
 
     pcaPlot <- .PCAFunction(
-        speCPM(), speCPM_compute(), ExpVar,
+        rv$speCpm(), rv$speCpm_compute(), ExpVar,
         input$selectedTypes, ROIshapes, ROIcolours
     ) +
         ggplot2::ggtitle(paste0("CPM - by ", ExpVar))
@@ -37,11 +44,14 @@ pcaPlotCpm <- shiny::reactive({
     return(pcaPlot)
 })
 # nocov end
+    return(pcaPlotCpm)
+}
 
+.pcaPlotCpmBatch <- function(input, output, session, rv) {
 # nocov start
 pcaPlotCpmBatch <- shiny::reactive({
 
-    batchVars <- data()[[2]] |>
+    batchVars <- rv$data()[[2]] |>
         dplyr::pull(input$selectedBatch) |>
         unique()
 
@@ -57,7 +67,7 @@ pcaPlotCpmBatch <- shiny::reactive({
     })
 
     pcaPlot <- .PCAFunction(
-        speCPM(), speCPM_compute(),
+        rv$speCpm(), rv$speCpm_compute(),
         input$selectedBatch, batchVars,
         ROIshapes, ROIcolours
     ) +
@@ -66,3 +76,5 @@ pcaPlotCpmBatch <- shiny::reactive({
     return(pcaPlot)
 })
 # nocov end
+    return(pcaPlotCpmBatch)
+}

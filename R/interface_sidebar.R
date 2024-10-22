@@ -4,7 +4,7 @@
 #' @keywords internal
 #'
 #' @author Seung J. Kim
-.interfaceSidebar <- function() {
+.interfaceSidebar <- function(output) {
   bslib::sidebar(
     bslib::accordion(
       open = TRUE,

@@ -1,4 +1,4 @@
-.outputHeatmapNavPanel <- function() {
+.outputHeatmapNavPanel <- function(input, output, session, rv) {
     # nocov start
     output$heatmapUI <- shiny::renderUI({
         shiny::renderPlot(

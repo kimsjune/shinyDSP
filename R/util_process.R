@@ -1,3 +1,4 @@
+.data <- function(input, output, session, rv){
 # nocov
 data <- shiny::eventReactive(input$load, {
     shiny::validate(
@@ -50,8 +51,11 @@ data <- shiny::eventReactive(input$load, {
 
     return(data)
 })
+    return(data)
+}
 # nocov end
 
+.new_sampleAnnoFile <- function(input, output, session, rv) {
 new_sampleAnnoFile <- shiny::eventReactive(input$selectedExpVar, {
     req(input$selectedExpVar)
 
@@ -59,24 +63,27 @@ new_sampleAnnoFile <- shiny::eventReactive(input$selectedExpVar, {
 
 
     if (length(input$selectedExpVar) > 1) {
-        new_sampleAnnoFile <- data()$sampleAnnoFile %>%
+        new_sampleAnnoFile <- rv$data()$sampleAnnoFile %>%
             tidyr::unite(
                 !!ExpVar,
                 input$selectedExpVar,
                 sep = "_"
             )
     } else {
-        new_sampleAnnoFile <- data()$sampleAnnoFile
+        new_sampleAnnoFile <- rv$data()$sampleAnnoFile
     }
     return(new_sampleAnnoFile)
 })
+    return(new_sampleAnnoFile)
+}
 
+.spe <- function(input, output, session, rv) {
 # nocov start
 spe <- shiny::eventReactive(c(input$selectedTypes), {
     spe <- standR::readGeoMx(
-        data()[[1]],
+        rv$data()[[1]],
         # data()[[2]]
-        new_sampleAnnoFile()
+        rv$new_sampleAnnoFile()
     )
     selectedTypes <- input$selectedTypes
     selectedExpVar <- paste0(input$selectedExpVar, collapse = "_")
@@ -96,3 +103,5 @@ spe <- shiny::eventReactive(c(input$selectedTypes), {
     return(spe)
 })
 # nocov end
+    return(spe)
+}

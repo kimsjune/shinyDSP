@@ -4,7 +4,7 @@
 #' @keywords internal
 #'
 #' @author Seung J. Kim
-.interfaceVolcanoNavPanel <- function() {
+.interfaceVolcanoNavPanel <- function(output) {
     bslib::nav_panel(
         "Volcano",
         value = "Volcano",

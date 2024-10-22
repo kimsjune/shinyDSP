@@ -1,4 +1,4 @@
-.outputVolcanoNavPanel <- function(){
+.outputVolcanoNavPanel <- function(input, output, session, rv){
 # nocov start
 output$customRange <- shiny::renderUI({
     htmltools::div(
@@ -37,7 +37,7 @@ output$volcanoUI <- shiny::renderUI({
     #     height = shiny::reactive(350 * ncol(contrast()))
     # )
 
-    tabsets <- lapply(names(volcano()), function(name){
+    tabsets <- lapply(names(rv$volcano()), function(name){
         shiny::tabPanel(name,
                  shiny::plotOutput(outputId = paste0("volcano_", name)),
 
@@ -57,8 +57,8 @@ output$volcanoUI <- shiny::renderUI({
 })
 
 
-shiny::observe({
-lapply(names(volcano()), function(name) {
+shiny::observeEvent(input$generateVolcano,{
+lapply(names(rv$volcano()), function(name) {
 
 
 
@@ -68,10 +68,10 @@ lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
             paste("volcano", name, ext, sep = ".")
         },
         content = function(file) {
-
+            rv$
             ggsave(file,
 
-                   volcano()[[name]],
+                   rv$volcano()[[name]],
 
 
 

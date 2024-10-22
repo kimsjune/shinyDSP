@@ -4,7 +4,7 @@
 #' @keywords internal
 #'
 #' @author Seung J. Kim
-.interfacePcaNavPanel <- function() {
+.interfacePcaNavPanel <- function(output) {
     bslib::nav_panel(
         "PCA",
         value = "PCA",

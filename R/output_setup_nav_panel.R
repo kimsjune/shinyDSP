@@ -1,4 +1,4 @@
-.outputSetupNavPanel <- function() {
+.outputSetupNavPanel <- function(input, output, session, rv) {
 
     # nocov start
     output$countFileText <- shiny::renderUI({
@@ -13,14 +13,14 @@
     output$countFile <- shiny::renderUI({
         shiny::validate(
             shiny::need(
-                shiny::isTruthy(input$load) & shiny::isTruthy(data()),
+                shiny::isTruthy(input$load) & shiny::isTruthy(rv$data()),
 
 
                 "'Use demo data or upload your own, and hit 'load'!"
             )
         )
         DT::renderDT(
-            data()$countFile %>%
+            rv$data()$countFile %>%
                 dplyr::slice_sample(n = 20) %>%
                 DT::datatable()
 
@@ -39,10 +39,10 @@
 
     # nocov start
     output$sampleAnnoFile <- shiny::renderUI({
-        shiny::req(input$load, data())
+        shiny::req(input$load, rv$data())
 
         DT::renderDT(
-            data()$sampleAnnoFile %>%
+            rv$data()$sampleAnnoFile %>%
                 dplyr::slice_sample(n = 20) %>%
                 DT::datatable()
         )

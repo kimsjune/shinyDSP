@@ -24,10 +24,10 @@ shinyDSP <- function() {
         title = "shinyDSP",
         id = "navpanel",
         fillable = TRUE,
-        sidebar = .interfaceSidebar(),
-        .interfaceSetupNavPanel(),
-        .interfacePcaNavPanel(),
-        .interfaceTableNavPanel(),
+        sidebar = .interfaceSidebar(output),
+        .interfaceSetupNavPanel(output),
+        .interfacePcaNavPanel(output),
+        .interfaceTableNavPanel(output),
         .interfaceVolcanoNavPanel(),
         .interfaceHeatmapNavPanel()
 
@@ -67,16 +67,75 @@ shinyDSP <- function() {
 
     server <- function(input, output, session) {
 
-      ## These files need to be sourced unlike interface_* and observeEvent_*
-      source("R/util_process_excel.R", local = TRUE)$value
-      source("R/util_PCA_function.R", local = TRUE)$value
-      source("R/util_PCA_customization.R", local = TRUE)$value
-      source("R/util_PCA_by_CPM.R", local = TRUE)$value
-      source("R/util_PCA_by_Q3.R", local = TRUE)$value
-      source("R/util_PCA_by_RUV4.R", local = TRUE)$value
-      source("R/util_differential_gene_exp.R", local = TRUE)$value
-      source("R/util_table.R", local = TRUE)$value
-      source("R/util_volcano.R", local = TRUE)$value
+      rv <- shiny::reactiveValues()
+
+      observe({
+        ##------util_process.R----------------
+        rv$data <- .data(input, output, session, rv)
+        rv$new_sampleAnnoFile <- .new_sampleAnnoFile(input, output, session, rv)
+        rv$spe <- .spe(input, output, session, rv)
+
+        ##------output_PCA_customization.R-----------
+        rv$pcaCustomization <- .pcaCustomization(input, output, session, rv)
+        rv$pcaCustomizationBatch <- .pcaCustomizationBatch(input, output, session, rv)
+
+        ##------util_PCA_by_CPM.R
+        rv$speCpm <- .speCpm(input, output, session, rv)
+        rv$speCpm_compute <- .speCpm_compute(input, output, session, rv)
+        rv$pcaPlotCpm <- .pcaPlotCpm(input, output, session, rv)
+        rv$pcaPlotCpmBatch <- .pcaPlotCpmBatch(input, output, session, rv)
+
+        ##------util_PCA_by_Q3.R
+        rv$speQ3 <- .speQ3(input, output, session, rv)
+        rv$speQ3_compute <- .speQ3_compute(input, output, session, rv)
+        rv$pcaPlotQ3 <- .pcaPlotQ3(input, output, session, rv)
+        rv$pcaPlotQ3Batch <- .pcaPlotQ3Batch(input, output, session, rv)
+
+        ##------util_PCA_by_RUV4.R
+        rv$speRuv_NCGs <- .speRuv_NCGs(input, output, session, rv)
+        rv$speRuvBatchCorrection <- .speRuvBatchCorrection(input, output, session, rv)
+        rv$speRuv <- .speRuv(input, output, session, rv)
+        rv$speRuv_compute <- .speRuv_compute(input, output, session, rv)
+        rv$pcaPlotRuv <- .pcaPlotRuv(input, output, session, rv)
+        rv$pcaPlotRuvBatch <- .pcaPlotRuvBatch(input, output, session, rv)
+
+
+
+      })
+
+
+      shiny::observeEvent(input$selectedNorm,{
+
+
+
+
+        ##------util_differential_gene_exp.R
+        rv$design <- .design(input, output, session, rv)
+        rv$dge <- .dge(input, output, session, rv)
+        rv$contrast <- .contrast(input, output, session, rv)
+        rv$efit <- .efit(input, output,session, rv)
+
+
+
+
+        ##------util_table.R
+        rv$topTabDF <- .topTabDF(input, output, session, rv)
+
+        ##------util_volcano.R
+        rv$volcano <- .volcano(input, output, session, rv)
+
+
+
+
+      })
+
+      shiny::eventReactive(input$generateTable,{
+        print(rv$topTabDF())
+      })
+
+
+
+
       source("R/util_heatmap.R", local = TRUE)$value
 
 
@@ -120,12 +179,12 @@ shinyDSP <- function() {
         .observeEvent_sidebar(input)
 
         ## --------------------Sidebar outputs----------------------------------
-        source("R/output_sidebar.R", local = TRUE)$value
-        .outputSidebar()
+        # source("R/output_sidebar.R", local = TRUE)$value
+        .outputSidebar(input, output, session, rv)
 
         ## -------
-        source("R/output_setup_nav_panel.R", local = TRUE)$value
-        .outputSetupNavPanel()
+        # source("R/output_setup_nav_panel.R", local = TRUE)$value
+        .outputSetupNavPanel(input, output, session, rv)
 
 
         ## --------------------PCA nav panel observe----------------------------
@@ -133,36 +192,17 @@ shinyDSP <- function() {
 
 
         ## --------------------PCA nav panel outputs----------------------------
-        source("R/output_pca_nav_panel.R", local = TRUE)$value
-        .outputPcaNavPanel()
+        # source("R/output_pca_nav_panel.R", local = TRUE)$value
+        .outputPcaNavPanel(input, output, session, rv)
 
 
         ## --------------------Table nav panel output---------------------------
-        source("R/output_table_nav_panel.R", local = TRUE)$value
-        .outputTableNavPanel()
+        # source("R/output_table_nav_panel.R", local = TRUE)$value
+        .outputTableNavPanel(input, output, session, rv)
 
 
         ## --------------------Table observe
-        shiny::observe({
-          lapply(names(topTabDF()), function(name) {
-            output[[paste0("table_", name)]] <- DT::renderDataTable({
-              topTabDF()[[name]] %>%
-                dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~ ifelse(abs(.) < 1,
-                                              formatC(., format = "e", digits = 3),  # Scientific notation for abs < 1
-                                              formatC(., format = "f", digits = 3)))) %>%
-                DT::datatable()
-            })
-            output[[paste0("downloadTable_", name)]] <- shiny::downloadHandler(
-              filename = function() {
-                paste(name, "csv", sep = ".")
-              },
-              content = function(file) {
-                utils::write.csv(topTabDF()[[name]], file, row.names = FALSE)
-              }
-            )
-          }
-          )
-        })
+
 
         ## --------------------Volcano observe----------------------------------
         # nocov start
@@ -171,10 +211,10 @@ shinyDSP <- function() {
         })
         # nocov end
 
-        shiny::observe({
-          lapply(names(volcano()), function(name) {
+        shiny::observeEvent(input$generateVolcano,{
+          lapply(names(rv$volcano()), function(name) {
             output[[paste0("volcano_", name)]] <- shiny::renderPlot({
-              volcano()[[name]]
+              rv$volcano()[[name]]
 
             })
 
@@ -185,16 +225,16 @@ shinyDSP <- function() {
 
 
         ## --------------------Volcano outputs----------------------------------
-        source("R/output_volcano_nav_panel.R", local = TRUE)$value
-        .outputVolcanoNavPanel()
+        # source("R/output_volcano_nav_panel.R", local = TRUE)$value
+        .outputVolcanoNavPanel(input, output, session, rv)
 
 
 
 
 
         #### --------------------Heatmap outputs--------------------------------
-        source("R/output_heatmap_nav_panel.R", local = TRUE)$value
-        .outputHeatmapNavPanel()
+        # source("R/output_heatmap_nav_panel.R", local = TRUE)$value
+        .outputHeatmapNavPanel(input, output, session, rv)
 
 
 

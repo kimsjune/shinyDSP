@@ -1,8 +1,15 @@
+.design <- function(input, output, session, rv) {
 # nocov start
-design <- shiny::reactive({
+design <- shiny::eventReactive(input$selectedNorm,{
     shiny::req(input$selectedNorm)
+    spe <- switch(input$selectedNorm,
+                  "CPM" = rv$speCpm(),
+                  "Q3" = rv$speQ3(),
+                  "RUV4" = rv$speRuv())
 
-    spe <- eval(parse(text = input$selectedNorm))
+
+
+
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     # li <- list()
@@ -19,7 +26,7 @@ design <- shiny::reactive({
 
     preFormula <- c("~0", ExpVar, preFormula)
 
-    if (input$selectedNorm == "speRUV()") {
+    if (input$selectedNorm == "rv$speRuv()") {
         for (i in seq_along(input$k)) {
             preFormula[[i + length(preFormula)]] <- paste0("ruv_W", i)
         }
@@ -44,56 +51,68 @@ design <- shiny::reactive({
     return(design)
 })
 # nocov end
+    return(design)
+}
 
+.dge <- function(input, output, session, rv) {
 # nocov start
-dge <- shiny::eventReactive(design(), {
+dge <- shiny::eventReactive(rv$design(), {
     shiny::withProgress(message = "Creating a DGEList object...", {
-        spe <- eval(parse(text = input$selectedNorm))
+        spe <- switch(input$selectedNorm,
+                      "CPM" = rv$speCpm(),
+                      "Q3" = rv$speQ3(),
+                      "RUV4" = rv$speRuv())
 
         dge <- edgeR::SE2DGEList(spe)
 
         shiny::incProgress(1 / 4)
 
-        keep <- edgeR::filterByExpr(dge, design())
+        keep <- edgeR::filterByExpr(dge, rv$design())
 
 
         dge <- dge[keep, , keep.lib.sizes = FALSE]
         shiny::incProgress(2 / 4)
 
 
-        dge <- edgeR::estimateDisp(dge, design = design(), robust = TRUE)
+        dge <- edgeR::estimateDisp(dge, design = rv$design(), robust = TRUE)
         shiny::incProgress(3 / 4)
     })
     return(dge)
 })
 # nocov end
+    return(dge)
+}
 
+.efit <- function(input, output, session, rv) {
 # nocov start
-efit <- shiny::eventReactive(dge(), {
-    shiny::req(input$selectedBatch, contrast())
+efit <- shiny::eventReactive(rv$dge(), {
+    shiny::req(input$selectedBatch, rv$contrast())
 
     shiny::withProgress(
         message = "Performing differential gene expression analysis...",
         {
-            spe <- eval(parse(text = input$selectedNorm))
+            spe <- switch(input$selectedNorm,
+                          "CPM" = rv$speCpm(),
+                          "Q3" = rv$speQ3(),
+                          "RUV4" = rv$speRuv())
 
             block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
 
-            v <- limma::voom(dge(), design())
-            corfit <- limma::duplicateCorrelation(v, design(), block = block_by)
+            v <- limma::voom(rv$dge(), rv$design())
+            corfit <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
 
             shiny::incProgress(1 / 5)
 
-            v2 <- limma::voom(dge(), design(), block = block_by, correlation = corfit$consensus)
-            corfit2 <- limma::duplicateCorrelation(v, design(), block = block_by)
+            v2 <- limma::voom(rv$dge(), rv$design(), block = block_by, correlation = corfit$consensus)
+            corfit2 <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
 
             shiny::incProgress(2 / 5)
 
-            fit <- limma::lmFit(v, design(), block = block_by, correlation = corfit2$consensus)
+            fit <- limma::lmFit(v, rv$design(), block = block_by, correlation = corfit2$consensus)
 
             shiny::incProgress(3 / 5)
 
-            fit_contrast <- limma::contrasts.fit(fit, contrasts = contrast())
+            fit_contrast <- limma::contrasts.fit(fit, contrasts = rv$contrast())
             efit <- limma::eBayes(fit_contrast, robust = TRUE)
 
             shiny::incProgress(4 / 5)
@@ -103,10 +122,12 @@ efit <- shiny::eventReactive(dge(), {
     return(efit)
 })
 # nocov end
+    return(efit)
+}
 
-
+.contrast <- function(input, output, session, rv) {
 # nocov start
-contrast <- shiny::eventReactive(c(design(), input$selectedTypes), {
+contrast <- shiny::eventReactive(c(rv$design(), input$selectedTypes), {
     # replace space with _
     selectedTypes_underscore <- gsub(" ", "_", input$selectedTypes)
 
@@ -128,7 +149,7 @@ contrast <- shiny::eventReactive(c(design(), input$selectedTypes), {
     con <- limma::makeContrasts(
         # Must use as.character()
         contrasts = as.character(unlist(comparisons)),
-        levels = colnames(design())
+        levels = colnames(rv$design())
     )
 
     colnames(con) <- sub("-", "_vs_", colnames(con))
@@ -136,3 +157,5 @@ contrast <- shiny::eventReactive(c(design(), input$selectedTypes), {
     return(con)
 })
 # nocov end
+    return(contrast)
+}

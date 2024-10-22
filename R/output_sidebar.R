@@ -1,7 +1,7 @@
-.outputSidebar <- function() {
+.outputSidebar <- function(input, output, session, rv) {
     # nocov start
     output$selectYourExpVar <- shiny::renderUI({
-        shiny::req(data())
+        shiny::req(rv$data())
 
         shiny::selectInput(
             inputId = "selectedExpVar",
@@ -14,7 +14,7 @@
                 "Pick column(s) that contain biological variables such as genotype and/or
           treatment."
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selectize = TRUE,
@@ -25,7 +25,7 @@
 
     # nocov start
     output$selectYourType <- shiny::renderUI({
-        shiny::req(new_sampleAnnoFile(), input$selectedExpVar)
+        shiny::req(rv$new_sampleAnnoFile(), input$selectedExpVar)
 
 
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
@@ -41,7 +41,7 @@
                 "Pick groups you want to compare such as 'WT' and 'Mutant'"
             ),
             # choices = data()$sampleAnnoFile %>% pull(input$selectedExpVar) %>% unique(),
-            choices = new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
+            choices = rv$new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
             multiple = TRUE,
             selectize = TRUE,
             selected = NULL
@@ -52,7 +52,7 @@
 
     # nocov start
     output$selectYourBatch <- shiny::renderUI({
-        shiny::req(data())
+        shiny::req(rv$data())
 
         shiny::selectInput(
             inputId = "selectedBatch",
@@ -64,7 +64,7 @@
                 ),
                 "For example, sample preparation date "
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = FALSE
         )
@@ -73,7 +73,7 @@
 
     # nocov start
     output$selectYourConfounder <- shiny::renderUI({
-        shiny::req(data())
+        shiny::req(rv$data())
 
         shiny::selectizeInput(
             inputId = "selectedConfounders",
@@ -85,7 +85,7 @@
                 ),
                 "For example, sex or age "
             ),
-            choices = data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selected = NULL,
@@ -100,7 +100,7 @@
     # nocov start
 
         output$selectYourK <- shiny::renderUI({
-            shiny::req(data())
+            shiny::req(rv$data())
             shiny::numericInput(
                 inputId = "k",
                 "k value for RUV4 norm.",
@@ -115,13 +115,13 @@
     # nocov start
 
         output$selectYourNorm <- shiny::renderUI({
-            shiny::req(data())
+            shiny::req(rv$data())
             shinyWidgets::radioGroupButtons(
                 inputId = "selectedNorm",
                 choices = list(
-                    "CPM" = "speCPM()",
-                    "Q3" = "speQ3()",
-                    "RUV4" = "speRUV()"
+                    "CPM" = "CPM",
+                    "Q3" = "Q3",
+                    "RUV4" = "RUV4"
                 ),
                 size = "sm",
                 justified = TRUE,
@@ -140,7 +140,7 @@
 
     # nocov start
         output$selectYourLFC <- shiny::renderUI({
-            shiny::req(data())
+            shiny::req(rv$data())
 
             shiny::numericInput(
                 inputId = "lfc",

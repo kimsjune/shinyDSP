@@ -1,9 +1,10 @@
+.volcano <- function(input, output, session, rv) {
 # nocov start
 volcano <- shiny::eventReactive(c(
     input$selectedTypes, input$selectedNorm,
     input$generateVolcano
 ), {
-    shiny::req(efit(), contrast(), input$logFCcutoff, input$PvalCutoff)
+    shiny::req(rv$efit(), rv$contrast(), input$logFCcutoff, input$PvalCutoff)
 
     shiny::withProgress(message = "Plotting...", {
         # make data frame
@@ -23,8 +24,8 @@ volcano <- shiny::eventReactive(c(
         #             NA
         #         ))
         # })
-        volcanoDF <- lapply(seq_len(ncol(contrast())), function(i) {
-                limma::topTable(efit(), coef = i, number = Inf) %>%
+        volcanoDF <- lapply(seq_len(ncol(rv$contrast())), function(i) {
+                limma::topTable(rv$efit(), coef = i, number = Inf) %>%
                     tibble::rownames_to_column(var = "Target.name") %>%
                     dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
                     dplyr::mutate(de = ifelse(logFC >= input$logFCcutoff &
@@ -58,7 +59,7 @@ volcano <- shiny::eventReactive(c(
             plots <- lapply(seq_along(volcanoDF), function(i) {
                 .volcanoFunction(
                     volcanoDF[[i]], input$delabSize, input$maxOverlap,
-                    colnames(contrast())[i],
+                    colnames(rv$contrast())[i],
                     input$logFCcutoff, input$PvalCutoff,
                     input$DnCol, input$notDEcol, input$UpCol
                 ) +
@@ -71,7 +72,7 @@ volcano <- shiny::eventReactive(c(
             plots <- lapply(seq_along(volcanoDF), function(i) {
                 .volcanoFunction(
                     volcanoDF[[i]], input$delabSize, input$maxOverlap,
-                    colnames(contrast())[i],
+                    colnames(rv$contrast())[i],
                     input$logFCcutoff, input$PvalCutoff,
                     input$DnCol, input$notDEcol, input$UpCol
                 ) +
@@ -86,8 +87,10 @@ volcano <- shiny::eventReactive(c(
         }
     })
 
-    names(plots) <- names(topTabDF())
+    names(plots) <- names(rv$topTabDF())
 
     return(plots)
 })
 # nocov end
+    return(volcano)
+}

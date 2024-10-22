@@ -1,4 +1,5 @@
-PCAcustomization <- shiny::reactive({
+.pcaCustomization <- function(input, output, session, rv) {
+pcaCustomization <- shiny::reactive({
     shapes_colours_pca <- list()
     shapes_colours_pca <- lapply(seq_along(input$selectedTypes), function(i) {
         htmltools::div(
@@ -45,9 +46,12 @@ PCAcustomization <- shiny::reactive({
 
     return(shapes_colours_pca) # Show the actual widget,
 })
+    return(pcaCustomization)
+}
 
+.pcaCustomizationBatch <- function(input, output, session, rv) {
 # nocov start
-PCAcustomizationBatch <- shiny::reactive({
+pcaCustomizationBatch <- shiny::reactive({
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     selectedTypes <- lapply(seq_along(input$selectedTypes), function(i) {
@@ -55,7 +59,7 @@ PCAcustomizationBatch <- shiny::reactive({
     })
 
     # must use dplyr for this to work...
-    batchVars <- new_sampleAnnoFile() %>%
+    batchVars <- rv$new_sampleAnnoFile() %>%
         tibble::as_tibble() %>%
         # not sure when to use !! or as.name() OR both
         dplyr::filter(!!as.name(ExpVar) %in% !!selectedTypes) %>%
@@ -111,3 +115,5 @@ PCAcustomizationBatch <- shiny::reactive({
     return(shapes_colours_pca_batch)
 })
 # nocov end
+    return(pcaCustomizationBatch)
+}
