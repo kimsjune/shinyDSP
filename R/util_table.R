@@ -16,7 +16,10 @@ topTabDF <- shiny::reactive({
             tibble::rownames_to_column(var = "Gene")
     })
 
-    names(topTabDF) <- c(colnames(rv$contrast()), "ANOVA")
+    names(topTabDF) <- c(colnames(rv$contrast()),
+                         colnames(rv$contrast()) %>% stringr::str_split(., "_vs_") %>%
+                                      unlist() %>% unique() %>% paste(., collapse = "_vs_")
+                         )
 
     return(topTabDF)
 })

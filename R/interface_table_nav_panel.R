@@ -8,19 +8,8 @@
     bslib::nav_panel(
         "Table",
         value = "Table",
-        bslib::layout_sidebar(
-            # sidebar = bslib::accordion(
-            #     bslib::accordion_panel(
-            #         "",
-            #         shiny::actionButton(
-            #             inputId = "generateTable",
-            #             "Show table"
-            #
-            #         )
-            #     )
-            #
-            # ),
+
             shiny::uiOutput("topTable") %>% shinycssloaders::withSpinner(type = 4)
-        )
+
     )
 }

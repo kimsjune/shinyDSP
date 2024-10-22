@@ -61,7 +61,10 @@ volcano <- shiny::eventReactive(input$generateVolcano,{
         }
     })
 
-    names(plots) <- names(rv$topTabDF())
+    ## remove the last name (ANOVA), which is not being plotted as Volcano
+    names(plots) <- names(rv$topTabDF())[-length(
+        names(rv$topTabDF())
+    )]
 
     return(plots)
 })

@@ -45,6 +45,7 @@ Imports:
     SingleCellExperiment,
     standR,
     stats,
+    stringr,
     SummarizedExperiment,
     svglite,
     tibble,

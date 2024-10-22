@@ -9,26 +9,26 @@
                         " ",
                         shiny::actionButton(
                             inputId = "generateHeatmap",
-                            label = "Run"
+                            label = "Show/update"
                         )
                     ),
                     bslib::accordion_panel(
                         "Heatmap options",
                         htmltools::div(
                             shiny::numericInput(
-                                inputId = "top_n_genes",
+                                inputId = "topNgenes",
                                 "Number of genes to show", value = 50
                             ),
                             # numericInput(inputId = "heatmap_fc",
                             #              "log2 FC to test", value = 1),
-                            shiny::textInput("heatmap_col", "Heatmap colour scheme\n (see appendix for options)",
+                            shiny::textInput("heatmapCol", "Heatmap colour scheme\n (see appendix for options)",
                                 value = "Inferno"
                             ),
-                            shiny::sliderInput("heatmap_range",
+                            shiny::sliderInput("heatmapRange",
                                 "Z score range",
                                 value = c(-2, 2), min = -5, max = 5
                             ),
-                            shiny::radioButtons("heatmap_size",
+                            shiny::radioButtons("heatmapSize",
                                 "Plot display size",
                                 choices = c(
                                     "x-small" = 9,
@@ -39,14 +39,13 @@
                                 selected = 12
                             ),
                             shiny::numericInput(
-                                inputId = "heatmap_fontsize",
+                                inputId = "heatmapFontSize",
                                 "Gene name size", value = 12
                             )
                         )
                     )
                 ),
-            shiny::uiOutput("heatmapUI") %>% withSpinner(type = 4),
-            shiny::downloadButton("downloadHeatmap")
+            shiny::uiOutput("heatmapUI") %>% withSpinner(type = 4)
         )
     )
 }

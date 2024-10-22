@@ -92,8 +92,10 @@ shinyDSP <- function() {
         ##------util_volcano.R
         rv$volcano <- .volcano(input, output, session, rv)
 
-
-
+        ##------util_heatmap.R
+        rv$lcpmSubScaleTopGenes <- .lcpmSubScaleTopGenes(input, output, session, rv)
+        rv$columnSplit <- .columnSplit(input, output, session, rv)
+        rv$heatmap <- .heatmap(input, output, session, rv)
 
       })
 
@@ -102,7 +104,7 @@ shinyDSP <- function() {
 
 
 
-      source("R/util_heatmap.R", local = TRUE)$value
+
 
       ##------nav panel behaviour-----------
       .outputNavPanels(input, output, session, rv)
@@ -128,26 +130,9 @@ shinyDSP <- function() {
       .outputTableNavPanel(input, output, session, rv)
 
 
-        ## --------------------Table observe
 
 
-        ## --------------------Volcano observe----------------------------------
-        # nocov start
-        shiny::observeEvent(input$toggleCustomRange, {
-            shinyjs::toggle("showCustomRange")
-        })
-        # nocov end
 
-        # nocov start
-        shiny::observeEvent(input$generateVolcano,{
-          lapply(names(rv$volcano()), function(name) {
-            output[[paste0("volcano_", name)]] <- shiny::renderPlot({
-              rv$volcano()[[name]]
-            })
-          }
-          )
-        })
-        # nocov end
 
 
         ## --------------------Volcano outputs----------------------------------
@@ -161,26 +146,6 @@ shinyDSP <- function() {
         .outputHeatmapNavPanel(input, output, session, rv)
 
 
-
-        top_n_genes <- shiny::reactive({
-            input$top_n_genes
-        })
-
-        heatmap_col <- shiny::reactive({
-            input$heatmap_col
-        })
-
-        heatmap_range <- shiny::reactive({
-            input$heatmap_range
-        })
-
-        heatmap_size <- shiny::reactive({
-            input$heatmap_size
-        })
-
-        heatmap_fontsize <- shiny::reactive({
-            input$heatmap_fontsize
-        })
 
 
 

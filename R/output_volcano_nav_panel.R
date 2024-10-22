@@ -47,11 +47,8 @@ output$volcanoUI <- shiny::renderUI({
 
 shiny::observeEvent(input$generateVolcano,{
 lapply(names(rv$volcano()), function(name) {
-
-
-
 lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-    output[[paste0("downloadVolcano", name, ext)]] <- downloadHandler(
+    output[[paste0("downloadVolcano", name, ext)]] <- shiny::downloadHandler(
         filename = function() {
             paste("volcano", name, ext, sep = ".")
         },
