@@ -4,7 +4,7 @@
 \alias{.interfaceTableNavPanel}
 \title{Create the "Table" nav panel}
 \usage{
-.interfaceTableNavPanel()
+.interfaceTableNavPanel(output)
 }
 \value{
 \code{\link[bslib:nav-items]{bslib::nav_panel()}}

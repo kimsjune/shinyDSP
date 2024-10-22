@@ -4,7 +4,7 @@
 \alias{.interfaceSetupNavPanel}
 \title{Create the "QC" nav panel}
 \usage{
-.interfaceSetupNavPanel()
+.interfaceSetupNavPanel(output)
 }
 \value{
 \code{\link[bslib:nav-items]{bslib::nav_panel()}}

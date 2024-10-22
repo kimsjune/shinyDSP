@@ -1,5 +1,18 @@
 .outputSidebar <- function(input, output, session, rv) {
     # nocov start
+    observeEvent(input$useSampleData, {
+        if (input$useSampleData == FALSE) {
+            shinyjs::show("uploadedCountFile")
+            shinyjs::show("uploadedSampleAnnoFile")
+        } else {
+            shinyjs::hide("uploadedCountFile")
+            shinyjs::hide("uploadedSampleAnnoFile")
+        }
+    })
+    # nocov end
+
+
+    # nocov start
     output$selectYourExpVar <- shiny::renderUI({
         shiny::req(rv$data())
 

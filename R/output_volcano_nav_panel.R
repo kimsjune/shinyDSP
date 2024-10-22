@@ -18,24 +18,10 @@ output$customRange <- shiny::renderUI({
 # nocov start
 output$volcanoUI <- shiny::renderUI({
     shiny::validate(
-        shiny::need(
-            shiny::isTruthy(input$load) &
-                shiny::isTruthy(input$selectedTypes) &
-                shiny::isTruthy(input$selectedNorm) &
-                shiny::isTruthy(input$generateVolcano),
-            "Hit 'run'!"
-        )
+        shiny::need(shiny::isTruthy(input$generateVolcano),
+                    "Hit 'Show/update'!")
     )
 
-    # # Plots as a list can be grouped into a grid and output
-    # shiny::renderPlot(
-    #     # grid.arrange(grobs = plots)
-    #     cowplot::plot_grid(
-    #         plotlist = volcano(), ncol = 1, align = "v",
-    #         axis = "lr"
-    #     ),
-    #     height = shiny::reactive(350 * ncol(contrast()))
-    # )
 
     tabsets <- lapply(names(rv$volcano()), function(name){
         shiny::tabPanel(name,
@@ -45,9 +31,11 @@ output$volcanoUI <- shiny::renderUI({
                  shiny::fluidRow(
                  lapply(c("png","tiff","pdf","svg"), function(ext){
 
-                shiny::column(3,
+                shiny::column(1, style = "text-align: center;",
                      shiny::downloadButton(paste0("downloadVolcano", name, ext), paste(toupper(ext)))
-                ) })))})
+                ) }))
+
+                )})
 
 
     shiny::tabsetPanel(
@@ -83,18 +71,23 @@ lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
 })
 
 })
+
+# nocov start
+shiny::observeEvent(input$toggleCustomRange, {
+    shinyjs::toggle("showCustomRange")
+})
 # nocov end
 
 # nocov start
-# output$downloadVolcano <- shiny::downloadHandler(
-#   filename = function() {
-#     paste0("volcano_", Sys.Date(), ".png")
-#   },
-#   content = function(file) {
-#     cowplot::save_plot(file, volcanoPlots())
-#   },
-#   contentType = "image/png"
-# )
-# no cov
+shiny::observeEvent(input$generateVolcano,{
+    lapply(names(rv$volcano()), function(name) {
+        output[[paste0("volcano_", name)]] <- shiny::renderPlot({
+            rv$volcano()[[name]]
+        })
+    }
+    )
+})
+# nocov end
+
 
 }

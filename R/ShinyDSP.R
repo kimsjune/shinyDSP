@@ -18,7 +18,6 @@ shinyDSP <- function() {
             href = "favicon.ico/lung.png"
         )),
         htmltools::tags$style(
-
         ),
         shinyjs::useShinyjs(),
         title = "shinyDSP",
@@ -29,47 +28,26 @@ shinyDSP <- function() {
         .interfacePcaNavPanel(output),
         .interfaceTableNavPanel(output),
         .interfaceVolcanoNavPanel(),
-        .interfaceHeatmapNavPanel()
+        .interfaceHeatmapNavPanel(),
 
 
+        bslib::nav_spacer(),
 
-
-
-
-
-        # bslib::nav_panel(
-        #   "Appendix",
-        #   div(
-        #     tags$p("These are all possible colours schmes for the heatmap. Enter the names on the top exactly without quotes."),
-        #     tags$img(src = "images/hcl.svg", alt = "hcl_palette")
-        #   )
-        # )
-
-        # bslib::nav_panel(
-        #   "Credit",
-        #   div(
-        #     tags$p("Amin Manji and Meggie Vo helped with beta testing, and grammar, respectively."),
-        #     tags$p("Funded by the AMOSO foundation and PSI),
-        #     tags$img(src = "images/amoso-logo.png", alt = "amoso logo")
-        #   )
-        # )
-
-
-        # nav_spacer(),
-        #
-        # nav_menu(
-        #   title = "Links",
-        #   nav_item(
-        #     tags$a(
-        #       shiny::icon("github"), "", href = "https://github.com/rstudio/shiny"))
-        # )
+        bslib::nav_menu(
+          title = "Links",
+          bslib::nav_item(
+            htmltools::tags$a(
+              shiny::icon("github"), "", href = "https://github.com/kimsjune/shinyDSP"))
+        )
     )
 
     server <- function(input, output, session) {
+      options(shiny.maxRequestSize = 50 * 1024^2)
+
 
       rv <- shiny::reactiveValues()
 
-      observe({
+      shiny::observe({
         ##------util_process.R----------------
         rv$data <- .data(input, output, session, rv)
         rv$new_sampleAnnoFile <- .new_sampleAnnoFile(input, output, session, rv)
@@ -98,25 +76,15 @@ shinyDSP <- function() {
         rv$speRuv_compute <- .speRuv_compute(input, output, session, rv)
         rv$pcaPlotRuv <- .pcaPlotRuv(input, output, session, rv)
         rv$pcaPlotRuvBatch <- .pcaPlotRuvBatch(input, output, session, rv)
-
-
-
       })
 
 
       shiny::observeEvent(input$selectedNorm,{
-
-
-
-
         ##------util_differential_gene_exp.R
         rv$design <- .design(input, output, session, rv)
         rv$dge <- .dge(input, output, session, rv)
         rv$contrast <- .contrast(input, output, session, rv)
         rv$efit <- .efit(input, output,session, rv)
-
-
-
 
         ##------util_table.R
         rv$topTabDF <- .topTabDF(input, output, session, rv)
@@ -129,76 +97,35 @@ shinyDSP <- function() {
 
       })
 
-      shiny::eventReactive(input$generateTable,{
-        print(rv$topTabDF())
-      })
+
 
 
 
 
       source("R/util_heatmap.R", local = TRUE)$value
 
-
-        options(shiny.maxRequestSize = 50 * 1024^2)
-      shiny::observe({
-        if (is.null(input$selectedTypes)){
-          bslib::nav_hide("navpanel", "PCA")
-        } else {
-          bslib::nav_show("navpanel", "PCA")
-        }
-      }
-      )
-
-      shiny::observe({
-        if (is.null(input$selectedNorm)){
-          bslib::nav_hide("navpanel", "Table")
-          bslib::nav_hide("navpanel", "Volcano")
-          bslib::nav_hide("navpanel", "Heatmap")
-        } else {
-          bslib::nav_show("navpanel", "Table")
-          bslib::nav_show("navpanel", "Volcano")
-          bslib::nav_show("navpanel", "Heatmap")
-        }
-      }
-      )
+      ##------nav panel behaviour-----------
+      .outputNavPanels(input, output, session, rv)
 
 
 
-
-
-
-
-
-
-        # shiny::observeEvent(input$run,{
-        #   if (input$main == "introPage"){
-        #     nav_select(id = "main", selected = "PCA")
-        #   }
-        # })
-        ## --------------------Sidebar observe----------------------------------
-        .observeEvent_sidebar(input)
 
         ## --------------------Sidebar outputs----------------------------------
-        # source("R/output_sidebar.R", local = TRUE)$value
         .outputSidebar(input, output, session, rv)
 
         ## -------
-        # source("R/output_setup_nav_panel.R", local = TRUE)$value
         .outputSetupNavPanel(input, output, session, rv)
 
 
-        ## --------------------PCA nav panel observe----------------------------
-        .observeEvent_pca_nav_panel(input)
+
 
 
         ## --------------------PCA nav panel outputs----------------------------
-        # source("R/output_pca_nav_panel.R", local = TRUE)$value
         .outputPcaNavPanel(input, output, session, rv)
 
 
         ## --------------------Table nav panel output---------------------------
-        # source("R/output_table_nav_panel.R", local = TRUE)$value
-        .outputTableNavPanel(input, output, session, rv)
+      .outputTableNavPanel(input, output, session, rv)
 
 
         ## --------------------Table observe
@@ -211,21 +138,19 @@ shinyDSP <- function() {
         })
         # nocov end
 
+        # nocov start
         shiny::observeEvent(input$generateVolcano,{
           lapply(names(rv$volcano()), function(name) {
             output[[paste0("volcano_", name)]] <- shiny::renderPlot({
               rv$volcano()[[name]]
-
             })
-
-
           }
           )
         })
+        # nocov end
 
 
         ## --------------------Volcano outputs----------------------------------
-        # source("R/output_volcano_nav_panel.R", local = TRUE)$value
         .outputVolcanoNavPanel(input, output, session, rv)
 
 
@@ -233,7 +158,6 @@ shinyDSP <- function() {
 
 
         #### --------------------Heatmap outputs--------------------------------
-        # source("R/output_heatmap_nav_panel.R", local = TRUE)$value
         .outputHeatmapNavPanel(input, output, session, rv)
 
 
@@ -257,14 +181,7 @@ shinyDSP <- function() {
         heatmap_fontsize <- shiny::reactive({
             input$heatmap_fontsize
         })
-        #
-        #
-        #
-        #
-        observe({
 
-
-        })
 
 
     }

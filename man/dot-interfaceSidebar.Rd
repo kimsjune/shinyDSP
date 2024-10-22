@@ -4,7 +4,7 @@
 \alias{.interfaceSidebar}
 \title{Creates the "sidebar" UI element}
 \usage{
-.interfaceSidebar()
+.interfaceSidebar(output)
 }
 \value{
 \code{\link[bslib:sidebar]{bslib::sidebar()}}

@@ -1,22 +1,9 @@
 .outputTableNavPanel <- function(input, output, session, rv) {
     # nocov start
     output$topTable <- shiny::renderUI({
-        print("Rendering topTable UI")
+        shiny::req(rv$topTabDF())
 
-        print(rv$topTabDF())
-        # shiny::validate(
-        #     shiny::need(
-        #         shiny::isTruthy(input$load) &
-        #             shiny::isTruthy(input$selectedTypes) &
-        #             shiny::isTruthy(input$selectedNorm),
-        #         "'Load' data, 'choose types', select 'normalization', then hit 'run'!"
-        #     )
-        # )
-        # DT::renderDT(
-        #     topTabDF() %>%
-        #         DT::datatable() %>%
-        #         DT::formatSignif(columns = c(3:ncol(topTabDF())), digits = 4)
-        # )
+
 
         lapply(names(rv$topTabDF()), function(name) {
             output[[paste0("table_", name)]] <- DT::renderDataTable({

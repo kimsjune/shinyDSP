@@ -62,12 +62,7 @@
                 width = NULL, height = 900,
                 style = bslib::css(grid_template_columns = "2fr 2fr 2fr 1fr"),
 
-                # col_widths = c(
-                #     4, 4, 4,
-                #     4, 4, 4,
-                #     6, 6,
-                #     6, 6
-                # ),
+
                 shiny::uiOutput("pcaPlotCpm",
                     style = "padding: 4px;"
                 ) %>% shinycssloaders::withSpinner(
@@ -121,15 +116,6 @@
                   type = 4, size = 0.5,
                   proxy.height = 50
                 )
-                # shiny::downloadButton("downloadPca", "Save plots"),
-                # shiny::downloadButton("downloadPcaLegend", "Save legends"),
-                # lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                #     downloadButton(paste0("pca_", ext), paste(toupper(ext)))
-                # }),
-                #
-                # lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                #     downloadButton(paste0("pcaLegend_", ext), paste(toupper(ext)))
-                # })
 
 
 

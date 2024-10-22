@@ -1,12 +1,5 @@
 .outputSetupNavPanel <- function(input, output, session, rv) {
 
-    # nocov start
-    output$countFileText <- shiny::renderUI({
-        shiny::req(output$countFile)
-
-        htmltools::p("Your count table looks like this:")
-    })
-    # nocov end
 
 
     # nocov start
@@ -29,13 +22,6 @@
     # nocov end
 
 
-    # nocov start
-    output$sampleAnnoFileText <- shiny::renderUI({
-        shiny::req(output$sampleAnnoFile)
-
-        htmltools::p("Your annotation table looks like this:")
-    })
-    # nocov end
 
     # nocov start
     output$sampleAnnoFile <- shiny::renderUI({

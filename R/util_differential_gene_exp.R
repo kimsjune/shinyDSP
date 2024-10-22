@@ -1,7 +1,14 @@
 .design <- function(input, output, session, rv) {
 # nocov start
-design <- shiny::eventReactive(input$selectedNorm,{
-    shiny::req(input$selectedNorm)
+design <- shiny::reactive({
+
+    shiny::validate(
+        shiny::need(shiny::isTruthy(input$selectedNorm) &
+                        shiny::isTruthy(input$selectedExpVar) &
+                        shiny::isTruthy(input$selectedTypes),
+                    "Select variables/groups of interest and normalization")
+                        )
+
     spe <- switch(input$selectedNorm,
                   "CPM" = rv$speCpm(),
                   "Q3" = rv$speQ3(),
@@ -12,10 +19,6 @@ design <- shiny::eventReactive(input$selectedNorm,{
 
     ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
-    # li <- list()
-    # li[[1]] <- "~0"
-    # li[[2]] <- ExpVar
-    # li[[3]] <- input$selectedBatch
 
     preFormula <- list()
 
@@ -83,51 +86,10 @@ dge <- shiny::eventReactive(rv$design(), {
     return(dge)
 }
 
-.efit <- function(input, output, session, rv) {
-# nocov start
-efit <- shiny::eventReactive(rv$dge(), {
-    shiny::req(input$selectedBatch, rv$contrast())
-
-    shiny::withProgress(
-        message = "Performing differential gene expression analysis...",
-        {
-            spe <- switch(input$selectedNorm,
-                          "CPM" = rv$speCpm(),
-                          "Q3" = rv$speQ3(),
-                          "RUV4" = rv$speRuv())
-
-            block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
-
-            v <- limma::voom(rv$dge(), rv$design())
-            corfit <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
-
-            shiny::incProgress(1 / 5)
-
-            v2 <- limma::voom(rv$dge(), rv$design(), block = block_by, correlation = corfit$consensus)
-            corfit2 <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
-
-            shiny::incProgress(2 / 5)
-
-            fit <- limma::lmFit(v, rv$design(), block = block_by, correlation = corfit2$consensus)
-
-            shiny::incProgress(3 / 5)
-
-            fit_contrast <- limma::contrasts.fit(fit, contrasts = rv$contrast())
-            efit <- limma::eBayes(fit_contrast, robust = TRUE)
-
-            shiny::incProgress(4 / 5)
-        }
-    )
-
-    return(efit)
-})
-# nocov end
-    return(efit)
-}
 
 .contrast <- function(input, output, session, rv) {
 # nocov start
-contrast <- shiny::eventReactive(c(rv$design(), input$selectedTypes), {
+contrast <- shiny::eventReactive(rv$design(), {
     # replace space with _
     selectedTypes_underscore <- gsub(" ", "_", input$selectedTypes)
 
@@ -158,4 +120,46 @@ contrast <- shiny::eventReactive(c(rv$design(), input$selectedTypes), {
 })
 # nocov end
     return(contrast)
+}
+
+.efit <- function(input, output, session, rv) {
+    # nocov start
+    efit <- shiny::eventReactive(rv$dge(), {
+        shiny::req(input$selectedBatch, rv$contrast())
+
+        shiny::withProgress(
+            message = "Performing differential gene expression analysis...",
+            {
+                spe <- switch(input$selectedNorm,
+                              "CPM" = rv$speCpm(),
+                              "Q3" = rv$speQ3(),
+                              "RUV4" = rv$speRuv())
+
+                block_by <- SummarizedExperiment::colData(spe)[[input$selectedBatch]]
+
+                v <- limma::voom(rv$dge(), rv$design())
+                corfit <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
+
+                shiny::incProgress(1 / 5)
+
+                v2 <- limma::voom(rv$dge(), rv$design(), block = block_by, correlation = corfit$consensus)
+                corfit2 <- limma::duplicateCorrelation(v, rv$design(), block = block_by)
+
+                shiny::incProgress(2 / 5)
+
+                fit <- limma::lmFit(v, rv$design(), block = block_by, correlation = corfit2$consensus)
+
+                shiny::incProgress(3 / 5)
+
+                fit_contrast <- limma::contrasts.fit(fit, contrasts = rv$contrast())
+                efit <- limma::eBayes(fit_contrast, robust = TRUE)
+
+                shiny::incProgress(4 / 5)
+            }
+        )
+
+        return(efit)
+    })
+    # nocov end
+    return(efit)
 }

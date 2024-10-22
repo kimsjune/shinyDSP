@@ -1,4 +1,4 @@
-#' Create the "QC" nav panel
+#' Create the "setup" nav panel
 #'
 #' @return [bslib::nav_panel()]
 #' @keywords internal
@@ -59,8 +59,20 @@
                     "
                 )
             ),
+            shiny::tags$div(
+                shiny::tags$p(
+                    "Your count table looks like this:
+                    "
+                )
+            ),
 
             shiny::uiOutput("countFile") %>% shinycssloaders::withSpinner(type = 4),
+            shiny::tags$div(
+                shiny::tags$p(
+                    "Your annotation table looks like this:
+                    "
+                )
+            ),
             shiny::uiOutput("sampleAnnoFile") %>% shinycssloaders::withSpinner(type = 4)
 
         )

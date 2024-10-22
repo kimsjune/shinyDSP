@@ -14,20 +14,10 @@
                     " ",
                     shiny::actionButton(
                         inputId = "generateVolcano",
-                        label = "Run"
+                        label = "Show/update"
                     )
                 ),
-                # bslib::accordion_panel(
-                #     "Download",
-                #
-                #     shiny::fluidRow(
-                #
-                #
-                #         lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                #             shiny::column(6,shiny::downloadButton(paste0("downloadVolcano_", ext), paste(toupper(ext))))
-                #         })
-                #     )
-                # ),
+
 
 
                 bslib::accordion_panel(
@@ -80,18 +70,6 @@
                     )
                 )
 
-                # accordion_panel(
-                #   "Download",
-                #   # radioButtons(inputId = "downloadVolcanoType",
-                #   #              label = "format",
-                #   #              inline = T,
-                #   #              choices = c("png" = ".png",
-                #   #                          "svg" = ".svg",
-                #   #                          "tiff" = ".tiff",
-                #   #                          "pdf" = ".pdf")),
-                #   downloadButton("downloadVolcano",
-                #                  "Download plots")
-                # )
             ),
             shiny::uiOutput("volcanoUI") %>% shinycssloaders::withSpinner(type = 4)
         )

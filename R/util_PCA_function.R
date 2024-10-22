@@ -81,22 +81,4 @@
       shape = ggplot2::guide_legend(nrow = length(selectedVar), title.position = "top")
     )
 
-    # {
-    #         if (sum(nchar(selectedVar)) > 110) {
-    #             ggplot2::guides(
-    #                 fill = ggplot2::guide_legend(nrow = 4),
-    #                 shape = ggplot2::guide_legend(nrow = 4)
-    #             )
-    #         } else if (sum(nchar(selectedVar)) > 80) {
-    #             ggplot2::guides(
-    #                 fill = ggplot2::guide_legend(nrow = 3),
-    #                 shape = ggplot2::guide_legend(nrow = 3)
-    #             )
-    #         } else if (sum(nchar(selectedVar)) > 30) {
-    #             ggplot2::guides(
-    #                 fill = ggplot2::guide_legend(nrow = 2),
-    #                 shape = ggplot2::guide_legend(nrow = 2)
-    #             )
-    #         }
-    #     }
 }

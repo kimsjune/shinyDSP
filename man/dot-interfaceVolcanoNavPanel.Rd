@@ -4,7 +4,7 @@
 \alias{.interfaceVolcanoNavPanel}
 \title{Create the "Volcano" nav panel}
 \usage{
-.interfaceVolcanoNavPanel()
+.interfaceVolcanoNavPanel(output)
 }
 \value{
 \code{\link[bslib:nav-items]{bslib::nav_panel()}}

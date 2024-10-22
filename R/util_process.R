@@ -32,22 +32,13 @@ data <- shiny::eventReactive(input$load, {
         sampleAnnoFile <- readr::read_delim(unname(input$uploadedSampleAnnoFile$datapath)
 
         )
-        # countFile <- readxl::read_excel(input$countFile$datapath)
-        # sampleAnnoFile <- readxl::read_excel(input$sampleAnnoFile$datapath)
-        # featureAnnoFile <- readxl::read_excel(input$featureAnnoFile$datapath)
-    }
 
-    # countFile <- as.data.frame(bioprob[, c(3, 13:(dim(bioprob)[2] - 2))])
-    # sampleAnnoFile <- as.data.frame(segProp)
-    # featureAnnoFile <- as.data.frame(bioprob[, seq_len(12)])
+    }
 
     data[[1]] <- as.data.frame(countFile)
     data[[2]] <- as.data.frame(sampleAnnoFile)
 
     names(data) <- c("countFile", "sampleAnnoFile")
-    # data[[3]] <- featureAnnoFile
-    # data[[4]] <- sampleAnnoFile[,ncol(sampleAnnoFile)]
-    # data[[5]] <- colnames(sampleAnnoFile)
 
     return(data)
 })

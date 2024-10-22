@@ -94,60 +94,7 @@
   })
   # nocov end
 
-  # # nocov start
-  # output$downloadPca <- shiny::downloadHandler(
-  #   filename = function() {
-  #     paste0("pca_", Sys.Date(), ".png")
-  #   },
-  #   content = function(file) {
-  #     ggplot2::ggsave(file, device = "png",
-  #                        cowplot::plot_grid(
-  #
-  #         pcaPlotCpm() + ggplot2::theme(legend.position = "none"),
-  #         pcaPlotQ3() + ggplot2::theme(legend.position = "none"),
-  #         pcaPlotRuv() + ggplot2::theme(legend.position = "none"),
-  #         pcaPlotCpmBatch() + ggplot2::theme(legend.position = "none"),
-  #         pcaPlotQ3Batch() + ggplot2::theme(legend.position = "none"),
-  #         pcaPlotRuvBatch() + ggplot2::theme(legend.position = "none"),
-  #         align = 'hv', axis = 'tblr', ncol = 3, nrow = 2
-  #                        ),
-  #         height = 12, width = 12, units = c("in")
-  #
-  #
-  #     )
-  #   },
-  #   contentType = "image/png"
-  # )
-  # # nocov end
-  #
-  # # nocov start
-  # output$downloadPcaLegend <- shiny::downloadHandler(
-  #   filename = function() {
-  #     paste0("pca_legend_", Sys.Date(), ".png")
-  #   },
-  #   content = function(file) {
-  #     ggplot2::ggsave(file, device = "png",
-  #                     cowplot::plot_grid(
-  #                     ggpubr::as_ggplot(
-  #                       ggpubr::get_legend(
-  #                         pcaPlotCpm()
-  #                       )
-  #                     ),
-  #                     ggpubr::as_ggplot(
-  #                       ggpubr::get_legend(
-  #                         pcaPlotCpmBatch()
-  #                       )
-  #                     )),
-  #                     height = 12, width = 12, units = c("in")
-  #
-  #
-  #     )
-  #   },
-  #   contentType = "image/png"
-  # )
-  # # nocov end
-
-
+# nocov start
 shiny::observe({
   lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
     output[[paste0("pca_", ext)]] <- shiny::downloadHandler(
@@ -199,4 +146,18 @@ shiny::observe({
   })
 
 })
+# nocov end
+
+
+# nocov start
+shiny::observeEvent(input$togglePCAcustom, {
+  shinyjs::toggle(id = "PCAcustom")
+})
+# nocov end
+
+# nocov start
+shiny::observeEvent(input$togglePCAcustom, {
+  shinyjs::toggle(id = "PCAcustomBatch")
+})
+# nocov end
 }

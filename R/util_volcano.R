@@ -1,29 +1,11 @@
 .volcano <- function(input, output, session, rv) {
 # nocov start
-volcano <- shiny::eventReactive(c(
-    input$selectedTypes, input$selectedNorm,
-    input$generateVolcano
-), {
-    shiny::req(rv$efit(), rv$contrast(), input$logFCcutoff, input$PvalCutoff)
+volcano <- shiny::eventReactive(input$generateVolcano,{
+    shiny::req(rv$efit(), rv$contrast())
+
 
     shiny::withProgress(message = "Plotting...", {
-        # make data frame
-        # volcanoDF <- lapply(as.list(seq_len(ncol(contrast()))), function(i) {
-        #     limma::topTable(efit(), coef = i, number = Inf) %>%
-        #         tibble::rownames_to_column(var = "Target.name") %>%
-        #         dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
-        #         dplyr::mutate(de = ifelse(logFC >= input$logFCcutoff &
-        #             adj.P.Val < input$PvalCutoff, "UP",
-        #         ifelse(logFC <= -(input$logFCcutoff) &
-        #             adj.P.Val < input$PvalCutoff, "DN",
-        #         "NO"
-        #         )
-        #         )) %>%
-        #         dplyr::mutate(deLab = ifelse(
-        #             quantile(abs(logFC), 0.999, na.rm = TRUE) < abs(logFC), Target.name,
-        #             NA
-        #         ))
-        # })
+
         volcanoDF <- lapply(seq_len(ncol(rv$contrast())), function(i) {
                 limma::topTable(rv$efit(), coef = i, number = Inf) %>%
                     tibble::rownames_to_column(var = "Target.name") %>%
@@ -41,14 +23,6 @@ volcano <- shiny::eventReactive(c(
                                               & abs(logFC) >= input$logFCcutoff & adj.P.Val < input$PvalCutoff, Target.name, NA)
                 )
 
-
-                    # dplyr::mutate(deLab = dplyr::case_when(
-                    #     logFC > quantile(logFC[logFC > 0], 0.9, na.rm = TRUE) ~ Target.name,  # Above 90th percentile of positive values
-                    #     logFC < quantile(logFC[logFC < 0], 0.9, na.rm = TRUE) ~ Target.name,  # Below 90th percentile of negative values
-                    #     TRUE ~ NA_character_                                             # Otherwise NA
-                    # )
-
-                    # )
             })
 
 

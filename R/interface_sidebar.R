@@ -12,24 +12,6 @@
       bslib::accordion_panel(
         "",
 
-    # shinyWidgets::prettySwitch(
-    #   inputId = "useSampleData",
-    #   label = "Use demo data",
-    #   value = FALSE,
-    #   fill = TRUE
-    # ),
-    # shinyjs::hidden(
-    #   shiny::fileInput(
-    #     inputId = "uploadedFile",
-    #     label = "Upload your file",
-    #     accept = c(".xlsx")
-    #   )
-    # ),
-    # shiny::actionButton(
-    #   inputId = "load",
-    #   "Load",
-    #   style = "display: inline-block; padding: 4px"
-    # ),
     shiny::uiOutput("selectYourExpVar") %>% shinycssloaders::withSpinner(
       type = 4, size = 0.5, proxy.height = 75
     ),
@@ -42,11 +24,7 @@
     shiny::uiOutput("selectYourConfounder") %>% shinycssloaders::withSpinner(
       type = 4, size = 0.5, proxy.height = 75
     ),
-    # shiny::actionButton(
-    #   inputId = "run",
-    #   "Run",
-    #   style = "display: inline-block; padding: 4px"
-    # )
+
     ),
     bslib::accordion_panel(
       "",
