@@ -2,6 +2,8 @@
     # nocov start
     output$heatmapUI <- shiny::renderUI({
 
+        print(rv$lcpmSubScaleTopGenes())
+
         shiny::validate(
             shiny::need(shiny::isTruthy(input$generateHeatmap),
                         "Hit 'Show/update'!")

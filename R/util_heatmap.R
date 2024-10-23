@@ -18,15 +18,21 @@
     # })
 
     lcpmSubScaleTopGenes <- lapply(names(rv$topTabDF()), function(name) {
-        SummarizedExperiment::assay(spe,2)[
+
+
+
+        columns <- stringr::str_split_1(name, "_vs_")  %>%
+            sapply(function(.) which(SummarizedExperiment::colData(spe) %>%
+                                         tibble::as_tibble() %>%
+                                         dplyr::pull(ExpVar)  == .)) %>% c()
+        names(columns) <- name
+
+        table <- SummarizedExperiment::assay(spe,2)[
             rv$topTabDF()[[name]] %>% dplyr::slice_head(n = input$topNgenes) %>%
-                dplyr::select(Gene) %>% unlist() %>% unname()
-            ,
-                                           SummarizedExperiment::colData(spe) %>%
-                                               tibble::as_tibble() %>%
-                                               dplyr::pull(ExpVar) %in%
-                                               stringr::str_split_1(name, "_vs_")] %>%
-            data.frame() %>% t() %>% scale() %>% t()
+                                                        dplyr::select(Gene) %>% unlist() %>% unname(),
+            columns[[name]]] %>% data.frame() %>% t() %>% scale() %>% t()
+
+        return(table)
 
     })
 
@@ -60,13 +66,12 @@
 
         columnSplit <- lapply(names(rv$topTabDF()), function(name) {
 
-
-            SummarizedExperiment::colData(spe) %>% tibble::as_tibble() %>%
+            columnSplit <- SummarizedExperiment::colData(spe) %>% tibble::as_tibble() %>%
                 dplyr::filter(!!dplyr::ensym(ExpVar) %in% stringr::str_split_1(name, "_vs_")) %>%
             dplyr::pull(ExpVar) %>% table()
         })
 
-        names(columnSplit) <- names(rv$topTabDF())
+        names(columnSplit) <- names(rv$lcpmSubScaleTopGenes())
 
 
 
@@ -117,20 +122,20 @@ heatmap <- shiny::eventReactive(rv$lcpmSubScaleTopGenes(), {
                                     labels_gp = grid::gpar(fontsize = input$heatmapFontSize, fontface = "plain", fontfamily = "sans"),
                                     legend_height = grid::unit(3 * as.numeric(input$heatmapSize), units = "mm")
                                 ),
-                                top_annotation = ComplexHeatmap::HeatmapAnnotation(
-                                    foo = ComplexHeatmap::anno_block(
-                                        gp = grid::gpar(lty = 0, fill = "transparent"),
-                                        labels = rv$columnSplit()[[name]] %>% names(),
-                                        labels_gp = grid::gpar(col = "black", fontsize = 14, fontfamily = "sans", fontface = "bold"),
-                                        labels_rot = 0, labels_just = "center", labels_offset = grid::unit(4.5, "mm")
-                                    )
-                                ),
+                                # top_annotation = ComplexHeatmap::HeatmapAnnotation(
+                                #     foo = ComplexHeatmap::anno_block(
+                                #         gp = grid::gpar(lty = 0, fill = "transparent"),
+                                #         labels = rv$columnSplit()[[name]] %>% names(),
+                                #         labels_gp = grid::gpar(col = "black", fontsize = 14, fontfamily = "sans", fontface = "bold"),
+                                #         labels_rot = 0, labels_just = "center", labels_offset = grid::unit(4.5, "mm")
+                                #     )
+                                # ),
                                 border_gp = grid::gpar(col = "black", lwd = 0.2),
                                 row_names_gp = grid::gpar(fontfamily = "sans", fontface = "italic", fontsize = input$heatmapFontSize),
-                                show_column_names = F,
-                                column_split = rep(LETTERS[seq_len(rv$columnSplit()[[name]] %>% unlist() %>% unname() %>% length())],
-
-                                                   rv$columnSplit()[[name]] %>% unlist() %>% unname())
+                                show_column_names = T#,
+                                # column_split = rep(LETTERS[seq_len(rv$columnSplit()[[name]] %>% unlist() %>% unname() %>% length())],
+                                #
+                                #                    rv$columnSplit()[[name]] %>% unlist() %>% unname())
                                 )
 
 
