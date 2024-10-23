@@ -31,8 +31,9 @@ output$volcanoUI <- shiny::renderUI({
                  shiny::fluidRow(
                  lapply(c("png","tiff","pdf","svg"), function(ext){
 
-                shiny::column(1, style = "text-align: center;",
-                     shiny::downloadButton(paste0("downloadVolcano", name, ext), paste(toupper(ext)))
+                shiny::column(2,
+                             htmltools::div(style = "display: flex; justify-concent: center; align-items: center;",
+                     shiny::downloadButton(paste0("downloadVolcano", name, ext), paste(toupper(ext))))
                 ) }))
 
                 )})

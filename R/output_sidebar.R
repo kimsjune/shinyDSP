@@ -53,7 +53,6 @@
                 ),
                 "Pick groups you want to compare such as 'WT' and 'Mutant'"
             ),
-            # choices = data()$sampleAnnoFile %>% pull(input$selectedExpVar) %>% unique(),
             choices = rv$new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
             multiple = TRUE,
             selectize = TRUE,

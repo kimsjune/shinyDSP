@@ -2,7 +2,8 @@
     # nocov start
     output$heatmapUI <- shiny::renderUI({
 
-        print(rv$lcpmSubScaleTopGenes())
+        print(rv$columnSplit())
+        print(ncol(rv$lcpmSubScaleTopGenes()[[1]]))
 
         shiny::validate(
             shiny::need(shiny::isTruthy(input$generateHeatmap),

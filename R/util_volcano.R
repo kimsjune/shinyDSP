@@ -28,7 +28,6 @@ volcano <- shiny::eventReactive(input$generateVolcano,{
 
         # If not using custom range, determine maximum absolute FC for each plot
         if (input$toggleCustomRange == FALSE) {
-            plots <- list()
 
             plots <- lapply(seq_along(volcanoDF), function(i) {
                 .volcanoFunction(
@@ -62,9 +61,14 @@ volcano <- shiny::eventReactive(input$generateVolcano,{
     })
 
     ## remove the last name (ANOVA), which is not being plotted as Volcano
+
+    if (length(input$selectedTypes) > 2) {
     names(plots) <- names(rv$topTabDF())[-length(
         names(rv$topTabDF())
     )]
+    } else {
+        names(plots) <- names(rv$topTabDF())
+    }
 
     return(plots)
 })
