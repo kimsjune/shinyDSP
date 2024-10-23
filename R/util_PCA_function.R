@@ -27,7 +27,8 @@
             values = as.integer(unlist(ROIshapes)) # as.integer() crucial
         ) +
         ggplot2::scale_fill_manual(colourShapeBy,
-            values = unlist(ROIcolours) # colour() is a base function, so must be avoided
+            ## colour() is a base function, so must be avoided
+            values = unlist(ROIcolours)
         ) +
         ggplot2::scale_y_continuous(
             labels = scales::number_format(accuracy = 0.1)
@@ -59,7 +60,10 @@
                 size = 16, hjust = 0.5, face = "bold",
                 family = "sans"
             ),
-            panel.border = ggplot2::element_rect(colour = "black", linewidth = 0.4),
+            panel.border = ggplot2::element_rect(
+                colour = "black",
+                linewidth = 0.4
+            ),
             panel.background = ggplot2::element_rect(
                 fill = "transparent",
                 colour = NA
@@ -72,13 +76,21 @@
                 fill = "transparent",
                 colour = NA
             ),
-            legend.key = ggplot2::element_rect(fill = "transparent", colour = NA),
+            legend.key = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
             legend.position = "bottom",
             aspect.ratio = 1
         ) +
-    ggplot2::guides(
-      fill = ggplot2::guide_legend(nrow = length(selectedVar), title.position = "top"),
-      shape = ggplot2::guide_legend(nrow = length(selectedVar), title.position = "top")
-    )
-
+        ggplot2::guides(
+            fill = ggplot2::guide_legend(
+                nrow = length(selectedVar),
+                title.position = "top"
+            ),
+            shape = ggplot2::guide_legend(
+                nrow = length(selectedVar),
+                title.position = "top"
+            )
+        )
 }

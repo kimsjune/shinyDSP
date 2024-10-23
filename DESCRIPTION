@@ -33,6 +33,7 @@ Imports:
     htmltools,
     limma,
     magrittr,
+    pals,
     readr,
     readxl,
     S4Vectors,

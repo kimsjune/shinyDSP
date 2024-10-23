@@ -2,7 +2,7 @@
 % Please edit documentation in R/interface_setup_nav_panel.R
 \name{.interfaceSetupNavPanel}
 \alias{.interfaceSetupNavPanel}
-\title{Create the "QC" nav panel}
+\title{Create the "setup" nav panel}
 \usage{
 .interfaceSetupNavPanel(output)
 }
@@ -10,7 +10,7 @@
 \code{\link[bslib:nav-items]{bslib::nav_panel()}}
 }
 \description{
-Create the "QC" nav panel
+Create the "setup" nav panel
 }
 \author{
 Seung J. Kim

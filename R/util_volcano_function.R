@@ -35,7 +35,6 @@
             title = ggplot2::element_text(size = 16, hjust = 0.5),
             axis.text = ggplot2::element_text(size = 16, color = "black"),
             axis.title = ggplot2::element_text(size = 16),
-
             plot.margin = grid::unit(c(1, 1, 1, 1), "mm"),
             plot.background = ggplot2::element_rect(
                 fill = "transparent",
@@ -54,7 +53,8 @@
                 fill = "transparent",
                 colour = NA
             ),
-            legend.key = ggplot2::element_rect(fill = "transparent", colour = NA),
+            legend.key = ggplot2::element_rect(fill = "transparent",
+                                               colour = NA),
             legend.position = "none"
         ) +
         ggplot2::geom_vline(

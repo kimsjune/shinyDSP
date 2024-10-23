@@ -8,8 +8,6 @@
     bslib::nav_panel(
         "Table",
         value = "Table",
-
-            shiny::uiOutput("topTable") %>% shinycssloaders::withSpinner(type = 4)
-
+        shiny::uiOutput("topTable") %>% shinycssloaders::withSpinner(type = 4)
     )
 }

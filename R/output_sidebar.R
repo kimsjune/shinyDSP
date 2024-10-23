@@ -24,10 +24,12 @@
                     "Variable(s) of interest",
                     bsicons::bs_icon("info-circle")
                 ),
-                "Pick column(s) that contain biological variables such as genotype and/or
+                "Pick column(s) that contain biological variables such as
+                genotype and/or
           treatment."
             ),
-            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(
+              dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selectize = TRUE,
@@ -53,7 +55,8 @@
                 ),
                 "Pick groups you want to compare such as 'WT' and 'Mutant'"
             ),
-            choices = rv$new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>% unique(),
+            choices = rv$new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>%
+              unique(),
             multiple = TRUE,
             selectize = TRUE,
             selected = NULL
@@ -76,7 +79,8 @@
                 ),
                 "For example, sample preparation date "
             ),
-            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(
+              dplyr::where(is.character))
                 %>% colnames(),
             multiple = FALSE
         )
@@ -97,7 +101,8 @@
                 ),
                 "For example, sex or age "
             ),
-            choices = rv$data()$sampleAnnoFile %>% dplyr::select(dplyr::where(is.character))
+            choices = rv$data()$sampleAnnoFile %>% dplyr::select(
+              dplyr::where(is.character))
                 %>% colnames(),
             multiple = TRUE,
             selected = NULL,
@@ -111,55 +116,54 @@
 
     # nocov start
 
-        output$selectYourK <- shiny::renderUI({
-            shiny::req(rv$data())
-            shiny::numericInput(
-                inputId = "k",
-                "k value for RUV4 norm.",
-                value = 2,
-                min = 1,
-                max = 20
-            )
-        })
+    output$selectYourK <- shiny::renderUI({
+        shiny::req(rv$data())
+        shiny::numericInput(
+            inputId = "k",
+            "k value for RUV4 norm.",
+            value = 2,
+            min = 1,
+            max = 20
+        )
+    })
 
     # nocov end
 
     # nocov start
 
-        output$selectYourNorm <- shiny::renderUI({
-            shiny::req(rv$data())
-            shinyWidgets::radioGroupButtons(
-                inputId = "selectedNorm",
-                choices = list(
-                    "CPM" = "CPM",
-                    "Q3" = "Q3",
-                    "RUV4" = "RUV4"
+    output$selectYourNorm <- shiny::renderUI({
+        shiny::req(rv$data())
+        shinyWidgets::radioGroupButtons(
+            inputId = "selectedNorm",
+            choices = list(
+                "CPM" = "CPM",
+                "Q3" = "Q3",
+                "RUV4" = "RUV4"
+            ),
+            size = "sm",
+            justified = TRUE,
+            label = bslib::tooltip(
+                trigger = list(
+                    "Normalization",
+                    bsicons::bs_icon("info-circle")
                 ),
-                size = "sm",
-                justified = TRUE,
-                label = bslib::tooltip(
-                    trigger = list(
-                        "Normalization",
-                        bsicons::bs_icon("info-circle")
-                    ),
-                    "Pick a method for differential gene expression analysis."
-                ),
-                selected = character(0)
-            )
-        })
+                "Pick a method for differential gene expression analysis."
+            ),
+            selected = character(0)
+        )
+    })
 
     # nocov end
 
     # nocov start
-        output$selectYourLFC <- shiny::renderUI({
-            shiny::req(rv$data())
+    output$selectYourLFC <- shiny::renderUI({
+        shiny::req(rv$data())
 
-            shiny::numericInput(
-                inputId = "lfc",
-                label = "log2 fold change cutoff",
-                value = 1
-            )
-        })
-        # nocov end
-
+        shiny::numericInput(
+            inputId = "lfc",
+            label = "log2 fold change cutoff",
+            value = 1
+        )
+    })
+    # nocov end
 }

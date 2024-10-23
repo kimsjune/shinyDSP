@@ -17,9 +17,6 @@
                         label = "Show/update"
                     )
                 ),
-
-
-
                 bslib::accordion_panel(
                     "Volcano options",
                     htmltools::div(
@@ -69,9 +66,9 @@
                         shiny::uiOutput("customRange")
                     )
                 )
-
             ),
-            shiny::uiOutput("volcanoUI") %>% shinycssloaders::withSpinner(type = 4)
+            shiny::uiOutput("volcanoUI") %>%
+              shinycssloaders::withSpinner(type = 4)
         )
     )
 }

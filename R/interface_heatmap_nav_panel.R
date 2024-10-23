@@ -19,9 +19,8 @@
                                 inputId = "topNgenes",
                                 "Number of genes to show", value = 50
                             ),
-                            # numericInput(inputId = "heatmap_fc",
-                            #              "log2 FC to test", value = 1),
-                            shiny::textInput("heatmapCol", "Heatmap colour scheme\n (see appendix for options)",
+                            shiny::textInput("heatmapCol",
+                                             "Heatmap colour scheme",
                                 value = "Inferno"
                             ),
                             shiny::sliderInput("heatmapRange",
