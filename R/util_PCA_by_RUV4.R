@@ -12,7 +12,7 @@
 
 .speRuvBatchCorrection <- function(input, output, session, rv) {
     # nocov start
-    speRuvBatchCorrection <- shiny::eventReactive(c(rv$speRuv_NCGs(),input$k), {
+    speRuvBatchCorrection <- shiny::eventReactive(c(rv$speRuv_NCGs(), input$k), {
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
         return(standR::geomxBatchCorrection(rv$speRuv_NCGs(),
             factors = ExpVar,

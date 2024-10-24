@@ -36,7 +36,8 @@
         shiny::selectInput(
             inputId = "selectedQcColPal",
             "Select colour palette",
-            choices = c("alphabet","alphabet2","glasbey"),
+            choices = c("alphabet","alphabet2","cols25","glasbey",
+                        "watlington"),
 
 
             selected = "glasbey",
@@ -46,7 +47,14 @@
     })
 
     shiny::observeEvent(input$generateQc,{
-        shiny::req(input$selectedQc, input$selectedQcColBy)
+        shiny::validate(
+            shiny::need(
+                shiny::isTruthy(input$selectedQc) &
+                    shiny::isTruthy(input$generateQc) &
+                    shiny::isTruthy(input$selectedQcColPal),
+                "Pick QC variables and hit 'show'!"
+            )
+        )
 
         output$qcCutoffUI <- renderUI({
             lapply(input$selectedQc, function(column){
@@ -61,24 +69,28 @@
         shiny::validate(
             shiny::need(
                 shiny::isTruthy(input$selectedQc) &
-                    shiny::isTruthy(input$generateQc),
+                    shiny::isTruthy(input$generateQc) &
+                    shiny::isTruthy(input$selectedQcColPal),
                 "Pick QC variables and hit 'show'!"
             )
         )
 
 
 
+
         ## ggplot2 options
         unique_categories <- rv$new_sampleAnnoFile() %>% dplyr::pull(input$selectedQcColBy) %>% unique() %>% as.factor()
         num_categories <- length(unique_categories)
-        colors <- paste0("pals::",input$selectedQcColPal,"(",num_categories,")")
+        colours <- switch(input$selectedQcColPal,
+                         "alphabet" = pals::alphabet() %>% sample(num_categories),
+                         "alphabet2" = pals::alphabet() %>% sample(num_categories),
+                         "cols25" = pals::cols25() %>% sample(num_categories),
+                         "glasbey" = pals::glasbey() %>% sample(num_categories),
+                         "watlington" = pals::watlington() %>% sample(num_categories)
+                         )
 
-        print(unique_categories)
-        print(num_categories)
-        print(colors)
 
-
-    plots <- lapply(1:input$nQcPlots, function(i){
+    plots <- lapply(seq_len(length(input$nQcPlots)), function(i){
         if (length(input$selectedQc) >= 2 ) {
             x <- input$selectedQc[i %% length(input$selectedQc) + 1]
             y <- input$selectedQc[(i + 1) %% length(input$selectedQc) + 1]
@@ -89,9 +101,10 @@
             output[[plotOutputId]] <- shiny::renderPlot({
                 ggplot2::ggplot(rv$new_sampleAnnoFile() ,
                                 ggplot2::aes(!!as.name(x), !!as.name(y),
-                                colour = !!as.name(input$selectedQcColBy))) +
-                    ggplot2::geom_point() +
-                    ggplot2::scale_colour_manual(values = pals::glasbey(7)) +
+                                fill = !!as.name(input$selectedQcColBy))) +
+                    ggplot2::geom_point(shape = 21, size = 3,
+                                        stroke = 0.5) +
+                    ggplot2::scale_colour_manual(values = colours) +
                     ggplot2::theme(
                         panel.grid.minor = ggplot2::element_blank(),
                         panel.grid.major = ggplot2::element_blank(),
