@@ -85,6 +85,7 @@
 #' @importFrom readxl read_excel
 #' @importFrom S4Vectors metadata
 #' @importFrom scales number_format
+#' @importFrom scales scientific
 #' @importFrom scater runPCA
 #' @importFrom shiny addResourcePath
 #' @importFrom shiny column

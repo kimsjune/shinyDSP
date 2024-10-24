@@ -15,7 +15,7 @@
 #' @author Seung J. Kim
 .PCAFunction <- function(spe, precomputed, colourShapeBy, selectedVar,
                          ROIshapes, ROIcolours) {
-    standR::drawPCA(spe, precomputed) +
+    standR::drawPCA(spe, precomputed =  precomputed) +
 
         ## really need as.name() plus !! because of factor()
         ggplot2::geom_point(ggplot2::aes(

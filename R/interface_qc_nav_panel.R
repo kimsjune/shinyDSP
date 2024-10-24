@@ -13,9 +13,15 @@
                                     value = 1,
                                     min = 1),
                 shiny::uiOutput("qcColBy"),
-                shiny::uiOutput("qcColPal"),
-                shiny::uiOutput("qcCutoffUI")
+                shiny::uiOutput("qcColPal")
+                ),
+
+
+                bslib::accordion_panel(
+                    "Apply QC cutoffs",
+                shiny::uiOutput("qcCutoff")
                 )
+
 
 
 

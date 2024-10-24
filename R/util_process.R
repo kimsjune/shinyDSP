@@ -5,7 +5,7 @@
             shiny::need(
                 shiny::isTruthy(input$useSampleData) ||
                     shiny::isTruthy(input$uploadedCountFile),
-                "Use demo data OR upload your own!"
+                ""
             )
         )
 
@@ -74,7 +74,7 @@
 
 .spe <- function(input, output, session, rv) {
     # nocov start
-    spe <- shiny::eventReactive(c(input$selectedTypes), {
+    spe <- shiny::eventReactive(input$selectedTypes, {
         spe <- standR::readGeoMx(
             rv$data()[[1]],
             # data()[[2]]

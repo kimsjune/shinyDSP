@@ -3,8 +3,9 @@
     output$countFile <- shiny::renderUI({
         shiny::validate(
             shiny::need(
-                shiny::isTruthy(input$load) & shiny::isTruthy(rv$data()),
-                "'Use demo data or upload your own, and hit 'load'!"
+                shiny::isTruthy(input$useSampleData) ||
+                    shiny::isTruthy(input$uploadedCountFile),
+                "'Use demo data' or upload your own!"
             )
         )
         DT::renderDT(
