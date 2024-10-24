@@ -4,7 +4,7 @@
 #' @keywords internal
 #'
 #' @author Seung J. Kim
-.interfaceSetupNavPanel <- function(output) {
+.interfaceSetupNavPanel <- function() {
     bslib::nav_panel(
         "Setup",
         value = "Setup",

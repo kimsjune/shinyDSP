@@ -1,4 +1,4 @@
-.outputQcNavPanel <- function(input, output, session, rv) {
+.outputQcNavPanel <- function(input, output, rv) {
     output$qcSelect <- renderUI({
         shiny::req(rv$new_sampleAnnoFile())
 

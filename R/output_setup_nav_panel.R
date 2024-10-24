@@ -1,4 +1,4 @@
-.outputSetupNavPanel <- function(input, output, session, rv) {
+.outputSetupNavPanel <- function(input, output, rv) {
     # nocov start
     output$countFile <- shiny::renderUI({
         shiny::validate(

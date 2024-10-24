@@ -1,4 +1,4 @@
-.interfaceQcNavPanel <- function(output) {
+.interfaceQcNavPanel <- function() {
     bslib::nav_panel(
         "QC",
         value = "QC",

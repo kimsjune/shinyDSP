@@ -1,6 +1,6 @@
-.outputSidebar <- function(input, output, session, rv) {
+.outputSidebar2 <- function(input, output, rv) {
     # nocov start
-    observeEvent(input$useSampleData, {
+    shiny::observeEvent(input$useSampleData, {
         if (input$useSampleData == FALSE) {
             shinyjs::show("uploadedCountFile")
             shinyjs::show("uploadedSampleAnnoFile")

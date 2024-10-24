@@ -12,22 +12,27 @@
 #'     shiny::runApp(app)
 #' }
 shinyDSP <- function() {
-  ui <- bslib::page_navbar(
-    htmltools::tags$head(htmltools::tags$link(
-      rel = "shortcut icon",
-      href = "favicon.ico/lung.png"
-    )),
-    htmltools::tags$style(
-    ),
-    shinyjs::useShinyjs(),
+
+
+  ui <- htmltools::tagList(
+      htmltools::tags$head(htmltools::tags$link(
+        rel = "shortcut icon",
+        href = "favicon.ico/lung.png"
+      )),
+      htmltools::tags$style(
+      ),
+      shinyjs::useShinyjs(),
+
+
+    bslib::page_navbar(
     title = "shinyDSP",
     id = "navpanel",
     fillable = TRUE,
-    sidebar = .interfaceSidebar(output),
-    .interfaceSetupNavPanel(output),
+    sidebar = .interfaceSidebar(),
+    .interfaceSetupNavPanel(),
     .interfaceQcNavPanel(),
-    .interfacePcaNavPanel(output),
-    .interfaceTableNavPanel(output),
+    .interfacePcaNavPanel(),
+    .interfaceTableNavPanel(),
     .interfaceVolcanoNavPanel(),
     .interfaceHeatmapNavPanel(),
 
@@ -39,6 +44,9 @@ shinyDSP <- function() {
       bslib::nav_item(
         htmltools::tags$a(
           shiny::icon("github"), "", href = "https://github.com/kimsjune/shinyDSP"))
+
+
+    )
     )
   )
 
@@ -108,53 +116,55 @@ shinyDSP <- function() {
 
 
 
-
-    ##---------------------nav panel behaviour----------------------------------
-    .outputNavPanels(input, output, session, rv)
-
-
-
-
-    ## --------------------Sidebar outputs--------------------------------------
-    .outputSidebar(input, output, session, rv)
-
-    ## --------------------Setup nav panel output-------------------------------
-    .outputSetupNavPanel(input, output, session, rv)
-
-    ## --------------------QC nav panel output----------------------------------
-    .outputQcNavPanel(input, output, session, rv)
+##---------------------nav panel behaviour----------------------------------
+.outputNavPanels(input, output, rv)
 
 
 
 
+## --------------------Sidebar outputs--------------------------------------
+## I think there is a bug with acceptable function names. Error w/o '2' at the
+## end
+.outputSidebar2(input, output, rv)
 
-    ## --------------------PCA nav panel output---------------------------------
-    .outputPcaNavPanel(input, output, session, rv)
+## --------------------Setup nav panel output-------------------------------
+.outputSetupNavPanel(input, output, rv)
 
-
-    ## --------------------Table nav panel output-------------------------------
-    .outputTableNavPanel(input, output, session, rv)
+## --------------------QC nav panel output----------------------------------
+.outputQcNavPanel(input, output, rv)
 
 
 
 
 
+## --------------------PCA nav panel output---------------------------------
+.outputPcaNavPanel2(input, output, rv)
 
 
-    ## --------------------Volcano nav panel output-----------------------------
-    .outputVolcanoNavPanel(input, output, session, rv)
+## --------------------Table nav panel output-------------------------------
+.outputTableNavPanel2(input, output, rv)
 
 
 
 
 
-    ## --------------------Heatmap nav panel output-----------------------------
-    .outputHeatmapNavPanel(input, output, session, rv)
+
+
+## --------------------Volcano nav panel output-----------------------------
+.outputVolcanoNavPanel2(input, output, rv)
+
+
+
+
+
+## --------------------Heatmap nav panel output-----------------------------
+.outputHeatmapNavPanel2(input, output, rv)
+
 
 
 
 
 
   }
-  shiny::shinyApp(ui = ui, server = server)
+  shiny::shinyApp(ui, server)
 }

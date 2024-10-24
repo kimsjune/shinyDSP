@@ -1,9 +1,6 @@
-.outputHeatmapNavPanel <- function(input, output, session, rv) {
+.outputHeatmapNavPanel2 <- function(input, output, rv) {
     # nocov start
     output$heatmapUI <- shiny::renderUI({
-        print(rv$columnSplit())
-        print(ncol(rv$lcpmSubScaleTopGenes()[[1]]))
-
         shiny::validate(
             shiny::need(
                 shiny::isTruthy(input$generateHeatmap),

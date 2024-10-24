@@ -1,5 +1,5 @@
 .pcaCustomization <- function(input, output, session, rv) {
-    pcaCustomization <- shiny::reactive({
+    pcaCustomization <- shiny::eventReactive(input$selectedTypes, {
         shapes_colours_pca <- list()
         shapes_colours_pca <- lapply(seq_along(input$selectedTypes), function(i) {
             htmltools::div(
@@ -55,7 +55,7 @@
 
 .pcaCustomizationBatch <- function(input, output, session, rv) {
     # nocov start
-    pcaCustomizationBatch <- shiny::reactive({
+    pcaCustomizationBatch <- shiny::eventReactive(input$selectedTypes, {
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
         selectedTypes <- lapply(seq_along(input$selectedTypes), function(i) {

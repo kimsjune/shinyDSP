@@ -4,19 +4,23 @@
 #' @keywords internal
 #'
 #' @author Seung J. Kim
-.interfacePcaNavPanel <- function(output) {
+.interfacePcaNavPanel <- function() {
     bslib::nav_panel(
         "PCA",
         value = "PCA",
         bslib::page_fillable(
             bslib::layout_sidebar(
                 sidebar = accordion(
+                    ## PCA customization panel must be OPEN for the inputs to
+                    ## show up. Same goes for the actionButton...
+                    open = c("runButton","Shapes and colours"),
                     bslib::accordion_panel(
-                        "",
-                        shiny::actionButton(
-                            inputId = "generatePCA",
-                            label = "Run"
-                        )
+                        "", value  = "runButton",
+                        # shiny::actionButton(
+                        #     inputId = "generatePCA",
+                        #     label = "Run"
+                        # )
+                        shiny::uiOutput("generatePcaButton")
                     ),
                     bslib::accordion_panel(
                         "Download",

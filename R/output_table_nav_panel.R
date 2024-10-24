@@ -1,4 +1,4 @@
-.outputTableNavPanel <- function(input, output, session, rv) {
+.outputTableNavPanel2 <- function(input, output, rv) {
     # nocov start
     output$topTable <- shiny::renderUI({
         shiny::req(rv$topTabDF())

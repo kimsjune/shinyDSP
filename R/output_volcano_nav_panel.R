@@ -1,4 +1,4 @@
-.outputVolcanoNavPanel <- function(input, output, session, rv) {
+.outputVolcanoNavPanel2 <- function(input, output, rv) {
     # nocov start
     output$customRange <- shiny::renderUI({
         htmltools::div(
