@@ -22,7 +22,7 @@
                     htmltools::div(
                         shiny::numericInput(
                             inputId = "maxOverlap",
-                            "Density of gene names to show",
+                            "Density of gene names",
                             min = 0, max = 50, value = 6
                         ),
                         shiny::numericInput(
@@ -68,7 +68,7 @@
                 )
             ),
             shiny::uiOutput("volcanoUI") %>%
-              shinycssloaders::withSpinner(type = 4)
+                shinycssloaders::withSpinner(type = 4)
         )
     )
 }

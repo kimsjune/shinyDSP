@@ -6,12 +6,12 @@
         ## This creates the action button after customization inputs are first
         ## ready. Technically batch custom options are not checked, but they
         ## are initialized roughly at the same time?
-        shapes <- lapply(seq_along(input$selectedTypes), function (i) {
-            input[[paste0("shape_",input$selectedTypes[i])]]
+        shapes <- lapply(seq_along(input$selectedTypes), function(i) {
+            input[[paste0("shape_", input$selectedTypes[i])]]
         }) %>% unlist()
 
-        colours <-  lapply(seq_along(input$selectedTypes), function (i) {
-            input[[paste0("colour_",input$selectedTypes[i])]]
+        colours <- lapply(seq_along(input$selectedTypes), function(i) {
+            input[[paste0("colour_", input$selectedTypes[i])]]
         }) %>% unlist()
 
         shiny::req(shapes, colours)
@@ -24,7 +24,6 @@
         shiny::actionButton(
             inputId = "generatePCA",
             label = "Run"
-
         )
     })
 
@@ -53,7 +52,7 @@
         shiny::validate(
             shiny::need(
                 shiny::isTruthy(input$generatePCA) &
-                  shiny::isTruthy(input$selectedTypes),
+                    shiny::isTruthy(input$selectedTypes),
                 "Hit 'run' to generate PCA plots."
             )
         )
@@ -149,19 +148,18 @@
                 content = function(file) {
                     ggplot2::ggsave(file,
                         plot = cowplot::plot_grid(
-
                             rv$pcaPlotCpm() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             rv$pcaPlotQ3() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             rv$pcaPlotRuv() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             rv$pcaPlotCpmBatch() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             rv$pcaPlotQ3Batch() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             rv$pcaPlotRuvBatch() +
-                              ggplot2::theme(legend.position = "none"),
+                                ggplot2::theme(legend.position = "none"),
                             align = "hv", axis = "tblr", ncol = 3, nrow = 2
                         ),
                         height = 14, width = 14, units = c("in"),

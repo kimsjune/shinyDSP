@@ -18,8 +18,9 @@
                         shiny::column(1,
                             style = "text-align: center;",
                             shiny::downloadButton(
-                              paste0("downloadHeatmap", name, ext),
-                              paste(toupper(ext)))
+                                paste0("downloadHeatmap", name, ext),
+                                paste(toupper(ext))
+                            )
                         )
                     })
                 )
@@ -49,19 +50,19 @@
         lapply(names(rv$heatmap()), function(name) {
             lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
                 output[[paste0("downloadHeatmap", name, ext)]] <-
-                  shiny::downloadHandler(
-                    filename = function() {
-                        paste("heatmap", name, ext, sep = ".")
-                    },
-                    content = function(file) {
-                        rv$
-                            ggsave(file,
-                            rv$heatmap()[[name]],
-                            height = 8, width = 8, units = c("in"),
-                            device = ext
-                        )
-                    }
-                )
+                    shiny::downloadHandler(
+                        filename = function() {
+                            paste("heatmap", name, ext, sep = ".")
+                        },
+                        content = function(file) {
+                            rv$
+                                ggsave(file,
+                                rv$heatmap()[[name]],
+                                height = 8, width = 8, units = c("in"),
+                                device = ext
+                            )
+                        }
+                    )
             })
         })
     })

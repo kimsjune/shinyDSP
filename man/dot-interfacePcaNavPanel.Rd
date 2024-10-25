@@ -4,7 +4,7 @@
 \alias{.interfacePcaNavPanel}
 \title{Create the "PCA" nav panel}
 \usage{
-.interfacePcaNavPanel(output)
+.interfacePcaNavPanel()
 }
 \value{
 \code{\link[bslib:nav-items]{bslib::nav_panel()}}

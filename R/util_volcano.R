@@ -17,14 +17,16 @@
                     )
                     )) %>%
                     dplyr::mutate(
-                        logFC_threshold = quantile(abs(logFC), 0.99,
-                                                   na.rm = TRUE),
-                        pval_threshold = quantile(adj.P.Val, 0.01,
-                                                  na.rm = TRUE),
+                        logFC_threshold = stats::quantile(abs(logFC), 0.99,
+                            na.rm = TRUE
+                        ),
+                        pval_threshold = stats::quantile(adj.P.Val, 0.01,
+                            na.rm = TRUE
+                        ),
                         deLab = ifelse(abs(logFC) > logFC_threshold &
-                                         adj.P.Val < pval_threshold &
+                            adj.P.Val < pval_threshold &
                             abs(logFC) >= input$logFCcutoff &
-                              adj.P.Val < input$PvalCutoff, Target.name, NA)
+                            adj.P.Val < input$PvalCutoff, Target.name, NA)
                     )
             })
 
@@ -41,9 +43,9 @@
                     ) +
                         ggplot2::xlim(
                             0 - max(abs(volcanoDF[[i]] %>%
-                                          dplyr::select(logFC))),
+                                dplyr::select(logFC))),
                             max(abs(volcanoDF[[i]] %>%
-                                      dplyr::select(logFC)))
+                                dplyr::select(logFC)))
                         )
                 })
             } else {
@@ -69,8 +71,7 @@
         ## plotted as Volcano
 
         if (length(input$selectedTypes) > 2) {
-            names(plots) <- names(rv$topTabDF())[-length(names(rv$topTabDF())
-            )]
+            names(plots) <- names(rv$topTabDF())[-length(names(rv$topTabDF()))]
         } else {
             names(plots) <- names(rv$topTabDF())
         }

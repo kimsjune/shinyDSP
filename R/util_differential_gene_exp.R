@@ -44,7 +44,8 @@
 
         if (!limma::is.fullrank(design)) {
             formula <- gsub(" ", " + ", paste(preFormula[
-              c(1, 2, tail(preFormula, length(input$k)))], collapse = " "))
+                c(1, 2, tail(preFormula, length(input$k)))
+            ], collapse = " "))
             design <- stats::model.matrix(eval(parse(text = formula)),
                 data = SummarizedExperiment::colData(spe)
             )
@@ -105,10 +106,12 @@
                 noquote(
                     paste0(
                         utils::combn(selectedTypes_underscore, 2,
-                                     simplify = FALSE)[[i]][1],
+                            simplify = FALSE
+                        )[[i]][1],
                         "-",
                         utils::combn(selectedTypes_underscore, 2,
-                                     simplify = FALSE)[[i]][2]
+                            simplify = FALSE
+                        )[[i]][2]
                     )
                 )
             }
@@ -143,28 +146,36 @@
                 )
 
                 block_by <- SummarizedExperiment::colData(spe)[[
-                  input$selectedBatch]]
+                    input$selectedBatch
+                ]]
 
                 v <- limma::voom(rv$dge(), rv$design())
                 corfit <- limma::duplicateCorrelation(v, rv$design(),
-                                                      block = block_by)
+                    block = block_by
+                )
 
                 shiny::incProgress(1 / 5)
 
-                v2 <- limma::voom(rv$dge(), rv$design(), block = block_by,
-                                  correlation = corfit$consensus)
+                v2 <- limma::voom(rv$dge(), rv$design(),
+                    block = block_by,
+                    correlation = corfit$consensus
+                )
                 corfit2 <- limma::duplicateCorrelation(v, rv$design(),
-                                                       block = block_by)
+                    block = block_by
+                )
 
                 shiny::incProgress(2 / 5)
 
-                fit <- limma::lmFit(v, rv$design(), block = block_by,
-                                    correlation = corfit2$consensus)
+                fit <- limma::lmFit(v, rv$design(),
+                    block = block_by,
+                    correlation = corfit2$consensus
+                )
 
                 shiny::incProgress(3 / 5)
 
                 fit_contrast <- limma::contrasts.fit(fit,
-                                                     contrasts = rv$contrast())
+                    contrasts = rv$contrast()
+                )
                 efit <- limma::eBayes(fit_contrast, robust = TRUE)
 
                 shiny::incProgress(4 / 5)

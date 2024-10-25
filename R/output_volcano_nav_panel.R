@@ -31,11 +31,12 @@
                 shiny::plotOutput(outputId = paste0("volcano_", name)),
                 shiny::fluidRow(
                     lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
-                        shiny::column(2,
-                               shiny::downloadButton(
-                                 paste0("downloadVolcano", name, ext),
-                                 paste(toupper(ext)))
-
+                        shiny::column(
+                            2,
+                            shiny::downloadButton(
+                                paste0("downloadVolcano", name, ext),
+                                paste(toupper(ext))
+                            )
                         )
                     })
                 )
@@ -54,19 +55,19 @@
         lapply(names(rv$volcano()), function(name) {
             lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
                 output[[paste0("downloadVolcano", name, ext)]] <-
-                  shiny::downloadHandler(
-                    filename = function() {
-                        paste("volcano", name, ext, sep = ".")
-                    },
-                    content = function(file) {
-                        rv$
-                            ggsave(file,
-                            rv$volcano()[[name]],
-                            height = 4, width = 6, units = c("in"),
-                            device = ext
-                        )
-                    }
-                )
+                    shiny::downloadHandler(
+                        filename = function() {
+                            paste("volcano", name, ext, sep = ".")
+                        },
+                        content = function(file) {
+                            rv$
+                                ggsave(file,
+                                rv$volcano()[[name]],
+                                height = 4, width = 6, units = c("in"),
+                                device = ext
+                            )
+                        }
+                    )
             })
         })
     })

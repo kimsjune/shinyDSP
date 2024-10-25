@@ -29,8 +29,9 @@
           treatment."
             ),
             choices = rv$data()$sampleAnnoFile %>% dplyr::select(
-              dplyr::where(is.character))
-                %>% colnames(),
+                dplyr::where(is.character)
+            )
+            %>% colnames(),
             multiple = TRUE,
             selectize = TRUE,
             selected = NULL
@@ -56,7 +57,7 @@
                 "Pick groups you want to compare such as 'WT' and 'Mutant'"
             ),
             choices = rv$new_sampleAnnoFile() %>% dplyr::pull(!!ExpVar) %>%
-              unique(),
+                unique(),
             multiple = TRUE,
             selectize = TRUE,
             selected = NULL
@@ -80,8 +81,9 @@
                 "For example, sample preparation date "
             ),
             choices = rv$data()$sampleAnnoFile %>% dplyr::select(
-              dplyr::where(is.character))
-                %>% colnames(),
+                dplyr::where(is.character)
+            )
+            %>% colnames(),
             multiple = FALSE
         )
     })
@@ -102,8 +104,9 @@
                 "For example, sex or age "
             ),
             choices = rv$data()$sampleAnnoFile %>% dplyr::select(
-              dplyr::where(is.character))
-                %>% colnames(),
+                dplyr::where(is.character)
+            )
+            %>% colnames(),
             multiple = TRUE,
             selected = NULL,
             options = list(

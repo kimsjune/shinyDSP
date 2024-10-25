@@ -1,4 +1,4 @@
-.outputNavPanels <- function(input, output, rv) {
+.outputNavPanels2 <- function(input, output, rv) {
     shiny::observe({
         if (is.null(input$selectedTypes)) {
             bslib::nav_hide("navpanel", "QC")

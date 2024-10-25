@@ -1,4 +1,4 @@
-.outputSetupNavPanel <- function(input, output, rv) {
+.outputSetupNavPanel2 <- function(input, output, rv) {
     # nocov start
     output$countFile <- shiny::renderUI({
         shiny::validate(
@@ -10,7 +10,7 @@
         )
         DT::renderDT(
             rv$data()$countFile %>%
-                dplyr::slice_sample(n = 20) %>%
+                dplyr::slice_head(n = 20) %>%
                 DT::datatable()
         )
     })
@@ -24,7 +24,7 @@
 
         DT::renderDT(
             rv$data()$sampleAnnoFile %>%
-                dplyr::slice_sample(n = 20) %>%
+                dplyr::slice_head(n = 20) %>%
                 DT::datatable()
         )
     })

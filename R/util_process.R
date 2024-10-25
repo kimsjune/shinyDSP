@@ -52,7 +52,7 @@
 
 .new_sampleAnnoFile <- function(input, output, session, rv) {
     new_sampleAnnoFile <- shiny::eventReactive(input$selectedExpVar, {
-        req(input$selectedExpVar)
+        shiny::req(input$selectedExpVar)
 
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
@@ -74,7 +74,7 @@
 
 .spe <- function(input, output, session, rv) {
     # nocov start
-    spe <- shiny::eventReactive(input$selectedTypes, {
+    spe <- shiny::reactive({
         spe <- standR::readGeoMx(
             rv$data()[[1]],
             # data()[[2]]
@@ -89,11 +89,29 @@
 
         spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), test)]
 
-        # if (input$enableQC) {
-        # qc <- colData(spe)$AlignedReads/colData(spe)$RawReads >=0.9 & colData(spe)$SequencingSaturation >=90
-        #
-        # spe <- spe[,qc]
-        # }
+
+        ## filter
+        # Create filtering conditions using lapply
+        filters <- lapply(input$selectedQc, function(column) {
+            cutoff_value <- input[[paste0("cutoff_", column)]]
+            if (!is.na(cutoff_value)) {
+                return(SummarizedExperiment::colData(spe)[[column]] >
+                           cutoff_value)
+            } else {
+                return(NULL)
+            }
+        })
+
+
+        # Remove NULLs and combine filters
+        filters <- Filter(Negate(is.null), filters)
+        if (length(filters) > 0) {
+            combined_filter <- Reduce(`&`, filters)
+            spe <- spe[, combined_filter]
+        }
+
+
+
 
         return(spe)
     })

@@ -13,9 +13,10 @@
                 sidebar = accordion(
                     ## PCA customization panel must be OPEN for the inputs to
                     ## show up. Same goes for the actionButton...
-                    open = c("runButton","Shapes and colours"),
+                    open = c("runButton", "Shapes and colours"),
                     bslib::accordion_panel(
-                        "", value  = "runButton",
+                        "",
+                        value = "runButton",
                         # shiny::actionButton(
                         #     inputId = "generatePCA",
                         #     label = "Run"
@@ -62,7 +63,8 @@
                             shiny::uiOutput("customization")
                         ),
                         htmltools::div(
-                            id = "PCAcustomBatch", style = "display: inline-block;",
+                            id = "PCAcustomBatch",
+                            style = "display: inline-block;",
                             shiny::uiOutput("customizationBatch")
                         )
                     )

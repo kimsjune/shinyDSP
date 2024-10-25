@@ -1,0 +1,58 @@
+---
+title: "shinyDSP vignette"
+author: "Seung J. Kim"
+date: 
+output: BiocStyle::html_document:
+  toc: true
+  toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+## Introduction
+
+shinyDSP allows users to interactively visualize and analyze Nanostring GeoMx data.
+
+
+
+Users can vi
+
+## Installation
+
+```{r installation}
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("shinyDSP")
+
+# To install the development version from Github:
+if (!requireNamespace("devtools", quietly = TRUE))
+    install.packages("devtools")
+
+devtools::install_github("kimsjune/shinyDSP")
+
+library(shinyDSP)
+```
+
+## Usage
+
+```{r usage}
+library(shinyDSP)
+app <- shinyDSP()
+if (interactive()) shiny::runApp(app)
+```
+
+## Session Info
+
+```{r sessionInfo}
+SessionInfo()
+
+

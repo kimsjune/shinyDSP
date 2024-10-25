@@ -20,7 +20,7 @@
                                 "Number of genes to show", value = 50
                             ),
                             shiny::textInput("heatmapCol",
-                                             "Heatmap colour scheme",
+                                "Heatmap colour scheme",
                                 value = "Inferno"
                             ),
                             shiny::sliderInput("heatmapRange",

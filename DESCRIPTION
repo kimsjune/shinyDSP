@@ -34,6 +34,7 @@ Imports:
     limma,
     magrittr,
     pals,
+    RColorBrewer,
     readr,
     readxl,
     S4Vectors,
@@ -42,6 +43,7 @@ Imports:
     shiny,
     shinycssloaders,
     shinyjs,
+    shinyvalidate,
     shinyWidgets,
     SingleCellExperiment,
     standR,
@@ -56,6 +58,8 @@ biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcrip
 URL: https://kimsjune.github.com/ShinyDSP
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
+    knitr,
+    rmarkdown,
     shinytest2,
     spelling,
     testthat (>= 3.0.0)
@@ -63,3 +67,4 @@ Language: en-US
 Depends: 
     R (>= 4.4)
 Config/testthat/edition: 3
+VignetteBuilder: knitr

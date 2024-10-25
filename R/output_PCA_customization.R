@@ -5,20 +5,25 @@
             htmltools::div(
                 shinyWidgets::radioGroupButtons(
                     inputId = paste0("shape_", input$selectedTypes[i]),
-
                     label = paste0("Pick a shape for ", input$selectedTypes[i]),
                     choiceNames = list(
-                        tags$img(src = "www/circle.png", height = "24px",
-                                 width = "24px"),
-                        tags$img(src = "www/square.png", height = "24px",
-                                 width = "24px"),
+                        tags$img(
+                            src = "www/circle.png", height = "24px",
+                            width = "24px"
+                        ),
+                        tags$img(
+                            src = "www/square.png", height = "24px",
+                            width = "24px"
+                        ),
                         tags$img(
                             src = "www/square.png", height = "20px",
                             width = "20px",
                             style = "rotate: 45deg;"
                         ),
-                        tags$img(src = "www/triangle.png", height = "24px",
-                                 width = "24px"),
+                        tags$img(
+                            src = "www/triangle.png", height = "24px",
+                            width = "24px"
+                        ),
                         tags$img(
                             src = "www/triangle.png", height = "24px",
                             width = "24px",
@@ -83,17 +88,23 @@
 
                     label = paste0("Pick a shape for ", batchVars[i]),
                     choiceNames = list(
-                        tags$img(src = "www/circle.png", height = "24px",
-                                 width = "24px"),
-                        tags$img(src = "www/square.png", height = "24px",
-                                 width = "24px"),
+                        tags$img(
+                            src = "www/circle.png", height = "24px",
+                            width = "24px"
+                        ),
+                        tags$img(
+                            src = "www/square.png", height = "24px",
+                            width = "24px"
+                        ),
                         tags$img(
                             src = "www/square.png", height = "20px",
                             width = "20px",
                             style = "rotate: 45deg;"
                         ),
-                        tags$img(src = "www/triangle.png", height = "24px",
-                                 width = "24px"),
+                        tags$img(
+                            src = "www/triangle.png", height = "24px",
+                            width = "24px"
+                        ),
                         tags$img(
                             src = "www/triangle.png", height = "24px",
                             width = "24px",

@@ -67,7 +67,7 @@
                     )
                 ),
                 shiny::uiOutput("countFile") %>%
-                  shinycssloaders::withSpinner(type = 4),
+                    shinycssloaders::withSpinner(type = 4),
                 shiny::tags$div(
                     shiny::tags$p(
                         "Your annotation table looks like this:
@@ -75,10 +75,8 @@
                     )
                 ),
                 shiny::uiOutput("sampleAnnoFile") %>%
-                  shinycssloaders::withSpinner(type = 4)
+                    shinycssloaders::withSpinner(type = 4)
             )
         )
     )
 }
-
-
