@@ -1,14 +1,30 @@
 ---
 title: "shinyDSP vignette"
-author: "Seung J. Kim"
-date: 
-output: BiocStyle::html_document:
-  toc: true
-  toc_depth: 2
+author: 
+- name: Seung J. Kim
+  affiliation: 
+  - Interstitial Lung Disease Lab, London Health Sciences Center
+  email: seung.kim@lhsc.on.ca
+- name: Marco Mura
+  affiliation:
+  - Interstitial Lung Disease Lab, London Health Sciences Center
+  - Division of Respirology, Department of Medicine, Western University
+  email: marco.mura@lhsc.on.ca
+package: shinyDSP
+date: "`r format(Sys.time(), '%b %Y')`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
+    toc_float: true
+    toc_depth: 2
+    theme: spacelab
 vignette: >
   %\VignetteIndexEntry{vignette}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
 ---
 
 ```{r, include = FALSE}
@@ -19,15 +35,22 @@ knitr::opts_chunk$set(
 ```
 ## Introduction
 
-shinyDSP allows users to interactively visualize and analyze Nanostring GeoMx data.
+shinyDSP: Analyzing and Visualizing Nanostring GeoMx DSP Data
 
+shinyDSP is an intuitive Shiny application designed for the comprehensive analysis and visualization of [Nanostring GeoMx DSP](https://nanostring.com/products/geomx-digital-spatial-profiler/geomx-dsp-overview/) data. Users can upload either demo or custom datasets, consisting of count and sample annotation tables. The app prompts users to select variables of interest, potential batch effects, and confounding factors, allowing for customized exploration.
+
+With shinyDSP, users can create x-y scatter plots of any combination of categorical variables and apply user-defined cutoffs to filter samples. The app utilizes the R package, standR [@liu_standr_2023], to perform normalization using methods such as CPM, upper quartile (Q3), or RUV4 (Remove Unwanted Variation). Users can visualize PCA plots generated for each normalization method, color-coded by chosen variables or batch.
+
+After selecting a normalization scheme, users can identify differentially expressed genes between specified biological groups using limma-voom [@ritchie_limma_2015]. The app provides "raw" output numbers in tables, generates volcano plots for all pairwise comparisons, and displays heatmaps of the top differentially expressed genes.
+
+shinyDSP aims to provide a robust, start-to-finish analysis of GeoMx data, producing publication-ready outputs that are easily customizable to meet individual aesthetic preferences.
 
 
 Users can vi
 
 ## Installation
 
-```{r installation}
+```{r installation, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -44,15 +67,21 @@ library(shinyDSP)
 
 ## Usage
 
-```{r usage}
+```{r usage, eval = FALSE}
 library(shinyDSP)
 app <- shinyDSP()
+# This will open a new browser tab/window.
 if (interactive()) shiny::runApp(app)
 ```
+
+## Load data
+
+
+
 
 ## Session Info
 
 ```{r sessionInfo}
-SessionInfo()
+sessionInfo()
 
 

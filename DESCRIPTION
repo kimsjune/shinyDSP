@@ -58,6 +58,7 @@ biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcrip
 URL: https://kimsjune.github.com/ShinyDSP
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
+    BiocStyle,
     knitr,
     rmarkdown,
     shinytest2,
