@@ -50,7 +50,7 @@ Users can vi
 
 ## Installation
 
-```{r installation}
+```{r installation, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -67,7 +67,7 @@ library(shinyDSP)
 
 ## Usage
 
-```{r usage}
+```{r usage, eval = FALSE}
 library(shinyDSP)
 app <- shinyDSP()
 # This will open a new browser tab/window.
