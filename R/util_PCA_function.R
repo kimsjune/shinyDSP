@@ -9,7 +9,7 @@
 #' @param ROIcolours User input colours from .PCA_customization() function OR
 #' PCA_customization_batch()
 #'
-#' @return A [ggplot2] object
+#' @return A [ggplot2::] object
 #' @keywords internal
 #'
 #' @author Seung J. Kim

@@ -34,9 +34,7 @@ Imports:
     limma,
     magrittr,
     pals,
-    RColorBrewer,
     readr,
-    readxl,
     S4Vectors,
     scales,
     scater,
@@ -52,6 +50,7 @@ Imports:
     SummarizedExperiment,
     svglite,
     tibble,
+    tidyr,
     utils,
     withr
 biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcriptomics

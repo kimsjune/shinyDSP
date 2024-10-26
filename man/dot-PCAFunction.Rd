@@ -29,7 +29,7 @@ PCA_customization_batch()}
 PCA_customization_batch()}
 }
 \value{
-A \link{ggplot2} object
+A \link[ggplot2:ggplot2-package]{ggplot2::ggplot2} object
 }
 \description{
 PCA plotting function with ggplot2

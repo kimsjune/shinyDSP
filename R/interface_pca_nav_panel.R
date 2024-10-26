@@ -70,10 +70,12 @@
                     )
                 ),
                 bslib::layout_column_wrap(
-                    # thank god this fixed UI elements from overlapping each other
+                    ## thank god this fixed UI elements from overlapping
+                    ## each other
                     fill = FALSE, fillable = FALSE,
                     width = NULL, height = 900,
-                    style = bslib::css(grid_template_columns = "2fr 2fr 2fr 1fr"),
+                    style = bslib::css(
+                        grid_template_columns = "2fr 2fr 2fr 1fr"),
                     shiny::uiOutput("pcaPlotCpm",
                         style = "padding: 4px;"
                     ) %>% shinycssloaders::withSpinner(

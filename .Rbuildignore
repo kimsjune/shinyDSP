@@ -1,7 +1,9 @@
-^ShinyDSP\.Rproj$
+^shinyDSP\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 _\.new\.png$
 ^inst/extdata/testtables$
 ^\.git$
 ^\.gitignore$
+^\.github$
+^codecov\.yml$

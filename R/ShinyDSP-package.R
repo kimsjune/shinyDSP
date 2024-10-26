@@ -139,6 +139,7 @@
 #' @importFrom SummarizedExperiment colData
 #' @importFrom tibble num
 #' @importFrom tibble rownames_to_column
+#' @importFrom tidyr unite
 #' @importFrom utils combn
 #' @importFrom utils de
 #' @importFrom utils globalVariables
