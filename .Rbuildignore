@@ -7,3 +7,4 @@ _\.new\.png$
 ^\.gitignore$
 ^\.github$
 ^codecov\.yml$
+^dev$

@@ -99,7 +99,7 @@
 
         heatmap <- lapply(names(rv$lcpmSubScaleTopGenes()), function(name) {
             ComplexHeatmap::Heatmap(rv$lcpmSubScaleTopGenes()[[name]],
-                cluster_columns = F, col = colFunc,
+                cluster_columns = FALSE, col = colFunc,
                 heatmap_legend_param = list(
                     border = "black",
                     title = "Z score",
@@ -137,7 +137,7 @@
                     fontface = "italic",
                     fontsize = input$heatmapFontSize
                 ),
-                show_column_names = F,
+                show_column_names = FALSE,
                 column_split = rep(
                     LETTERS[seq_len(rv$columnSplit()[[name]] %>% length())],
                     rv$columnSplit()[[name]] %>% unname() %>% as.numeric()
