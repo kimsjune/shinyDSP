@@ -1,7 +1,7 @@
 # shinyDSP
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/kimsjune/shinyDSP/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yaml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yaml)
 <!-- badges: end --> 
 
   
