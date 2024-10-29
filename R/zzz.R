@@ -7,7 +7,7 @@
 #' @keywords internal
 .onAttach <- function(libname, pkgname) {
     shiny::addResourcePath("www", system.file("www", package = "shinyDSP"))
-    shiny::addResourcePath("favicon.ico", system.file("favicon.ico",
-        package = "shinyDSP"
-    ))
+    # shiny::addResourcePath("favicon.ico", system.file("favicon.ico",
+    #     package = "shinyDSP"
+    # ))
 }

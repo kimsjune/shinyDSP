@@ -138,6 +138,7 @@
                     fontsize = input$heatmapFontSize
                 ),
                 show_column_names = FALSE,
+                column_title = NULL,
                 column_split = rep(
                     LETTERS[seq_len(rv$columnSplit()[[name]] %>% length())],
                     rv$columnSplit()[[name]] %>% unname() %>% as.numeric()

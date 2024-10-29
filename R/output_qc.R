@@ -111,6 +111,8 @@
                                 ggplot2::ggsave(file, plot = p, device = ext)
                             }
                         )
+
+
                     shiny::downloadButton(paste0("downloadQc_", i, "_", ext),
                         label = paste(toupper(ext))
                     )
@@ -118,11 +120,12 @@
             )
 
 
+
+
             shiny::tagList(
                 shiny::plotOutput(paste0("qcPlot_", i)),
                 do.call(shiny::tagList, downloadButtons)
             )
-
         })
 
         return(shiny::tagList(plotsAndButtons))
@@ -133,11 +136,11 @@
     ## find it unless its right here. But .PCAFunction() works just fine.
     ## Maybe because that's being called in reactive() instead of renderUI()?
     .qcFunction <- function(data, x, y, selectedQcColBy, colours,
-                            uniqueCategories){
+                            uniqueCategories) {
         ggplot2::ggplot(
             data,
             ggplot2::aes(!!as.name(x), !!as.name(y),
-                         fill = !!as.name(selectedQcColBy)
+                fill = !!as.name(selectedQcColBy)
             )
         ) +
             ggplot2::geom_point(
@@ -211,7 +214,5 @@
                 ),
                 aspect.ratio = 1
             )
-
-}
-
+    }
 }

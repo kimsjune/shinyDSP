@@ -1,10 +1,12 @@
 # shinyDSP
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yaml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yaml)
-<!-- badges: end --> 
 
-  
+[![check-bioc](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml)
+
+<!-- badges: end -->
+
+
 shinyDSP is a Shiny app that lets you interactively visualize Nanostring GeoMx
 data. Its outputs are highly customizable. It performs differential gene
 expression analysis and summarizes the results in tables and plots. 

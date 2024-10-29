@@ -13,27 +13,36 @@
 #' }
 shinyDSP <- function() {
     ui <- htmltools::tagList(
-        htmltools::tags$head(htmltools::tags$link(
-            rel = "shortcut icon",
-            href = "favicon.ico/lung.png"
-        )),
+        htmltools::tags$head(),
         # Add CSS to adjust the navigation panel position
         header = htmltools::tags$style(htmltools::HTML("
     .navbar-nav {
       margin-left: 75px;  /* Adjust the value to move the panels right */
     }
   ")),
-        htmltools::tags$style(),
+        htmltools::tags$style(
+            htmltools::HTML("
+    .justified-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px; /* optional spacing below */
+    }
+  ")
+        ),
         shinyjs::useShinyjs(),
         bslib::page_navbar(
             title = htmltools::tags$div(
                 style = "display: inline; align-items: center; height: 50px",
-
                 htmltools::span("shinyDSP"),
-                htmltools::span(paste0(" v",
-                                       utils::packageDescription(
-                                         "shinyDSP")$Version),
-                                style = "font-size: 14px; color: grey;")
+                htmltools::span(
+                    paste0(
+                        " v",
+                        utils::packageDescription(
+                            "shinyDSP"
+                        )$Version
+                    ),
+                    style = "font-size: 14px; color: grey;"
+                )
             ),
             id = "navpanel",
             fillable = TRUE,
@@ -64,31 +73,28 @@ shinyDSP <- function() {
 
         # nocov start
         shiny::observe({
-          iv <- shinyvalidate::InputValidator$new()
+            iv <- shinyvalidate::InputValidator$new()
 
-          lapply(input$selectedTypes, function(type) {
-            colourInput <- input[[paste0("colour_", type)]]
+            lapply(input$selectedTypes, function(type) {
+                colourInput <- input[[paste0("colour_", type)]]
 
-            iv$add_rule(paste0("colour_", type), shinyvalidate::sv_required())
+                iv$add_rule(paste0("colour_", type), shinyvalidate::sv_required())
 
-            iv$add_rule(paste0("colour_", type), shinyvalidate::sv_in_set(
-              grDevices::colors(), "Must be a valid colour in grDevices::colors()"
+                iv$add_rule(paste0("colour_", type), shinyvalidate::sv_in_set(
+                    grDevices::colors(), "Must be a valid colour in grDevices::colors()"
+                ))
+            })
+            iv$add_rule("UpCol", shinyvalidate::sv_required())
+            iv$add_rule("DnCol", shinyvalidate::sv_required())
+
+            iv$add_rule("UpCol", shinyvalidate::sv_in_set(
+                grDevices::colors(), "Must be a valid colour in grDevices::colors()"
+            ))
+            iv$add_rule("DnCol", shinyvalidate::sv_in_set(
+                grDevices::colors(), "Must be a valid colour in grDevices::colors()"
             ))
 
-
-
-          })
-          iv$add_rule("UpCol", shinyvalidate::sv_required())
-          iv$add_rule("DnCol", shinyvalidate::sv_required())
-
-          iv$add_rule("UpCol", shinyvalidate::sv_in_set(
-            grDevices::colors(), "Must be a valid colour in grDevices::colors()"
-          ))
-          iv$add_rule("DnCol", shinyvalidate::sv_in_set(
-            grDevices::colors(), "Must be a valid colour in grDevices::colors()"
-          ))
-
-          iv$enable()
+            iv$enable()
         })
         # nocov end
 
@@ -100,13 +106,15 @@ shinyDSP <- function() {
             ## ------util_process.R----------------
             rv$data <- .data(input, output, session, rv)
             rv$new_sampleAnnoFile <- .new_sampleAnnoFile(
-              input, output, session, rv)
+                input, output, session, rv
+            )
             rv$spe <- .spe(input, output, session, rv)
 
             ## ------output_PCA_customization.R-----------
             rv$pcaCustomization <- .pcaCustomization(input, output, session, rv)
             rv$pcaCustomizationBatch <- .pcaCustomizationBatch(
-              input, output, session, rv)
+                input, output, session, rv
+            )
 
             ## ------util_PCA_by_CPM.R
             rv$speCpm <- .speCpm(input, output, session, rv)
@@ -123,13 +131,12 @@ shinyDSP <- function() {
             ## ------util_PCA_by_RUV4.R
             rv$speRuv_NCGs <- .speRuv_NCGs(input, output, session, rv)
             rv$speRuvBatchCorrection <- .speRuvBatchCorrection(
-              input, output, session, rv)
+                input, output, session, rv
+            )
             rv$speRuv <- .speRuv(input, output, session, rv)
             rv$speRuv_compute <- .speRuv_compute(input, output, session, rv)
             rv$pcaPlotRuv <- .pcaPlotRuv(input, output, session, rv)
             rv$pcaPlotRuvBatch <- .pcaPlotRuvBatch(input, output, session, rv)
-
-
         })
         # nocov end
 
@@ -149,7 +156,8 @@ shinyDSP <- function() {
 
             ## ------util_heatmap.R
             rv$lcpmSubScaleTopGenes <- .lcpmSubScaleTopGenes(
-              input, output, session, rv)
+                input, output, session, rv
+            )
             rv$columnSplit <- .columnSplit(input, output, session, rv)
             rv$heatmap <- .heatmap(input, output, session, rv)
         })

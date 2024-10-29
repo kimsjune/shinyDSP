@@ -11,7 +11,7 @@
         bslib::layout_sidebar(
             sidebar = bslib::accordion(
                 ## critical that this is open
-                open = c("options","Apply QC cutoffs"),
+                open = c("options", "Apply QC cutoffs"),
                 bslib::accordion_panel(
                     "",
                     value = "options",

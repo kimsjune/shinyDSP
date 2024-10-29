@@ -76,7 +76,7 @@
             ggplot2::aes(label = deLab),
             min.segment.length = 0,
             max.overlaps = maxOverlap
-        )+
+        ) +
         ggplot2::scale_color_manual(
             values = c(DnCol, notDEcol, UpCol),
             breaks = c("DN", "NA", "UP")

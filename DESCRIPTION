@@ -4,7 +4,7 @@ Version: 0.99.0
 Authors@R: 
     c(person("Seung J.", "Kim" , ,"seung.kim@lhsc.on.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5263-0758")),
-    person("Angwara", "Nilanont", ,"angwara.nilanont@lhsc.on.ca", role = c("con"),
+    person("Angwara", "Nilanont", ,"angwara.nilanont@lhsc.on.ca", role = c("ctb"),
             comment = c(ORCID = "0000-0003-4468-9172")),
     person("Marco", "Mura",  ,"marco.mura@lhsc.on.ca", role = c("fnd"))
     )           
@@ -54,7 +54,7 @@ Imports:
     utils,
     withr
 biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcriptomics
-URL: https://kimsjune.github.com/ShinyDSP
+URL: https://kimsjune.github.com/ShinyDSP, http://joonkim.ca/shinyDSP/
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
     BiocStyle,
@@ -65,6 +65,6 @@ Suggests:
     testthat (>= 3.0.0)
 Language: en-US
 Depends: 
-    R (>= 4.4)
+    R (>= 4.5)
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -96,7 +96,7 @@
             cutoff_value <- input[[paste0("cutoff_", column)]]
             if (!is.na(cutoff_value)) {
                 return(SummarizedExperiment::colData(spe)[[column]] >
-                           cutoff_value)
+                    cutoff_value)
             } else {
                 return(NULL)
             }

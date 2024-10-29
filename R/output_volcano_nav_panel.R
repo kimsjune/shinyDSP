@@ -30,9 +30,10 @@
                 name,
                 shiny::plotOutput(outputId = paste0("volcano_", name)),
                 shiny::fluidRow(
+                    class = "justified-buttons",
                     lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
                         shiny::column(
-                            2,
+                            3,
                             shiny::downloadButton(
                                 paste0("downloadVolcano", name, ext),
                                 paste(toupper(ext))

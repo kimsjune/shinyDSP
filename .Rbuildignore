@@ -2,9 +2,12 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 _\.new\.png$
-^inst/extdata/testtables$
 ^\.git$
 ^\.gitignore$
 ^\.github$
 ^codecov\.yml$
 ^dev$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+inst/extdata/*

@@ -19,9 +19,16 @@
                                 inputId = "topNgenes",
                                 "Number of genes to show", value = 50
                             ),
-                            shiny::textInput("heatmapCol",
+                            shiny::selectInput("heatmapCol",
                                 "Heatmap colour scheme",
-                                value = "Inferno"
+                                choices = c(
+                                    "viridis", "magma", "plasma",
+                                    "inferno", "cividis", "mako",
+                                    "rocker", "turbo"
+                                ),
+                                selected = "inferno",
+                                selectize = TRUE,
+                                multiple = FALSE
                             ),
                             shiny::sliderInput("heatmapRange",
                                 "Z score range",
@@ -30,12 +37,11 @@
                             shiny::radioButtons("heatmapSize",
                                 "Plot display size",
                                 choices = c(
-                                    "x-small" = 9,
-                                    "small" = 12,
-                                    "medium" = 16,
-                                    "large" = 20
+                                    "small" = 9,
+                                    "medium" = 12,
+                                    "large" = 16
                                 ),
-                                selected = 12
+                                selected = 9
                             ),
                             shiny::numericInput(
                                 inputId = "heatmapFontSize",

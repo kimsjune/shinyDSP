@@ -11,6 +11,7 @@ What the package does (one paragraph).
 Useful links:
 \itemize{
   \item \url{https://kimsjune.github.com/ShinyDSP}
+  \item \url{http://joonkim.ca/shinyDSP/}
   \item Report bugs at \url{https://kimsjune.github.com/ShinyDSP/issues}
 }
 
@@ -20,7 +21,7 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Angwara Nilanont \email{angwara.nilanont@lhsc.on.ca} (\href{https://orcid.org/0000-0003-4468-9172}{ORCID}) [conservator]
+  \item Angwara Nilanont \email{angwara.nilanont@lhsc.on.ca} (\href{https://orcid.org/0000-0003-4468-9172}{ORCID}) [contributor]
   \item Marco Mura \email{marco.mura@lhsc.on.ca} [funder]
 }
 
