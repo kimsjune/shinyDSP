@@ -10,7 +10,7 @@ What the package does (one paragraph).
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://kimsjune.github.com/ShinyDSP}
+  \item \url{https://kimsjune.github.com/shinyDSP}
   \item \url{http://joonkim.ca/shinyDSP/}
   \item Report bugs at \url{https://kimsjune.github.com/ShinyDSP/issues}
 }

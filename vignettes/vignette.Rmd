@@ -1,5 +1,5 @@
 ---
-title: "shinyDSP vignette"
+title: "shinyDSP tutorial"
 author: 
 - name: Seung J. Kim
   affiliation: 
@@ -13,8 +13,8 @@ author:
   - Interstitial Lung Disease Lab, London Health Sciences Center
   - Division of Respirology, Department of Medicine, Western University
   email: marco.mura@lhsc.on.ca
-package: shinyDSP
-date: "`r format(Sys.time(), '%b %Y')`"
+package: "`r pkg_ver('shinyDSP')`"
+date: "`r doc_date()`"
 output:
   BiocStyle::html_document:
     toc: true
@@ -22,6 +22,7 @@ output:
     toc_float: 
       smooth_scroll: true
     toc_depth: 2
+    self_contained: yes
 vignette: >
   %\VignetteIndexEntry{vignette}
   %\VignetteEncoding{UTF-8}
