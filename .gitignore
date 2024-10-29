@@ -9,4 +9,5 @@
 *_.new.png
 BiocCheck*
 inst/doc
+inst/extdata/*
 docs
