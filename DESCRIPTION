@@ -54,7 +54,7 @@ Imports:
     utils,
     withr
 biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcriptomics
-URL: https://kimsjune.github.com/ShinyDSP, http://joonkim.ca/shinyDSP/
+URL: https://kimsjune.github.com/shinyDSP, http://joonkim.ca/shinyDSP/
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
 Suggests: 
     BiocStyle,
