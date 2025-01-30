@@ -11,3 +11,5 @@ BiocCheck*
 inst/doc
 inst/extdata/*
 docs
+pkgdown
+dev
