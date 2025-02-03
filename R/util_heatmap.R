@@ -1,4 +1,4 @@
-.lcpmSubScaleTopGenes <- function(input, output, session, rv) {
+.lcpmSubScaleTopGenes <- function(input, output, session, rv) { 
     # nocov start
     lcpmSubScaleTopGenes <- shiny::eventReactive(input$generateHeatmap, {
         shiny::req(input$selectedTypes)
@@ -43,9 +43,9 @@
     })
     # nocov end
     return(lcpmSubScaleTopGenes)
-}
+} 
 
-.columnSplit <- function(input, output, session, rv) {
+.columnSplit <- function(input, output, session, rv) { 
     # nocov start
     spe <- switch(input$selectedNorm,
         "CPM" = rv$speCpm(),
@@ -76,10 +76,10 @@
     })
     # nocov end
     return(columnSplit)
-}
+} 
 
 
-.heatmap <- function(input, output, session, rv) {
+.heatmap <- function(input, output, session, rv) { 
     # nocov start
     heatmap <- shiny::eventReactive(rv$lcpmSubScaleTopGenes(), {
         spe <- switch(input$selectedNorm,
@@ -153,4 +153,4 @@
     })
     # nocov end
     return(heatmap)
-}
+} 

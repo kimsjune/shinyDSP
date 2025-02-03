@@ -66,12 +66,13 @@ shinyDSP <- function() {
         )
     )
 
-    server <- function(input, output, session) {
+    server <- function(input, output, session) { 
+        # nocov start
         options(shiny.maxRequestSize = 50 * 1024^2)
 
 
 
-        # nocov start
+        
         shiny::observe({
             iv <- shinyvalidate::InputValidator$new()
 
@@ -96,10 +97,10 @@ shinyDSP <- function() {
 
             iv$enable()
         })
-        # nocov end
+        
 
 
-        # nocov start
+        
         rv <- shiny::reactiveValues()
 
         shiny::observe({
@@ -138,9 +139,9 @@ shinyDSP <- function() {
             rv$pcaPlotRuv <- .pcaPlotRuv(input, output, session, rv)
             rv$pcaPlotRuvBatch <- .pcaPlotRuvBatch(input, output, session, rv)
         })
-        # nocov end
+        
 
-        # nocov start
+        
         shiny::observeEvent(input$selectedNorm, {
             ## ------util_differential_gene_exp.R
             rv$design <- .design(input, output, session, rv)
@@ -161,7 +162,7 @@ shinyDSP <- function() {
             rv$columnSplit <- .columnSplit(input, output, session, rv)
             rv$heatmap <- .heatmap(input, output, session, rv)
         })
-        # nocov start
+        
 
         ## ---------------------nav panel behaviour-----------------------------
         .outputNavPanels2(input, output, rv)
@@ -188,6 +189,6 @@ shinyDSP <- function() {
 
         ## --------------------Heatmap nav panel output-------------------------
         .outputHeatmapNavPanel2(input, output, rv)
-    }
+    } # nocov end
     shiny::shinyApp(ui, server)
-}
+} 

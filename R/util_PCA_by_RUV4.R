@@ -1,4 +1,4 @@
-.speRuv_NCGs <- function(input, output, session, rv) {
+.speRuv_NCGs <- function(input, output, session, rv) { 
     # nocov start
     speRuv_NCGs <- shiny::eventReactive(rv$spe(), {
         return(standR::findNCGs(rv$spe(),
@@ -10,7 +10,7 @@
     return(speRuv_NCGs)
 }
 
-.speRuvBatchCorrection <- function(input, output, session, rv) {
+.speRuvBatchCorrection <- function(input, output, session, rv) { 
     # nocov start
     ## Need BOTH input$selectedExpVar and rv$speRuv_NCGs()
     speRuvBatchCorrection <- shiny::eventReactive(c(
@@ -27,7 +27,7 @@
     return(speRuvBatchCorrection)
 }
 
-.speRuv <- function(input, output, session, rv) {
+.speRuv <- function(input, output, session, rv) { 
     # nocov start
     speRuv <- shiny::eventReactive(rv$speRuvBatchCorrection(), {
         speRuv <- scater::runPCA(rv$speRuvBatchCorrection())
@@ -35,9 +35,9 @@
     })
     # nocov end
     return(speRuv)
-}
+} 
 
-.speRuv_compute <- function(input, output, session, rv) {
+.speRuv_compute <- function(input, output, session, rv) { 
     # nocov start
     speRuv_compute <- shiny::eventReactive(rv$speRuv(), {
         speRuv_compute <- SingleCellExperiment::reducedDim(rv$speRuv(), "PCA")
@@ -45,9 +45,9 @@
     })
     # nocov end
     return(speRuv_compute)
-}
+} 
 
-.pcaPlotRuv <- function(input, output, session, rv) {
+.pcaPlotRuv <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotRuv <- shiny::reactive({
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
@@ -73,10 +73,10 @@
     })
     # nocov end
     return(pcaPlotRuv)
-}
+} 
 
 
-.pcaPlotRuvBatch <- function(input, output, session, rv) {
+.pcaPlotRuvBatch <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotRuvBatch <- shiny::reactive({
         batchVars <- rv$data()[[2]] %>%
@@ -105,4 +105,4 @@
     })
     # nocov end
     return(pcaPlotRuvBatch)
-}
+} 

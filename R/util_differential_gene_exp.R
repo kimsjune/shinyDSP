@@ -1,4 +1,4 @@
-.design <- function(input, output, session, rv) {
+.design <- function(input, output, session, rv) { 
     # nocov start
     design <- shiny::reactive({
         shiny::validate(
@@ -57,12 +57,10 @@
 
         return(design)
     })
-    # nocov end
     return(design)
-}
+} # nocov end
 
-.dge <- function(input, output, session, rv) {
-    # nocov start
+.dge <- function(input, output, session, rv) { # nocov start
     dge <- shiny::eventReactive(rv$design(), {
         shiny::withProgress(message = "Creating a DGEList object...", {
             spe <- switch(input$selectedNorm,
@@ -89,10 +87,10 @@
     })
     # nocov end
     return(dge)
-}
+} 
 
 
-.contrast <- function(input, output, session, rv) {
+.contrast <- function(input, output, session, rv) { 
     # nocov start
     contrast <- shiny::eventReactive(rv$design(), {
         # replace space with _
@@ -131,7 +129,7 @@
     return(contrast)
 }
 
-.efit <- function(input, output, session, rv) {
+.efit <- function(input, output, session, rv) { 
     # nocov start
     efit <- shiny::eventReactive(rv$dge(), {
         shiny::req(input$selectedBatch, rv$contrast())
@@ -186,4 +184,4 @@
     })
     # nocov end
     return(efit)
-}
+} 

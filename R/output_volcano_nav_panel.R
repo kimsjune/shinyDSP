@@ -1,5 +1,5 @@
-.outputVolcanoNavPanel2 <- function(input, output, rv) {
-    # nocov start
+.outputVolcanoNavPanel2 <- function(input, output, rv) { # nocov start
+    
     output$customRange <- shiny::renderUI({
         htmltools::div(
             shiny::sliderInput(
@@ -13,9 +13,9 @@
             )
         )
     })
-    # nocov end
+    
 
-    # nocov start
+    
     output$volcanoUI <- shiny::renderUI({
         shiny::validate(
             shiny::need(
@@ -50,8 +50,9 @@
             !!!tabsets
         )
     })
+    
 
-
+    
     shiny::observeEvent(input$generateVolcano, {
         lapply(names(rv$volcano()), function(name) {
             lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
@@ -72,14 +73,15 @@
             })
         })
     })
+    
 
-    # nocov start
+    
     shiny::observeEvent(input$toggleCustomRange, {
         shinyjs::toggle("showCustomRange")
     })
-    # nocov end
+    
 
-    # nocov start
+    
     shiny::observeEvent(input$generateVolcano, {
         lapply(names(rv$volcano()), function(name) {
             output[[paste0("volcano_", name)]] <- shiny::renderPlot({
@@ -87,5 +89,5 @@
             })
         })
     })
-    # nocov end
-}
+    
+} # nocov end

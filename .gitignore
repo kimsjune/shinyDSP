@@ -13,3 +13,4 @@ inst/extdata/*
 docs
 pkgdown
 dev
+vignettes/shinyDSP_secondary_cache/*

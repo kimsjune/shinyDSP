@@ -1,5 +1,5 @@
-.outputSetupNavPanel2 <- function(input, output, rv) {
-    # nocov start
+.outputSetupNavPanel2 <- function(input, output, rv) { # nocov start
+    
     output$countFile <- shiny::renderUI({
         shiny::validate(
             shiny::need(
@@ -14,11 +14,11 @@
                 DT::datatable()
         )
     })
-    # nocov end
+    
 
 
 
-    # nocov start
+    
     output$sampleAnnoFile <- shiny::renderUI({
         shiny::req(input$load, rv$data())
 
@@ -28,5 +28,5 @@
                 DT::datatable()
         )
     })
-    # nocov end
-}
+    
+} # nocov end

@@ -1,5 +1,4 @@
-.outputPcaNavPanel2 <- function(input, output, rv) {
-    # nocov start
+.outputPcaNavPanel2 <- function(input, output, rv) { 
     output$generatePcaButton <- shiny::renderUI({
         ## Kind of hacky; PCA plots require 1) actionButton and 2) customization
         ## inputs (shapes and colours). But each plot is a separate output...
@@ -28,26 +27,18 @@
     })
 
 
-    # nocov end
-
-
-    # nocov start
     # Opens a grouped widgets to pick shape and colour
     output$customization <- shiny::renderUI({
         shiny::req(input$selectedTypes)
         rv$pcaCustomization()
     })
-    # nocov end
 
-    # nocov start
     # Opens a grouped widgets to pick shape and colour
     output$customizationBatch <- shiny::renderUI({
         shiny::req(input$selectedTypes)
         rv$pcaCustomizationBatch()
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotCpm <- shiny::renderUI({
         shiny::validate(
             shiny::need(
@@ -63,55 +54,42 @@
         shiny::renderPlot(rv$pcaPlotCpm() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotQ3 <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
         shiny::renderPlot(rv$pcaPlotQ3() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotRuv <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
         shiny::renderPlot(rv$pcaPlotRuv() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotCpmBatch <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
         shiny::renderPlot(rv$pcaPlotCpmBatch() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotQ3Batch <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
         shiny::renderPlot(rv$pcaPlotQ3Batch() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotRuvBatch <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
         shiny::renderPlot(rv$pcaPlotRuvBatch() +
             ggplot2::theme(legend.position = "none"))
     })
-    # nocov end
 
-
-    # nocov start
     output$pcaPlotLegend <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
@@ -123,9 +101,7 @@
 
         shiny::renderPlot(legend)
     })
-    # nocov end
 
-    # nocov start
     output$pcaPlotLegendBatch <- shiny::renderUI({
         shiny::req(input$generatePCA, input$selectedTypes)
 
@@ -136,9 +112,7 @@
         )
         shiny::renderPlot(legend)
     })
-    # nocov end
 
-    # nocov start
     shiny::observe({
         lapply(c("png", "tiff", "pdf", "svg"), function(ext) {
             output[[paste0("pca_", ext)]] <- shiny::downloadHandler(
@@ -195,18 +169,13 @@
             )
         })
     })
-    # nocov end
 
 
-    # nocov start
     shiny::observeEvent(input$togglePCAcustom, {
         shinyjs::toggle(id = "PCAcustom")
     })
-    # nocov end
 
-    # nocov start
     shiny::observeEvent(input$togglePCAcustom, {
         shinyjs::toggle(id = "PCAcustomBatch")
     })
-    # nocov end
-}
+} 

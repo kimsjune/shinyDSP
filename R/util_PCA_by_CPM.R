@@ -1,4 +1,4 @@
-.speCpm <- function(input, output, session, rv) {
+.speCpm <- function(input, output, session, rv) { 
     # nocov start
     speCpm <- shiny::eventReactive(rv$spe(), {
         speCpm <- scater::runPCA(rv$spe())
@@ -6,9 +6,9 @@
     })
     # nocov end
     return(speCpm)
-}
+} 
 
-.speCpm_compute <- function(input, output, session, rv) {
+.speCpm_compute <- function(input, output, session, rv) { 
     # nocov start
     speCpm_compute <- shiny::eventReactive(rv$speCpm(), {
         speCpm_compute <- SingleCellExperiment::reducedDim(rv$speCpm(), "PCA")
@@ -18,7 +18,7 @@
     return(speCpm_compute)
 }
 
-.pcaPlotCpm <- function(input, output, session, rv) {
+.pcaPlotCpm <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotCpm <- shiny::reactive({
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
@@ -44,9 +44,9 @@
     })
     # nocov end
     return(pcaPlotCpm)
-}
+} 
 
-.pcaPlotCpmBatch <- function(input, output, session, rv) {
+.pcaPlotCpmBatch <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotCpmBatch <- shiny::reactive({
         batchVars <- rv$data()[[2]] |>
@@ -75,4 +75,4 @@
     })
     # nocov end
     return(pcaPlotCpmBatch)
-}
+} 

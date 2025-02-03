@@ -1,4 +1,5 @@
-.outputQcNavPanel2 <- function(input, output, rv) {
+.outputQcNavPanel2 <- function(input, output, rv) { # nocov start
+    
     output$qcSelect <- renderUI({
         shiny::req(rv$new_sampleAnnoFile())
 
@@ -12,7 +13,9 @@
             selectize = TRUE
         )
     })
+    
 
+    
     output$qcColBy <- renderUI({
         shiny::req(rv$new_sampleAnnoFile())
 
@@ -26,7 +29,9 @@
             selectize = TRUE
         )
     })
+    
 
+    
     output$qcColPal <- renderUI({
         shiny::req(rv$new_sampleAnnoFile())
 
@@ -41,7 +46,9 @@
             selectize = TRUE
         )
     })
+    
 
+    
     shiny::observe({
         output$qcCutoff <- renderUI({
             lapply(input$selectedQc, function(column) {
@@ -52,9 +59,10 @@
             })
         })
     })
+    
 
 
-
+    
     output$qcPlot <- renderUI({
         shiny::validate(
             shiny::need(
@@ -130,6 +138,7 @@
 
         return(shiny::tagList(plotsAndButtons))
     })
+    
 
 
     ## I want to put this function in a separate file but shinytest2 can't
@@ -215,4 +224,4 @@
                 aspect.ratio = 1
             )
     }
-}
+} # nocov end

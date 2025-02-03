@@ -1,4 +1,4 @@
-.speQ3 <- function(input, output, session, rv) {
+.speQ3 <- function(input, output, session, rv) { 
     # nocov start
     speQ3 <- shiny::eventReactive(rv$spe(), {
         speQ3 <- standR::geomxNorm(rv$spe(), method = "upperquartile")
@@ -7,9 +7,9 @@
     })
     # nocov end
     return(speQ3)
-}
+} 
 
-.speQ3_compute <- function(input, output, session, rv) {
+.speQ3_compute <- function(input, output, session, rv) { 
     # nocov start
     speQ3_compute <- shiny::eventReactive(rv$speQ3(), {
         speQ3_compute <- SingleCellExperiment::reducedDim(rv$speQ3(), "PCA")
@@ -17,9 +17,9 @@
     })
     # nocov end
     return(speQ3_compute)
-}
+} 
 
-.pcaPlotQ3 <- function(input, output, session, rv) {
+.pcaPlotQ3 <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotQ3 <- shiny::reactive({
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
@@ -45,9 +45,9 @@
     })
     # nocov end
     return(pcaPlotQ3)
-}
+} 
 
-.pcaPlotQ3Batch <- function(input, output, session, rv) {
+.pcaPlotQ3Batch <- function(input, output, session, rv) { 
     # nocov start
     pcaPlotQ3Batch <- shiny::reactive({
         batchVars <- rv$data()[[2]] %>%
@@ -75,4 +75,4 @@
     })
     # nocov end
     return(pcaPlotQ3Batch)
-}
+} 

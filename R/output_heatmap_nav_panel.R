@@ -1,5 +1,4 @@
-.outputHeatmapNavPanel2 <- function(input, output, rv) {
-    # nocov start
+.outputHeatmapNavPanel2 <- function(input, output, rv) { 
     output$heatmapUI <- shiny::renderUI({
         shiny::validate(
             shiny::need(
@@ -34,9 +33,9 @@
             !!!tabsets
         )
     })
-    # nocov end
+    
 
-    # nocov start
+    
     shiny::observeEvent(input$generateHeatmap, {
         lapply(names(rv$heatmap()), function(name) {
             output[[paste0("heatmap_", name)]] <- shiny::renderPlot(
@@ -46,9 +45,9 @@
             )
         })
     })
-    # nocov end
+    
 
-    # nocov start
+    
     shiny::observeEvent(input$generateHeatmap, {
         shiny::req(rv$lcpmSubScaleTopGenes())
 
@@ -75,5 +74,5 @@
             })
         })
     })
-    # nocov end
-}
+    
+} 

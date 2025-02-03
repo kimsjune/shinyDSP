@@ -5,9 +5,10 @@ author:
   affiliation: 
   - Interstitial Lung Disease Lab, London Health Sciences Center
   email: seung.kim@lhsc.on.ca
-- name: Angwara (Book) Nilanont
+- name: Angwara Nilanont
   affiliation:
-  - Interstitial Lung Disease Lab, London Health Sciences Center
+  - Western University
+  email: angwara.nilanont@lhsc.on.ca
 - name: Marco Mura
   affiliation:
   - Interstitial Lung Disease Lab, London Health Sciences Center
@@ -24,7 +25,7 @@ output:
     toc_depth: 2
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{vignette}
+  %\VignetteIndexEntry{shinyDSP}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 bibliography: references.bib
@@ -236,8 +237,9 @@ For each "Table", a corresponding heatmap is generated. The heatmaps are also or
 
 Below each heatmap, you have the option to save it as four different file types. 
 
+## Data processing and analysis
 
-
+For details on underlying functions, please check out the [secondary vignette](shinyDSP_secondary.html). 
 
 
 

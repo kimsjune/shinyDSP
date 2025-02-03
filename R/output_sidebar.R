@@ -1,5 +1,5 @@
-.outputSidebar2 <- function(input, output, rv) {
-    # nocov start
+.outputSidebar2 <- function(input, output, rv) { # nocov start
+    
     shiny::observeEvent(input$useSampleData, {
         if (input$useSampleData == FALSE) {
             shinyjs::show("uploadedCountFile")
@@ -9,10 +9,10 @@
             shinyjs::hide("uploadedSampleAnnoFile")
         }
     })
-    # nocov end
+    
 
 
-    # nocov start
+    
     output$selectYourExpVar <- shiny::renderUI({
         shiny::req(rv$data())
 
@@ -37,9 +37,9 @@
             selected = NULL
         )
     })
-    # nocov end
+    
 
-    # nocov start
+    
     output$selectYourType <- shiny::renderUI({
         shiny::req(rv$new_sampleAnnoFile(), input$selectedExpVar)
 
@@ -64,9 +64,9 @@
         )
     })
 
-    # nocov end
+    
 
-    # nocov start
+    
     output$selectYourBatch <- shiny::renderUI({
         shiny::req(rv$data())
 
@@ -87,9 +87,9 @@
             multiple = FALSE
         )
     })
-    # nocov end
+    
 
-    # nocov start
+    
     output$selectYourConfounder <- shiny::renderUI({
         shiny::req(rv$data())
 
@@ -115,9 +115,9 @@
             )
         )
     })
-    # nocov end
+    
 
-    # nocov start
+    
 
     output$selectYourK <- shiny::renderUI({
         shiny::req(rv$data())
@@ -130,9 +130,9 @@
         )
     })
 
-    # nocov end
+    
 
-    # nocov start
+    
 
     output$selectYourNorm <- shiny::renderUI({
         shiny::req(rv$data())
@@ -156,9 +156,9 @@
         )
     })
 
-    # nocov end
+    
 
-    # nocov start
+    
     output$selectYourLFC <- shiny::renderUI({
         shiny::req(rv$data())
 
@@ -168,5 +168,5 @@
             value = 1
         )
     })
-    # nocov end
-}
+    
+} # nocov end

@@ -1,4 +1,5 @@
 .pcaCustomization <- function(input, output, session, rv) {
+    
     pcaCustomization <- shiny::eventReactive(input$selectedTypes, {
         shapes_colours_pca <- list()
         shapes_colours_pca <- lapply(seq_along(input$selectedTypes), function(i) {
@@ -55,11 +56,12 @@
 
         return(shapes_colours_pca) # Show the actual widget,
     })
+    
     return(pcaCustomization)
 }
 
 .pcaCustomizationBatch <- function(input, output, session, rv) {
-    # nocov start
+    
     pcaCustomizationBatch <- shiny::eventReactive(input$selectedTypes, {
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
@@ -136,6 +138,6 @@
 
         return(shapes_colours_pca_batch)
     })
-    # nocov end
+    
     return(pcaCustomizationBatch)
 }

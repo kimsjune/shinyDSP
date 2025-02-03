@@ -1,3 +1,9 @@
+#' Create the "Heatmap" nav panel
+#'
+#' @returns [bslib::nav_panel()]
+#' @keywords internal
+#'
+#' @author Seung J. Kim
 .interfaceHeatmapNavPanel <- function() {
     bslib::nav_panel(
         "Heatmap",

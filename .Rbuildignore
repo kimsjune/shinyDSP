@@ -11,3 +11,4 @@ _\.new\.png$
 ^docs$
 ^pkgdown$
 inst/extdata/*
+^vignettes/shinyDSP_secondary_cache/*

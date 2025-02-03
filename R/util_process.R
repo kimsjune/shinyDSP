@@ -1,5 +1,5 @@
 .data <- function(input, output, session, rv) {
-    # nocov
+  # nocov start
     data <- shiny::eventReactive(input$load, {
         shiny::validate(
             shiny::need(
@@ -46,11 +46,12 @@
 
         return(data)
     })
+    # nocov end
     return(data)
 }
-# nocov end
 
 .new_sampleAnnoFile <- function(input, output, session, rv) {
+    # nocov start
     new_sampleAnnoFile <- shiny::eventReactive(input$selectedExpVar, {
         shiny::req(input$selectedExpVar)
 
@@ -69,6 +70,7 @@
         }
         return(new_sampleAnnoFile)
     })
+    # nocov end
     return(new_sampleAnnoFile)
 }
 
@@ -83,11 +85,11 @@
         selectedTypes <- input$selectedTypes
         selectedExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
-        test <- colData(spe) %>%
+        toKeep <- colData(spe) %>%
             tibble::as_tibble() %>%
             pull(!!selectedExpVar)
 
-        spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), test)]
+        spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), toKeep)]
 
 
         ## filter
@@ -117,4 +119,4 @@
     })
     # nocov end
     return(spe)
-}
+} 

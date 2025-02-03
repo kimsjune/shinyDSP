@@ -1,0 +1,386 @@
+---
+title: "shinyDSP secondary vignette"
+author: 
+- name: Seung J. Kim
+  affiliation: 
+  - Interstitial Lung Disease Lab, London Health Sciences Center
+  email: seung.kim@lhsc.on.ca
+- name: Angwara Nilanont
+  affiliation:
+  - Western University
+  email: angwara.nilanont@lhsc.on.ca
+- name: Marco Mura
+  affiliation:
+  - Interstitial Lung Disease Lab, London Health Sciences Center
+  - Division of Respirology, Department of Medicine, Western University
+  email: marco.mura@lhsc.on.ca
+package: "`r pkg_ver('shinyDSP')`"
+date: "`r doc_date()`"
+output:
+  BiocStyle::html_document:
+    toc: true
+    number_sections: true
+    toc_float: 
+      smooth_scroll: true
+    toc_depth: 2
+    self_contained: yes
+vignette: >
+  %\VignetteIndexEntry{shinyDSP_secondary}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+bibliography: references.bib
+link-citations: true
+editor_options: 
+  markdown: 
+    wrap: 80
+---
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = FALSE,
+    message = FALSE,
+    warning = FALSE,
+    echo = TRUE,
+    eval = TRUE,
+    cache = TRUE,
+    fig.align = 'center', out.width="65%"
+    
+)
+```
+## Introduction
+
+The purpose of this vignette is to look under the hood and explain what a few underlying functions do to make this app work.
+
+## Data import 
+
+The human kidney data from [Nanostring](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/) is loaded from `ExperimentHub()`. Two files are required: a count matrix and matching annotation file. Let's read those files.
+
+
+```{r load}
+library(standR)
+library(ExperimentHub)
+library(readr)
+library(dplyr)
+library(stats)
+
+eh <- ExperimentHub()
+AnnotationHub::query(eh, "standR")
+countFilePath <- eh[["EH7364"]]
+sampleAnnoFilePath <- eh[["EH7365"]]
+
+countFile <- readr::read_delim(unname(countFilePath), na = character())
+sampleAnnoFile <- readr::read_delim(unname(sampleAnnoFilePath), na = character())
+```
+
+## Variable(s) selection
+
+A key step in analysis is to select a biological group(s) of interest. Let's inspect `sampleAnnoFile`. 
+
+```{r}
+colnames(sampleAnnoFile)
+sampleAnnoFile$disease_status %>% unique()
+sampleAnnoFile$region %>% unique()
+```
+
+"disease_status" and "region" look like interesting variables. For example, we might be interested in comparing "normal_glomerulus" to "DKD_glomerulus". The app can create a new `sampleAnnoFile` where two or more variables of interest can be combined into one grouped variable (under "Variable(s) of interest" in the main `side bar`).
+
+```{r new_sampleAnnoFile}
+new_sampleAnnoFile <- sampleAnnoFile %>%
+    tidyr::unite(
+        "disease_region", # newly created grouped variable
+        c("disease_status","region"), # variables to combine
+        sep = "_"
+    )
+
+new_sampleAnnoFile$disease_region %>% unique()
+```
+
+Finally a spatial experiment object can be created.
+```{r readGeoMx}
+spe <- standR::readGeoMx(as.data.frame(countFile),
+                         as.data.frame(new_sampleAnnoFile))
+```
+
+## Selecting groups to analyze
+
+We merged "disease_status" and "region" to create a new group called, "disease_region". The app allows users to pick any subset of groups of interest. In this example, the four possible groups are "DKD_glomerulus", "DKD_tubule","normal_tubule", and "normal_glomerulus". The following script can subset `spe` to keep certain groups.
+
+```{r selectedTypes}
+selectedTypes <- c("DKD_glomerulus", "DKD_tubule", "normal_tubule", "normal_glomerulus")
+toKeep <- colData(spe) %>%
+    tibble::as_tibble() %>%
+    pull(disease_region)
+
+spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), toKeep)]
+```
+
+## Applying QC filters
+
+Regions of interest(ROIs) can be filtered out based on any quantitative variable in `colData(spe)` (same as `colnames(new_sampleAnnoFile)`). These options can be found under the "QC" `nav panel`'s `side bar`.  Let's say I want to keep ROIs whose "SequencingSaturation" is at least 85.
+
+```{r filter}
+filter <- lapply("SequencingSaturation", function(column) {
+    cutoff_value <- 85
+    if(!is.na(cutoff_value)) {
+        return(colData(spe)[[column]] > cutoff_value)
+    } else {
+        return(NULL)
+    }
+})
+
+filtered_spe <- spe[,unlist(filter)]
+
+colData(spe) %>% dim()
+colData(filtered_spe) %>% dim()
+```
+
+We can see that 14 ROIs have been filtered out. 
+
+## PCA
+
+Two PCA plots (colour-coded by biological groups or batch) for three normalization schemes are automatically created in the "PCA" `nav panel`. Let's take Q3 normalization as an example. 
+
+```{r speQ3}
+speQ3 <- standR::geomxNorm(filtered_spe, method = "upperquartile")
+speQ3 <- scater::runPCA(filtered_spe)
+
+speQ3_compute <- SingleCellExperiment::reducedDim(speQ3, "PCA")
+```
+
+Then, `.PCAFunction()` is called to generate the plot.
+```{r .PCAFunction, echo=FALSE}
+.PCAFunction <- function(spe, precomputed, colourShapeBy, selectedVar,
+                         ROIshapes, ROIcolours) {
+    standR::drawPCA(spe, precomputed = precomputed) +
+
+        ## really need as.name() plus !! because of factor()
+        ggplot2::geom_point(ggplot2::aes(
+            shape = factor(!!as.name(colourShapeBy), levels = selectedVar),
+            fill = factor(!!as.name(colourShapeBy), levels = selectedVar)
+        ), size = 3, colour = "black", stroke = 0.5) +
+
+        ggplot2::scale_shape_manual(colourShapeBy,
+            values = as.integer(unlist(ROIshapes)) # as.integer() crucial
+        ) +
+        ggplot2::scale_fill_manual(colourShapeBy,
+            ## colour() is a base function, so must be avoided
+            values = unlist(ROIcolours)
+        ) +
+        ggplot2::scale_y_continuous(
+            labels = scales::number_format(accuracy = 0.1)
+        ) +
+        ggplot2::scale_x_continuous(
+            labels = scales::number_format(accuracy = 0.1)
+        ) +
+        ggplot2::theme(
+            panel.grid.minor = ggplot2::element_blank(),
+            panel.grid.major = ggplot2::element_blank(),
+            axis.text = ggplot2::element_text(color = "black", size = 16),
+            axis.line = ggplot2::element_blank(),
+            axis.ticks = ggplot2::element_line(colour = "black"),
+            axis.title = ggplot2::element_text(size = 16),
+            legend.title = ggplot2::element_text(
+                size = 16, vjust = 0.5, hjust = 0.5,
+                face = "bold", family = "sans"
+            ),
+            legend.text = ggplot2::element_text(
+                size = 16, vjust = 0.5, hjust = 0,
+                face = "bold", family = "sans"
+            ),
+            plot.margin = grid::unit(c(1, 1, 1, 1), "mm"),
+            plot.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            plot.title = ggplot2::element_text(
+                size = 16, hjust = 0.5, face = "bold",
+                family = "sans"
+            ),
+            panel.border = ggplot2::element_rect(
+                colour = "black",
+                linewidth = 0.4
+            ),
+            panel.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.box.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.key = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.position = "bottom",
+            aspect.ratio = 1
+        ) +
+        ggplot2::guides(
+            fill = ggplot2::guide_legend(
+                nrow = length(selectedVar),
+                title.position = "top"
+            ),
+            shape = ggplot2::guide_legend(
+                nrow = length(selectedVar),
+                title.position = "top"
+            )
+        )
+}
+```
+
+```{r PCAFunction}
+.PCAFunction(speQ3, speQ3_compute, "disease_region", selectedTypes, c(21,22,23,24), c("blue","blue","black","black"))
+```
+
+## Design matrix
+
+Let's proceed with Q3 normalization. A design matrix is created next. 
+
+```{r design}
+design <- model.matrix(~0+disease_region, data = colData(speQ3))
+
+# Clean up column name
+colnames(design) <- gsub("disease_region", "", colnames(design))
+```
+
+If confounding variables are chosen in the main `side bar`, those would be added to `model.matrix` as `~0 + disease_region + confounder1 + confounder2)`.
+
+## Creating a DGEList
+
+`edgeR` is used to convert `SpatialExperiment` into `DGEList`, filter and estimate dispersion.
+
+```{r convert}
+library(edgeR)
+dge <- SE2DGEList(speQ3)
+keep <- filterByExpr(dge, design)
+
+dge <- dge[keep, , keep.lib.sizes = FALSE]
+
+dge <- estimateDisp(dge, design = design, robust = TRUE)
+```
+
+## Comparison between all biological groups
+
+Recall our "selectedTypes" from above: "DKD_glomerulus", "DKD_tubule", "normal_tubule", "normal_glomerulus".
+
+The following code creates all pairwise comparisons between them.
+```{r contast}
+# In case there are spaces
+selectedTypes_underscore <- gsub(" ", "_", selectedTypes)
+
+comparisons <- list()
+
+comparisons <- lapply(
+    seq_len(choose(length(selectedTypes_underscore), 2)),
+    function(i) {
+        noquote(
+            paste0(
+                utils::combn(selectedTypes_underscore, 2,
+                    simplify = FALSE
+                )[[i]][1],
+                "-",
+                utils::combn(selectedTypes_underscore, 2,
+                    simplify = FALSE
+                )[[i]][2]
+            )
+        )
+    }
+)
+
+con <- makeContrasts(
+    # Must use as.character()
+    contrasts = as.character(unlist(comparisons)),
+    levels = colnames(design)
+)
+
+colnames(con) <- sub("-", "_vs_", colnames(con))
+
+con
+```
+
+## Fitting a linear regression model with `limma`
+
+The app uses `duplicateCorrelation()` "[s]ince we need to make comparisons both within and between subjects, it is necessary to treat Patient as a random effect" [limma user's guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf) [@ritchie_limma_2015]. `limma-voom` method is used as `standR` package recommends [@liu_standr_2023]. 
+
+```{r limma}
+library(limma)
+block_by <- colData(speQ3)[["SlideName"]]
+
+v <- voom(dge, design)
+corfit <- duplicateCorrelation(v, design,
+    block = block_by
+)
+
+v2 <- voom(dge, design,
+    block = block_by,
+    correlation = corfit$consensus
+)
+
+corfit2 <- duplicateCorrelation(v, design,
+    block = block_by
+)
+
+fit <- lmFit(v, design,
+    block = block_by,
+    correlation = corfit2$consensus
+)
+
+fit_contrast <- contrasts.fit(fit,
+    contrasts = con
+)
+
+efit <- eBayes(fit_contrast, robust = TRUE)
+```
+
+## Tables of top differentially expressed genes
+For each contrast (a column in `con`), the app creates a table of top differentially expressed genes sorted by their adjusted P value.
+
+```{r tables}
+# Keep track of how many comparisons there are
+numeric_vector <- seq_len(ncol(con))
+new_list <- as.list(numeric_vector)
+
+# This adds n+1th index to new_list where n = ncol(con)
+# This index contains seq_len(ncol(con)) 
+# ex. new_list[[7]] = 1 2 3 4 5 6
+# This coefficient allows ANOVA-like comparison in toptable()
+if (length(selectedTypes) > 2) {
+    new_list[[length(new_list) + 1]] <- numeric_vector
+}
+
+topTabDF <- lapply(new_list, function(i) {
+    limma::topTable(efit,
+        coef = i, number = Inf, p.value = 0.05,
+        adjust.method = "BH", lfc = 1
+    ) %>%
+        tibble::rownames_to_column(var = "Gene")
+})
+
+# Adds names to topTabDF
+if (length(selectedTypes) > 2) {
+    names(topTabDF) <- c(
+        colnames(con),
+        colnames(con) %>% stringr::str_split(., "_vs_") %>%
+            unlist() %>% unique() %>% paste(., collapse = "_vs_")
+    )
+} else {
+    names(topTabDF) <- colnames(con)
+}
+
+```
+
+`topTabDF` is now a list of tables where the list index corresponds to that of columns in `con`.
+
+```{r tableExample}
+colnames(con)
+head(topTabDF[[1]])
+```
+
+These tables are then shown to the user in the "Tables" `nav panel`.
+
+## Volcano plot and heatmap
+
+No further *serious* data processing is performed at this point. The numbers in `topTabDF` is now parsed to create volcano plots and heatmaps in their respective `nav panel`s. 
