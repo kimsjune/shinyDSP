@@ -57,6 +57,7 @@ The human kidney data from [Nanostring](https://nanostring.com/products/geomx-di
 
 ```{r load}
 library(standR)
+library(SpatialExperiment)
 library(ExperimentHub)
 library(readr)
 library(dplyr)
