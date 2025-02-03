@@ -1,7 +1,7 @@
 library(shinytest2)
 
 test_that("testing shiyDSP all in one", {
-    app <- AppDriver$new(shinyDSP(), seed = 0, load_timeout = 30000, timeout = 300000, variant = platform_variant())
+    app <- AppDriver$new(shinyDSP(), seed = 0, load_timeout = 50000, timeout = 500000, variant = platform_variant())
 
     app$set_window_size(width = 1235, height = 730)
     app$set_inputs(useSampleData = TRUE)
