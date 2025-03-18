@@ -2,12 +2,16 @@ Package: shinyDSP
 Title: A Shiny App For Visualizing Nanostring GeoMx DSP Data
 Version: 0.99.3
 Description: 
-    This package is a Shiny app for interactively analyzing and visualizing Nanostring GeoMX Whole Transcriptome Atlas data. Users have the option of exploring a sample data to explore this app's functionality. Regions of interest (ROIs) can be filtered based on any user-provided metadata. Upon taking two or more groups of interest, all pairwise and ANOVA-like testing are automatically performed. Available ouputs include PCA, Volcano plots, tables and heatmaps. Aesthetics of each output are highly customizable. 
+    This package is a Shiny app for interactively analyzing and visualizing 
+    Nanostring GeoMX Whole Transcriptome Atlas data. Users have the option of 
+    exploring a sample data to explore this app's functionality. Regions of 
+    interest (ROIs) can be filtered based on any user-provided metadata. Upon 
+    taking two or more groups of interest, all pairwise and ANOVA-like testing 
+    are automatically performed. Available ouputs include PCA, Volcano plots, 
+    tables and heatmaps. Aesthetics of each output are highly customizable. 
 Authors@R: 
     c(person("Seung J.", "Kim" , ,"seung.kim@lhsc.on.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5263-0758")),
-    person("Angwara", "Nilanont", ,"angwara.nilanont@lhsc.on.ca", role = c("ctb"),
-            comment = c(ORCID = "0000-0003-4468-9172")),
     person("Marco", "Mura",  ,"marco.mura@lhsc.on.ca", role = c("fnd"))
     )           
 License: MIT + file LICENSE
@@ -52,8 +56,7 @@ Imports:
     svglite,
     tibble,
     tidyr,
-    utils,
-    withr
+    utils
 biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcriptomics
 URL: https://kimsjune.github.com/shinyDSP, http://joonkim.ca/shinyDSP/
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
@@ -63,7 +66,8 @@ Suggests:
     rmarkdown,
     shinytest2,
     spelling,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Language: en-US
 Depends: 
     R (>= 4.5)

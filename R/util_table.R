@@ -1,4 +1,4 @@
-.topTabDF <- function(input, output, session, rv) { 
+.topTabDF <- function(input, output, session, rv) {
     # nocov start
     topTabDF <- shiny::reactive({
         shiny::req(rv$efit(), rv$contrast())

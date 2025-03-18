@@ -1,4 +1,5 @@
 .lcpmSubScaleTopGenes <- function(input, output, session, rv) { 
+    Gene <- NULL
     # nocov start
     lcpmSubScaleTopGenes <- shiny::eventReactive(input$generateHeatmap, {
         shiny::req(input$selectedTypes)
@@ -13,7 +14,7 @@
 
         lcpmSubScaleTopGenes <- lapply(names(rv$topTabDF()), function(name) {
             columns <- stringr::str_split_1(name, "_vs_") %>%
-                sapply(function(.) {
+                lapply(function(.) {
                     which(SummarizedExperiment::colData(spe) %>%
                         tibble::as_tibble() %>%
                         dplyr::pull(ExpVar) == .)
@@ -58,12 +59,13 @@
     columnSplit <- shiny::eventReactive(rv$lcpmSubScaleTopGenes(), {
         columnSplit <- lapply(names(rv$topTabDF()), function(name) {
             columnSplit <- stringr::str_split_1(name, "_vs_") %>%
-                sapply(function(.) {
+                lapply(function(.) {
                     which(
                         SummarizedExperiment::colData(spe) %>%
                             tibble::as_tibble() %>% dplyr::select(ExpVar) == .
                     )
                 }) %>%
+                unlist() %>%
                 summary() %>%
                 .[, "Length"]
         })

@@ -1,5 +1,5 @@
 ---
-title: "shinyDSP secondary vignette"
+title: "shinyDSP internal data processing pipeline explained"
 author: 
 - name: Seung J. Kim
   affiliation: 

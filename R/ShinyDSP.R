@@ -66,7 +66,7 @@ shinyDSP <- function() {
         )
     )
 
-    server <- function(input, output, session) { 
+    server <- function(input, output, session) {
         # nocov start
         options(shiny.maxRequestSize = 50 * 1024^2)
 

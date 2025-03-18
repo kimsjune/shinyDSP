@@ -1,4 +1,5 @@
 .volcano <- function(input, output, session, rv) {
+    logFC <-adj.P.Val <- logFC_threshold <- pval_threshold <- Target.name <-NULL
     # nocov start
     volcano <- shiny::eventReactive(input$generateVolcano, {
         shiny::req(rv$efit(), rv$contrast())

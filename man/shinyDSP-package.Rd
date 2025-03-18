@@ -5,7 +5,7 @@
 \alias{shinyDSP-package}
 \title{shinyDSP: A Shiny App For Visualizing Nanostring GeoMx DSP Data}
 \description{
-What the package does (one paragraph).
+This package is a Shiny app for interactively analyzing and visualizing Nanostring GeoMX Whole Transcriptome Atlas data. Users have the option of exploring a sample data to explore this app's functionality. Regions of interest (ROIs) can be filtered based on any user-provided metadata. Upon taking two or more groups of interest, all pairwise and ANOVA-like testing are automatically performed. Available ouputs include PCA, Volcano plots, tables and heatmaps. Aesthetics of each output are highly customizable.
 }
 \seealso{
 Useful links:
@@ -21,7 +21,6 @@ Useful links:
 
 Other contributors:
 \itemize{
-  \item Angwara Nilanont \email{angwara.nilanont@lhsc.on.ca} (\href{https://orcid.org/0000-0003-4468-9172}{ORCID}) [contributor]
   \item Marco Mura \email{marco.mura@lhsc.on.ca} [funder]
 }
 

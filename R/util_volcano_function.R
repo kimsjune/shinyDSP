@@ -17,6 +17,7 @@
 .volcanoFunction <- function(volcano, delabSize, maxOverlap, title,
                              logFCcutoff, PvalCutoff,
                              DnCol, notDEcol, UpCol) {
+    logFC <- adj.P.Val <- deLab <- NULL
     ggplot2::ggplot(
         data = volcano,
         ggplot2::aes(
