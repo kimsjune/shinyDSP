@@ -381,3 +381,12 @@ These tables are then shown to the user in the "Tables" `nav panel`.
 ## Volcano plot and heatmap
 
 No further *serious* data processing is performed at this point. The numbers in `topTabDF` is now parsed to create volcano plots and heatmaps in their respective `nav panel`s. 
+
+```{r trick, eval=FALSE, echo=FALSE, message=FALSE}
+# I'm tricking R CMD build to silence a note about
+# `svglite` not loading any functions.
+# This is true. I just need svglite loaded to that
+# ggsave() can use "svg"
+library(svglite)
+svglite::svglite()
+```
