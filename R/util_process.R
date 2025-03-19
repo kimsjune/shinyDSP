@@ -1,4 +1,5 @@
 .data <- function(input, output, session, rv) {
+  . <- NULL
   # nocov start
     data <- shiny::eventReactive(input$load, {
         shiny::validate(

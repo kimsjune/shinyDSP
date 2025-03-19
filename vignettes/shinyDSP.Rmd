@@ -4,11 +4,7 @@ author:
 - name: Seung J. Kim
   affiliation: 
   - Interstitial Lung Disease Lab, London Health Sciences Center
-  email: seung.kim@lhsc.on.ca
-- name: Angwara Nilanont
-  affiliation:
-  - Western University
-  email: angwara.nilanont@lhsc.on.ca
+  email: skim823@uwo.ca
 - name: Marco Mura
   affiliation:
   - Interstitial Lung Disease Lab, London Health Sciences Center

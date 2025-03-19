@@ -47,6 +47,7 @@
 } 
 
 .columnSplit <- function(input, output, session, rv) { 
+    . <- NULL
     # nocov start
     spe <- switch(input$selectedNorm,
         "CPM" = rv$speCpm(),
