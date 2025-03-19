@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Seung J. Kim \email{seung.kim@lhsc.on.ca} (\href{https://orcid.org/0000-0001-5263-0758}{ORCID})
+\strong{Maintainer}: Seung J. Kim \email{skim823@uwo.ca} (\href{https://orcid.org/0000-0001-5263-0758}{ORCID})
 
 Other contributors:
 \itemize{
