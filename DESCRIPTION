@@ -1,6 +1,6 @@
 Package: shinyDSP
 Title: A Shiny App For Visualizing Nanostring GeoMx DSP Data
-Version: 0.99.7
+Version: 0.99.8
 Description: 
     This package is a Shiny app for interactively analyzing and visualizing 
     Nanostring GeoMX Whole Transcriptome Atlas data. Users have the option of 
@@ -56,7 +56,8 @@ Imports:
     svglite,
     tibble,
     tidyr,
-    utils
+    utils,
+    withr
 biocViews: DifferentialExpression, GeneExpression, ShinyApps, Spatial, Transcriptomics
 URL: https://kimsjune.github.com/shinyDSP, http://joonkim.ca/shinyDSP/
 BugReports: https://kimsjune.github.com/ShinyDSP/issues
@@ -66,8 +67,7 @@ Suggests:
     rmarkdown,
     shinytest2,
     spelling,
-    testthat (>= 3.0.0),
-    withr
+    testthat (>= 3.0.0)
 Language: en-US
 Depends: 
     R (>= 4.5)
