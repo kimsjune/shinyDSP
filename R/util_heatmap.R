@@ -60,13 +60,13 @@
     columnSplit <- shiny::eventReactive(rv$lcpmSubScaleTopGenes(), {
         columnSplit <- lapply(names(rv$topTabDF()), function(name) {
             columnSplit <- stringr::str_split_1(name, "_vs_") %>%
-                lapply(function(.) {
+                lapply(function(.){
                     which(
                         SummarizedExperiment::colData(spe) %>%
                             tibble::as_tibble() %>% dplyr::select(ExpVar) == .
                     )
-                }) %>%
-                unlist() %>%
+                } ) %>%
+                as.vector() %>%
                 summary() %>%
                 .[, "Length"]
         })
