@@ -15,7 +15,7 @@ date: "`r doc_date()`"
 output:
   BiocStyle::html_document:
     toc: true
-    number_sections: true
+    number_sections: false
     toc_float: 
       smooth_scroll: true
     toc_depth: 2
@@ -43,30 +43,13 @@ knitr::opts_chunk$set(
 
 shinyDSP: Analyzing and Visualizing Nanostring GeoMx DSP Data
 
-shinyDSP is an intuitive Shiny application designed for the comprehensive
-analysis and visualization of [Nanostring GeoMx
-DSP](https://nanostring.com/products/geomx-digital-spatial-profiler/geomx-dsp-overview/)
-data. Users can upload either demo or custom datasets, consisting of count and
-sample annotation tables. The app prompts users to select variables of interest,
-potential batch effects, and confounding factors, allowing for customized
-exploration.
+shinyDSP is an intuitive Shiny application designed for the comprehensive analysis and visualization of [Nanostring GeoMxDSP](https://nanostring.com/products/geomx-digital-spatial-profiler/geomx-dsp-overview/) data. Users can upload either demo or custom datasets, consisting of count and sample annotation tables. The app prompts users to select variables of interest, potential batch effects, and confounding factors, allowing for customized exploration.
 
-With shinyDSP, users can create x-y scatter plots of any combination of
-categorical variables and apply user-defined cutoffs to filter samples. The app
-utilizes the R package, standR [@liu_standr_2023], to perform normalization
-using methods such as CPM, upper quartile (Q3), or RUV4 (Remove Unwanted
-Variation). Users can visualize PCA plots generated for each normalization
-method, color-coded by chosen variables or batch.
+With shinyDSP, users can create x-y scatter plots of any combination of categorical variables and apply user-defined cutoffs to filter samples. The app utilizes the R package, standR [@liu_standr_2023], to perform normalization using methods such as CPM, upper quartile (Q3), or RUV4 (Remove Unwanted Variation). Users can visualize PCA plots generated for each normalization method, color-coded by chosen variables or batch.
 
-After selecting a normalization scheme, users can identify differentially
-expressed genes between specified biological groups using limma-voom
-[@ritchie_limma_2015]. The app provides "raw" output numbers in tables,
-generates volcano plots for all pairwise comparisons, and displays heatmaps of
-the top differentially expressed genes.
+After selecting a normalization scheme, users can identify differentially expressed genes between specified biological groups using limma-voom [@ritchie_limma_2015]. The app provides "raw" output numbers in tables, generates volcano plots for all pairwise comparisons, and displays heatmaps of the top differentially expressed genes.
 
-shinyDSP aims to provide a robust, start-to-finish analysis of GeoMx data,
-producing publication-ready outputs that are easily customizable to meet
-individual aesthetic preferences.
+shinyDSP aims to provide a robust, start-to-finish analysis of GeoMx data, producing publication-ready outputs that are easily customizable to meet individual aesthetic preferences.
 
 ## Installation
 
@@ -109,12 +92,11 @@ options will appear.
 
 ## Loading data
 
-shinyDSP requires count and annotation tables (in .csv or .txt format) as input.
-These tables are generated with DSP Data Analysis (DSPDA) software. To see how
-these files should be formatted, click on "Use [demo
-data](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/)",
-then "Load data". The top 10 rows of each table will be shown in the main
-display.
+shinyDSP requires count and annotation tables (in .csv or .txt format) as input. These tables are generated with DSP Data Analysis (DSPDA) software. To see how these files should be formatted, click on "Use [demo data](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/)", then "Load data". 
+
+For first-time users, you will be prompted to create a new directory called "ExperimentHub" in your R cache folder. Type yes (without quotation marks) in the R console and press Enter to proceed. The data will then be downloaded into the newly created folder.
+
+The top 10 rows of each table will be shown in the main display. 
 
 The main `side bar` will also be updated with various options.
 
@@ -244,3 +226,5 @@ For details on underlying functions, please check out the [secondary vignette](s
 ```{r sessionInfo} 
 sessionInfo()
 ```
+
+

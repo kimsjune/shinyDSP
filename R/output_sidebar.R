@@ -167,6 +167,17 @@
             label = "log2 fold change cutoff",
             value = 1
         )
+
+    })
+    
+    output$selectYourPValCutoff <- shiny::renderUI({
+      shiny::req(rv$data())
+      
+      shiny::numericInput(
+        inputId = "pvalcutoff",
+        label = "Adjusted P value cutoff",
+        value = 0.05
+      )
     })
     
 } # nocov end

@@ -2,7 +2,7 @@
 
 <!-- badges: start -->
 
-[![check-bioc](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml)
+[![check-bioc]](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml/badge.svg)](https://github.com/kimsjune/shinyDSP/actions/workflows/check-bioc.yml)
 
 <!-- badges: end -->
 

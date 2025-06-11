@@ -10,7 +10,7 @@
         )
         DT::renderDT(
             rv$data()$countFile %>%
-                dplyr::slice_head(n = 20) %>%
+                dplyr::slice_head(n = 100) %>%
                 DT::datatable()
         )
     })
@@ -24,7 +24,7 @@
 
         DT::renderDT(
             rv$data()$sampleAnnoFile %>%
-                dplyr::slice_head(n = 20) %>%
+                dplyr::slice_head(n = 100) %>%
                 DT::datatable()
         )
     })
