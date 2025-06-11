@@ -14,11 +14,7 @@ Description:
 Authors@R: 
     c(person("Seung J.", "Kim" , ,"skim823@uwo.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5263-0758")),
-<<<<<<< HEAD
     person("Marco", "Mura",  ,"marco.mura@respirology.site.co", role = c("aut","fnd"))
-=======
-    person("Marco", "Mura",  ,"marco.mura@respirology.site.co", role = c("fnd"))
->>>>>>> 92c31fb (Peer review fix: completed #2. Updated the secondary vignette, added knitr code hook to calculate execution times.)
     )           
 License: MIT + file LICENSE
 Encoding: UTF-8
