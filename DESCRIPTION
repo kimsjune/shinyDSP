@@ -12,7 +12,7 @@ Description:
 Authors@R: 
     c(person("Seung J.", "Kim" , ,"skim823@uwo.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5263-0758")),
-    person("Marco", "Mura",  ,"marco.mura@lhsc.on.ca", role = c("fnd"))
+    person("Marco", "Mura",  ,"marco.mura@respirology.site.co", role = c("fnd"))
     )           
 License: MIT + file LICENSE
 Encoding: UTF-8
