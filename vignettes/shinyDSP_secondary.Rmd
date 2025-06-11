@@ -41,6 +41,24 @@ knitr::opts_chunk$set(
     fig.align = 'center', out.width="65%"
     
 )
+
+knitr::knit_hooks$set(time_it = local({
+  now <- NULL
+  function(before, options) {
+    if (before) {
+      # record the current time before each chunk
+      now <<- Sys.time()
+    } else {
+      # calculate the time difference after a chunk
+      res <- difftime(Sys.time(), now, units = "secs")
+      # return a character string to show the time
+      msg <- paste("Time for this code chunk to run:", round(res,
+        2), "seconds")
+      message(msg)  # <-- print to console
+      return(msg)   # <-- also return to appear in knitted output
+    }
+  }
+}))
 ```
 ## Introduction
 
@@ -51,7 +69,7 @@ The purpose of this vignette is to look under the hood and explain what a few un
 The human kidney data from [Nanostring](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/) is loaded from `ExperimentHub()`. Two files are required: a count matrix and matching annotation file. Let's read those files.
 
 
-```{r load}
+```{r load, time_it = TRUE}
 library(standR)
 library(SummarizedExperiment)
 library(ExperimentHub)
@@ -80,7 +98,7 @@ sampleAnnoFile$region %>% unique()
 
 "disease_status" and "region" look like interesting variables. For example, we might be interested in comparing "normal_glomerulus" to "DKD_glomerulus". The app can create a new `sampleAnnoFile` where two or more variables of interest can be combined into one grouped variable (under "Variable(s) of interest" in the main `side bar`).
 
-```{r new_sampleAnnoFile}
+```{r new_sampleAnnoFile, time_it = TRUE}
 new_sampleAnnoFile <- sampleAnnoFile %>%
     tidyr::unite(
         "disease_region", # newly created grouped variable
@@ -92,7 +110,7 @@ new_sampleAnnoFile$disease_region %>% unique()
 ```
 
 Finally a spatial experiment object can be created.
-```{r readGeoMx}
+```{r readGeoMx, time_it = TRUE}
 spe <- standR::readGeoMx(as.data.frame(countFile),
                          as.data.frame(new_sampleAnnoFile))
 ```
@@ -101,7 +119,7 @@ spe <- standR::readGeoMx(as.data.frame(countFile),
 
 We merged "disease_status" and "region" to create a new group called, "disease_region". The app allows users to pick any subset of groups of interest. In this example, the four possible groups are "DKD_glomerulus", "DKD_tubule","normal_tubule", and "normal_glomerulus". The following script can subset `spe` to keep certain groups.
 
-```{r selectedTypes}
+```{r selectedTypes, time_it = TRUE}
 selectedTypes <- c("DKD_glomerulus", "DKD_tubule", "normal_tubule", "normal_glomerulus")
 toKeep <- colData(spe) %>%
     tibble::as_tibble() %>%
@@ -114,7 +132,7 @@ spe <- spe[, grepl(paste(selectedTypes, collapse = "|"), toKeep)]
 
 Regions of interest(ROIs) can be filtered out based on any quantitative variable in `colData(spe)` (same as `colnames(new_sampleAnnoFile)`). These options can be found under the "QC" `nav panel`'s `side bar`.  Let's say I want to keep ROIs whose "SequencingSaturation" is at least 85.
 
-```{r filter}
+```{r filter, time_it = TRUE}
 filter <- lapply("SequencingSaturation", function(column) {
     cutoff_value <- 85
     if(!is.na(cutoff_value)) {
@@ -134,16 +152,34 @@ We can see that 14 ROIs have been filtered out.
 
 ## PCA
 
-Two PCA plots (colour-coded by biological groups or batch) for three normalization schemes are automatically created in the "PCA" `nav panel`. Let's take Q3 normalization as an example. 
+Two PCA plots (colour-coded by biological groups or batch) for three normalization schemes are automatically created in the "PCA" `nav panel`. Let's take Q3 and RUV4 normalization as an example. 
 
-```{r speQ3}
+```{r speQ3, time_it=TRUE}
 speQ3 <- standR::geomxNorm(filtered_spe, method = "upperquartile")
 speQ3 <- scater::runPCA(filtered_spe)
 
 speQ3_compute <- SingleCellExperiment::reducedDim(speQ3, "PCA")
 ```
 
-Then, `.PCAFunction()` is called to generate the plot.
+```{r speRUV, time_it=TRUE}
+speRuv_NCGs <- standR::findNCGs(filtered_spe,
+        batch_name = "SlideName",
+        top_n = 200)
+
+
+speRuvBatchCorrection <- standR::geomxBatchCorrection(speRuv_NCGs,
+            factors = "disease_region",
+            NCGs = S4Vectors::metadata(speRuv_NCGs)$NCGs, k = 2
+        )
+
+speRuv <- scater::runPCA(speRuvBatchCorrection)
+
+speRuv_compute <- SingleCellExperiment::reducedDim(speRuv, "PCA")
+
+
+```
+
+Then, `.PCAFunction()` is called to generate the plot. We can see that biological replicates group better with RUV4 (top) compared to Q3 (bottom).
 ```{r .PCAFunction, echo=FALSE}
 .PCAFunction <- function(spe, precomputed, colourShapeBy, selectedVar,
                          ROIshapes, ROIcolours) {
@@ -228,16 +264,18 @@ Then, `.PCAFunction()` is called to generate the plot.
 }
 ```
 
-```{r PCAFunction}
-.PCAFunction(speQ3, speQ3_compute, "disease_region", selectedTypes, c(21,22,23,24), c("blue","blue","black","black"))
+```{r PCAFunction, time_it = TRUE}
+.PCAFunction(speRuv, speRuv_compute, "disease_region", selectedTypes, c(21,22,23,24), c("blue","dodgerblue1","black","grey75"))
+
+.PCAFunction(speQ3, speQ3_compute, "disease_region", selectedTypes, c(21,22,23,24), c("blue","dodgerblue1","black","grey75"))
 ```
 
 ## Design matrix
 
-Let's proceed with Q3 normalization. A design matrix is created next. 
+Let's proceed with RUV4 normalization. A design matrix is created next. 
 
-```{r design}
-design <- model.matrix(~0+disease_region, data = colData(speQ3))
+```{r design, time_it = TRUE}
+design <- model.matrix(~0+disease_region+ruv_W1+ruv_W2, data = colData(speRuv))
 
 # Clean up column name
 colnames(design) <- gsub("disease_region", "", colnames(design))
@@ -249,9 +287,9 @@ If confounding variables are chosen in the main `side bar`, those would be added
 
 `edgeR` is used to convert `SpatialExperiment` into `DGEList`, filter and estimate dispersion.
 
-```{r convert}
+```{r convert, time_it = TRUE}
 library(edgeR)
-dge <- SE2DGEList(speQ3)
+dge <- SE2DGEList(speRuv)
 keep <- filterByExpr(dge, design)
 
 dge <- dge[keep, , keep.lib.sizes = FALSE]
@@ -264,7 +302,7 @@ dge <- estimateDisp(dge, design = design, robust = TRUE)
 Recall our "selectedTypes" from above: "DKD_glomerulus", "DKD_tubule", "normal_tubule", "normal_glomerulus".
 
 The following code creates all pairwise comparisons between them.
-```{r contast}
+```{r contrast, time_it = TRUE}
 # In case there are spaces
 selectedTypes_underscore <- gsub(" ", "_", selectedTypes)
 
@@ -302,9 +340,9 @@ con
 
 The app uses `duplicateCorrelation()` "[s]ince we need to make comparisons both within and between subjects, it is necessary to treat Patient as a random effect" [limma user's guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf) [@ritchie_limma_2015]. `limma-voom` method is used as `standR` package recommends [@liu_standr_2023]. 
 
-```{r limma}
+```{r limma, time_it = TRUE}
 library(limma)
-block_by <- colData(speQ3)[["SlideName"]]
+block_by <- colData(speRuv)[["SlideName"]]
 
 v <- voom(dge, design)
 corfit <- duplicateCorrelation(v, design,
@@ -335,7 +373,7 @@ efit <- eBayes(fit_contrast, robust = TRUE)
 ## Tables of top differentially expressed genes
 For each contrast (a column in `con`), the app creates a table of top differentially expressed genes sorted by their adjusted P value.
 
-```{r tables}
+```{r tables, time_it = TRUE}
 # Keep track of how many comparisons there are
 numeric_vector <- seq_len(ncol(con))
 new_list <- as.list(numeric_vector)
@@ -382,3 +420,238 @@ These tables are then shown to the user in the "Tables" `nav panel`.
 
 No further *serious* data processing is performed at this point. The numbers in `topTabDF` is now parsed to create volcano plots and heatmaps in their respective `nav panel`s. 
 
+
+```{r .volcanoFunction, echo = FALSE}
+.volcanoFunction <- function(volcano, delabSize, maxOverlap, title,
+                             logFCcutoff, PvalCutoff,
+                             DnCol, notDEcol, UpCol) {
+    logFC <- adj.P.Val <- deLab <- NULL
+    ggplot2::ggplot(
+        data = volcano,
+        ggplot2::aes(
+            x = logFC,
+            y = -log10(adj.P.Val),
+            col = de,
+            label = deLab
+        )
+    ) +
+        ggplot2::geom_point() +
+        ggplot2::theme_bw() +
+        ggplot2::theme(
+            axis.ticks = ggplot2::element_line(colour = "black"),
+            panel.border = ggplot2::element_rect(colour = "black"),
+            text = ggplot2::element_text(size = 16, color = "black"),
+            title = ggplot2::element_text(size = 16, hjust = 0.5),
+            axis.text = ggplot2::element_text(size = 16, color = "black"),
+            axis.title = ggplot2::element_text(size = 16),
+            plot.margin = grid::unit(c(1, 1, 1, 1), "mm"),
+            plot.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            panel.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            panel.grid = ggplot2::element_blank(),
+            legend.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.box.background = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.key = ggplot2::element_rect(
+                fill = "transparent",
+                colour = NA
+            ),
+            legend.position = "none"
+        ) +
+        ggplot2::geom_vline(
+            xintercept = c(-(logFCcutoff), logFCcutoff), col = "black",
+            linetype = 3
+        ) +
+        ggplot2::geom_hline(
+            yintercept = -log10(PvalCutoff), col = "black",
+            linetype = 3
+        ) +
+        ggrepel::geom_text_repel(
+            size = delabSize,
+            segment.colour = "black",
+            segment.linetype = 3,
+            data = volcano %>%
+                dplyr::filter(logFC >= logFCcutoff | logFC <= -(logFCcutoff)),
+            ggplot2::aes(label = deLab),
+            min.segment.length = 0,
+            max.overlaps = maxOverlap
+        ) +
+        ggplot2::scale_color_manual(
+            values = c(DnCol, notDEcol, UpCol),
+            breaks = c("DN", "NA", "UP")
+        ) +
+        ggplot2::xlab(expression(log[2] ~ fold ~ change)) +
+        ggplot2::ylab(expression(-log[10] ~ italic(P) ~ value)) +
+        ggplot2::theme(aspect.ratio = 1, rect = ggplot2::element_rect(
+            fill = "transparent"
+        )) +
+        ggplot2::labs(title = title)
+}
+```
+
+```{r VolcanoFunction, time_it = TRUE}
+volcanoDF <- lapply(seq_len(ncol(con)), function(i) {
+                limma::topTable(efit, coef = i, number = Inf) %>%
+                    tibble::rownames_to_column(var = "Target.name") %>%
+                    dplyr::select("Target.name", "logFC", "adj.P.Val") %>%
+                    dplyr::mutate(de = ifelse(logFC >= 1 &
+                        adj.P.Val < 0.05, "UP",
+                    ifelse(logFC <= -(1) &
+                        adj.P.Val < 0.05, "DN",
+                    "NO"
+                    )
+                    )) %>%
+                    dplyr::mutate(
+                        logFC_threshold = stats::quantile(abs(logFC), 0.99,
+                            na.rm = TRUE
+                        ),
+                        pval_threshold = stats::quantile(adj.P.Val, 0.01,
+                            na.rm = TRUE
+                        ),
+                        deLab = ifelse(abs(logFC) > logFC_threshold &
+                            adj.P.Val < pval_threshold &
+                            abs(logFC) >= 0.05 &
+                            adj.P.Val < 0.05, Target.name, NA)
+                    )
+            })
+
+plots <- lapply(seq_along(volcanoDF), function(i) {
+    .volcanoFunction(
+        volcanoDF[[i]], 12, 5,
+        colnames(con)[i],
+        1, 0.05,
+        "Blue", "Grey", "Red"
+    ) +
+        ggplot2::xlim(
+            -2,
+            2
+        ) +
+        ggplot2::ylim(
+            0, 20
+        )
+})
+
+plots[1]
+
+```
+
+In contrast to Volcano plots, only the top N genes are shown in a heatmap. Setup is a bit more involved.
+
+```{r heatmapSetup, time_it = TRUE}
+lcpmSubScaleTopGenes <- lapply(names(topTabDF), function(name) {
+            columns <- stringr::str_split_1(name, "_vs_") %>%
+                lapply(function(.) {
+                    which(SummarizedExperiment::colData(speRuv) %>%
+                        tibble::as_tibble() %>%
+                        dplyr::pull(disease_region) == .)
+                }) %>%
+                unlist()
+
+            table <- SummarizedExperiment::assay(speRuv, 2)[
+                topTabDF[[name]] %>%
+                    dplyr::slice_head(n = 50) %>%
+                    dplyr::select(Gene) %>%
+                    unlist() %>%
+                    unname(),
+                columns
+            ] %>%
+                data.frame() %>%
+                t() %>%
+                scale() %>%
+                t()
+
+            return(table)
+        })
+
+        names(lcpmSubScaleTopGenes) <- names(topTabDF)
+        
+columnSplit <- lapply(names(topTabDF), function(name) {
+    columnSplit <- stringr::str_split_1(name, "_vs_") %>%
+        lapply(function(.){
+            which(
+                SummarizedExperiment::colData(speRuv) %>%
+                    tibble::as_tibble() %>% dplyr::select(disease_region) == .
+            )
+        } ) %>%
+        as.vector() %>%
+        summary() %>%
+        .[, "Length"]
+})
+
+names(columnSplit) <- names(lcpmSubScaleTopGenes)
+
+```
+
+```{r heatmap, fig.height = 6, fig.width = 4, time_it = TRUE}
+colFunc <- circlize::colorRamp2(
+            c(
+                -3, 0,
+                3
+            ),
+            hcl_palette = "Inferno"
+        )
+
+heatmap <- lapply(names(lcpmSubScaleTopGenes), function(name) {
+    ComplexHeatmap::Heatmap(lcpmSubScaleTopGenes[[name]],
+        cluster_columns = FALSE, col = colFunc,
+        heatmap_legend_param = list(
+            border = "black",
+            title = "Z score",
+            title_gp = grid::gpar(
+                fontsize = 12,
+                fontface = "plain",
+                fontfamily = "sans"
+            ),
+            labels_gp = grid::gpar(
+                fontsize = 12,
+                fontface = "plain",
+                fontfamily = "sans"
+            ),
+            legend_height = grid::unit(
+                3 * as.numeric(30),
+                units = "mm"
+            )
+        ),
+        top_annotation = ComplexHeatmap::HeatmapAnnotation(
+            foo = ComplexHeatmap::anno_block(
+                gp = grid::gpar(lty = 0, fill = "transparent"),
+                labels = columnSplit[[name]] %>% names(),
+                labels_gp = grid::gpar(
+                    col = "black", fontsize = 14,
+                    fontfamily = "sans",
+                    fontface = "bold"
+                ),
+                labels_rot = 0, labels_just = "center",
+                labels_offset = grid::unit(4.5, "mm")
+            )
+        ),
+        border_gp = grid::gpar(col = "black", lwd = 0.2),
+        row_names_gp = grid::gpar(
+            fontfamily = "sans",
+            fontface = "italic",
+            fontsize = 10
+        ),
+        show_column_names = FALSE,
+        column_title = NULL,
+        column_split = rep(
+            LETTERS[seq_len(columnSplit[[name]] %>% length())],
+            columnSplit[[name]] %>% unname() %>% as.numeric()
+        )
+
+    )
+})
+
+names(heatmap) <- names(lcpmSubScaleTopGenes)
+
+heatmap[[1]]
+```
