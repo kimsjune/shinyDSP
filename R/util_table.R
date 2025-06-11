@@ -14,10 +14,14 @@
         topTabDF <- lapply(new_list, function(i) {
             limma::topTable(rv$efit(),
 <<<<<<< HEAD
+<<<<<<< HEAD
                 coef = i, number = Inf, p.value = input$sbPvalCutoff,
 =======
                 coef = i, number = Inf, p.value = input$pvaluecutoff,
 >>>>>>> c11708a (Partial peer review fixes)
+=======
+                coef = i, number = Inf, p.value = input$sbPvalCutoff,
+>>>>>>> 1a01b71 (Peer review fix: enabled paging, adj. P val cutoff, removed 'turbo' and added all 115 palettes under hcl.pals())
                 adjust.method = "BH", lfc = input$lfc
             ) %>%
                 tibble::rownames_to_column(var = "Gene")
