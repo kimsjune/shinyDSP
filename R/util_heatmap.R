@@ -49,15 +49,23 @@
 .columnSplit <- function(input, output, session, rv) { 
     . <- NULL
     # nocov start
-    spe <- switch(input$selectedNorm,
-        "CPM" = rv$speCpm(),
-        "Q3" = rv$speQ3(),
-        "RUV4" = rv$speRuv()
-    )
-
-    ExpVar <- paste0(input$selectedExpVar, collapse = "_")
+    # spe <- switch(input$selectedNorm,
+    #     "CPM" = rv$speCpm(),
+    #     "Q3" = rv$speQ3(),
+    #     "RUV4" = rv$speRuv()
+    # )
+    # 
+    # ExpVar <- paste0(input$selectedExpVar, collapse = "_")
 
     columnSplit <- shiny::eventReactive(rv$lcpmSubScaleTopGenes(), {
+        spe <- switch(input$selectedNorm,
+                      "CPM" = rv$speCpm(),
+                      "Q3" = rv$speQ3(),
+                      "RUV4" = rv$speRuv()
+        )
+        
+        ExpVar <- paste0(input$selectedExpVar, collapse = "_")
+        
         columnSplit <- lapply(names(rv$topTabDF()), function(name) {
             columnSplit <- stringr::str_split_1(name, "_vs_") %>%
                 lapply(function(.){

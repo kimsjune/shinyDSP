@@ -64,6 +64,7 @@
 #' @importFrom ggrepel geom_text_repel
 #' @importFrom grDevices colors
 #' @importFrom grDevices dev.off
+#' @importFrom grDevices hcl.pals
 #' @importFrom grDevices png
 #' @importFrom grid gpar
 #' @importFrom grid unit
