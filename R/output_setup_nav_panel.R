@@ -11,12 +11,16 @@
         DT::renderDT(
             rv$data()$countFile %>%
                 dplyr::slice_head(n = 100) %>%
+<<<<<<< HEAD
                 # To show all 100 rows across five pages
                 DT::datatable(
                     options = list(
                         paging = TRUE
                     )
                 )
+=======
+                DT::datatable()
+>>>>>>> c11708a (Partial peer review fixes)
         )
     })  
 
@@ -30,12 +34,16 @@
         DT::renderDT(
             rv$data()$sampleAnnoFile %>%
                 dplyr::slice_head(n = 100) %>%
+<<<<<<< HEAD
                 # To show all 100 rows across five pages
                 DT::datatable(
                     options = list(
                         paging = TRUE
                     )
                 )
+=======
+                DT::datatable()
+>>>>>>> c11708a (Partial peer review fixes)
         )
     })
     

@@ -45,7 +45,11 @@ shinyDSP: Analyzing and Visualizing Nanostring GeoMx DSP Data
 
 shinyDSP is an intuitive Shiny application designed for the comprehensive analysis and visualization of [Nanostring GeoMxDSP](https://nanostring.com/products/geomx-digital-spatial-profiler/geomx-dsp-overview/) data. Users can upload either demo or custom datasets, consisting of count and sample annotation tables. The app prompts users to select variables of interest, potential batch effects, and confounding factors, allowing for customized exploration.
 
+<<<<<<< HEAD
 With shinyDSP, users can create x-y scatter plots of any combination of categorical variables and apply user-defined cutoffs to filter samples. The app utilizes the R package, standR [@liu_standr_2024], to perform normalization using methods such as CPM, upper quartile (Q3), or RUV4 (Remove Unwanted Variation). Users can visualize PCA plots generated for each normalization method, color-coded by chosen variables or batch.
+=======
+With shinyDSP, users can create x-y scatter plots of any combination of categorical variables and apply user-defined cutoffs to filter samples. The app utilizes the R package, standR [@liu_standr_2023], to perform normalization using methods such as CPM, upper quartile (Q3), or RUV4 (Remove Unwanted Variation). Users can visualize PCA plots generated for each normalization method, color-coded by chosen variables or batch.
+>>>>>>> c11708a (Partial peer review fixes)
 
 After selecting a normalization scheme, users can identify differentially expressed genes between specified biological groups using limma-voom [@ritchie_limma_2015]. The app provides "raw" output numbers in tables, generates volcano plots for all pairwise comparisons, and displays heatmaps of the top differentially expressed genes.
 
@@ -92,7 +96,11 @@ options will appear.
 
 ## Loading data
 
+<<<<<<< HEAD
 shinyDSP expects a count and annotation table in either .csv or .txt format as input. These are output files from GeoMx DSP Control Center or “readNanoStringGeomxSet()” function in “GeomxTools” [@griswold]. To see how these files should be formatted, click on "Use [demo data](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/)", then "Load data". 
+=======
+shinyDSP requires count and annotation tables (in .csv or .txt format) as input. These tables are generated with DSP Data Analysis (DSPDA) software. To see how these files should be formatted, click on "Use [demo data](https://nanostring.com/products/geomx-digital-spatial-profiler/spatial-organ-atlas/human-kidney/)", then "Load data". 
+>>>>>>> c11708a (Partial peer review fixes)
 
 For first-time users, you will be prompted to create a new directory called "ExperimentHub" in your R cache folder. Type yes (without quotation marks) in the R console and press Enter to proceed. The data will then be downloaded into the newly created folder.
 
