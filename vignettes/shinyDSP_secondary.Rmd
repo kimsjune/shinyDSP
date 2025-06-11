@@ -15,7 +15,7 @@ date: "`r doc_date()`"
 output:
   BiocStyle::html_document:
     toc: true
-    number_sections: true
+    number_sections: false
     toc_float: 
       smooth_scroll: true
     toc_depth: 2
@@ -300,7 +300,7 @@ con
 
 ## Fitting a linear regression model with `limma`
 
-The app uses `duplicateCorrelation()` "[s]ince we need to make comparisons both within and between subjects, it is necessary to treat Patient as a random effect" [limma user's guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf) [@ritchie_limma_2015]. `limma-voom` method is used as `standR` package recommends [@liu_standr_2023]. 
+The app uses `duplicateCorrelation()` "[s]ince we need to make comparisons both within and between subjects, it is necessary to treat Patient as a random effect" [limma user's guide](https://www.bioconductor.org/packages/devel/bioc/vignettes/limma/inst/doc/usersguide.pdf) [@ritchie_limma_2015]. `limma-voom` method is used as `standR` package recommends [@liu_standr_2024]. 
 
 ```{r limma}
 library(limma)
