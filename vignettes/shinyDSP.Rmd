@@ -168,7 +168,7 @@ Select the smallest value of "k value for RUV4 norm." that removes any batch eff
 
 ![](main_sidebar_norm.png){style="display: block; margin: 1em auto;" width="50%"}
 
-Now you can choose the normalization scheme to use for differential gene expression testing and the log fold-change cutoff for [limma::topTable](https://www.rdocumentation.org/packages/limma/versions/3.28.14/topics/toptable). Selecting a normalization scheme will reveal three new `nav panels` in the `nav bar`: "Table", "Volcano", and "Heatmap".
+Now you can choose the normalization scheme to use for differential gene expression testing, the log2 fold-change, and Benjamini-Hochberg adjusted P value cutoff for [limma::topTable](https://www.rdocumentation.org/packages/limma/versions/3.28.14/topics/toptable). Selecting a normalization scheme will reveal three new `nav panels` in the `nav bar`: "Table", "Volcano", and "Heatmap".
 
 ![](updated_nav_bar.png){style="display: block; margin: 1em auto;" width="100%"}
 

@@ -171,12 +171,12 @@
     })
     
     output$selectYourPValCutoff <- shiny::renderUI({
-      shiny::req(rv$data())
+        shiny::req(rv$data())
       
-      shiny::numericInput(
-        inputId = "pvalcutoff",
-        label = "Adjusted P value cutoff",
-        value = 0.05
+        shiny::numericInput(
+            inputId = "sbPvalCutoff",
+            label = "Adjusted P value cutoff",
+            value = 0.05
       )
     })
     

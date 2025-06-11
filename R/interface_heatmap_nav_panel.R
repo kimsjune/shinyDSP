@@ -28,11 +28,9 @@
                             shiny::selectInput("heatmapCol",
                                 "Heatmap colour scheme",
                                 choices = c(
-                                    "viridis", "magma", "plasma",
-                                    "inferno", "cividis", "mako",
-                                    "rocker", "turbo"
+                                  grDevices::hcl.pals()
                                 ),
-                                selected = "inferno",
+                                selected = "Inferno",
                                 selectize = TRUE,
                                 multiple = FALSE
                             ),
