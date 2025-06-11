@@ -172,30 +172,12 @@
     })
     
     output$selectYourPValCutoff <- shiny::renderUI({
-<<<<<<< HEAD
-<<<<<<< HEAD
         shiny::req(rv$data())
       
         shiny::numericInput(
             inputId = "sbPvalCutoff",
             label = "Adjusted P value cutoff",
             value = 0.05
-=======
-      shiny::req(rv$data())
-      
-      shiny::numericInput(
-        inputId = "pvalcutoff",
-        label = "Adjusted P value cutoff",
-        value = 0.05
->>>>>>> c11708a (Partial peer review fixes)
-=======
-        shiny::req(rv$data())
-      
-        shiny::numericInput(
-            inputId = "sbPvalCutoff",
-            label = "Adjusted P value cutoff",
-            value = 0.05
->>>>>>> 1a01b71 (Peer review fix: enabled paging, adj. P val cutoff, removed 'turbo' and added all 115 palettes under hcl.pals())
       )
     })
     
