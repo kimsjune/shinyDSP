@@ -34,7 +34,8 @@
                     shinycssloaders::withSpinner(
                         type = 4, size = 0.5, proxy.height = 75
                     ),
-                shiny::uiOutput("selectYourLFC")
+                shiny::uiOutput("selectYourLFC"),
+                shiny::uiOutput("selectYourPValCutoff")
             )
         )
     )
