@@ -78,7 +78,8 @@
                     "A batch variable",
                     bsicons::bs_icon("info-circle")
                 ),
-                "For example, sample preparation date "
+                "A variable that groups correlated observations together such
+                as tissue slide or patient"
             ),
             choices = rv$data()$sampleAnnoFile %>% dplyr::select(
                 dplyr::where(is.character)

@@ -15,6 +15,7 @@
     ## Need BOTH input$selectedExpVar and rv$speRuv_NCGs()
     speRuvBatchCorrection <- shiny::eventReactive(c(
         input$selectedExpVar,
+        input$k,
         rv$speRuv_NCGs()
     ), {
         ExpVar <- paste0(input$selectedExpVar, collapse = "_")
