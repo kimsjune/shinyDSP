@@ -78,7 +78,8 @@
                     "A batch variable",
                     bsicons::bs_icon("info-circle")
                 ),
-                "For example, sample preparation date "
+                "A variable that groups correlated observations together such
+                as tissue slide or patient"
             ),
             choices = rv$data()$sampleAnnoFile %>% dplyr::select(
                 dplyr::where(is.character)
@@ -167,6 +168,17 @@
             label = "log2 fold change cutoff",
             value = 1
         )
+
+    })
+    
+    output$selectYourPValCutoff <- shiny::renderUI({
+        shiny::req(rv$data())
+      
+        shiny::numericInput(
+            inputId = "sbPvalCutoff",
+            label = "Adjusted P value cutoff",
+            value = 0.05
+      )
     })
     
 } # nocov end

@@ -13,7 +13,7 @@
 
         topTabDF <- lapply(new_list, function(i) {
             limma::topTable(rv$efit(),
-                coef = i, number = Inf, p.value = 0.05,
+                coef = i, number = Inf, p.value = input$sbPvalCutoff,
                 adjust.method = "BH", lfc = input$lfc
             ) %>%
                 tibble::rownames_to_column(var = "Gene")
