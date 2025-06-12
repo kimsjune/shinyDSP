@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">shinyDSP</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,7 +70,7 @@ Mura</h4>
             <address class="author_afil">
       Interstitial Lung Disease Lab, London Health Sciences
 CenterDivision of Respirology, Department of Medicine, Western
-University<br><a class="author_email" href="mailto:#"></a><a href="mailto:marco.mura@lhsc.on.ca" class="email">marco.mura@lhsc.on.ca</a>
+University<br><a class="author_email" href="mailto:#"></a><a href="mailto:marco.mura@respirology.site.co" class="email">marco.mura@respirology.site.co</a>
       </address>
                   
             <h4 data-toc-skip class="date">12 June 2025</h4>
@@ -123,7 +123,7 @@ count matrix and matching annotation file. Let’s read those files.</p>
 <span></span>
 <span><span class="va">countFile</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">countFilePath</span><span class="op">)</span>, na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">sampleAnnoFile</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html" class="external-link">read_delim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unname.html" class="external-link">unname</a></span><span class="op">(</span><span class="va">sampleAnnoFilePath</span><span class="op">)</span>, na <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">character</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Time for this code chunk to run: 2.51 seconds</p>
+<p>Time for this code chunk to run: 2.53 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="variables-selection">Variable(s) selection<a class="anchor" aria-label="anchor" href="#variables-selection"></a>
@@ -169,7 +169,7 @@ variable (under “Variable(s) of interest” in the main
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spe</span> <span class="op">&lt;-</span> <span class="fu">standR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/standR/man/readGeoMx.html" class="external-link">readGeoMx</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">countFile</span><span class="op">)</span>,</span>
 <span>                         <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">new_sampleAnnoFile</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Time for this code chunk to run: 0.3 seconds</p>
+<p>Time for this code chunk to run: 0.31 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="selecting-groups-to-analyze">Selecting groups to analyze<a class="anchor" aria-label="anchor" href="#selecting-groups-to-analyze"></a>
@@ -229,7 +229,7 @@ example.</p>
 <span><span class="va">speQ3</span> <span class="op">&lt;-</span> <span class="fu">scater</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocSingular/man/runPCA.html" class="external-link">runPCA</a></span><span class="op">(</span><span class="va">filtered_spe</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">speQ3_compute</span> <span class="op">&lt;-</span> <span class="fu">SingleCellExperiment</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/reducedDims.html" class="external-link">reducedDim</a></span><span class="op">(</span><span class="va">speQ3</span>, <span class="st">"PCA"</span><span class="op">)</span></span></code></pre></div>
-<p>Time for this code chunk to run: 0.64 seconds</p>
+<p>Time for this code chunk to run: 0.63 seconds</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">speRuv_NCGs</span> <span class="op">&lt;-</span> <span class="fu">standR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/standR/man/findNCGs.html" class="external-link">findNCGs</a></span><span class="op">(</span><span class="va">filtered_spe</span>,</span>
 <span>        batch_name <span class="op">=</span> <span class="st">"SlideName"</span>,</span>
@@ -254,7 +254,7 @@ to Q3 (bottom).</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/dot-PCAFunction.html">.PCAFunction</a></span><span class="op">(</span><span class="va">speQ3</span>, <span class="va">speQ3_compute</span>, <span class="st">"disease_region"</span>, <span class="va">selectedTypes</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">21</span>,<span class="fl">22</span>,<span class="fl">23</span>,<span class="fl">24</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blue"</span>,<span class="st">"dodgerblue1"</span>,<span class="st">"black"</span>,<span class="st">"grey75"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="shinyDSP_secondary_files/figure-html/PCAFunction-2.png" width="65%" style="display: block; margin: auto;">Time
-for this code chunk to run: 0.27 seconds</p>
+for this code chunk to run: 0.26 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="design-matrix">Design matrix<a class="anchor" aria-label="anchor" href="#design-matrix"></a>
@@ -284,7 +284,7 @@ into <code>DGEList</code>, filter and estimate dispersion.</p>
 <span><span class="va">dge</span> <span class="op">&lt;-</span> <span class="va">dge</span><span class="op">[</span><span class="va">keep</span>, , keep.lib.sizes <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
 <span></span>
 <span><span class="va">dge</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/estimateDisp.html" class="external-link">estimateDisp</a></span><span class="op">(</span><span class="va">dge</span>, design <span class="op">=</span> <span class="va">design</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Time for this code chunk to run: 11.72 seconds</p>
+<p>Time for this code chunk to run: 11.84 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="comparison-between-all-biological-groups">Comparison between all biological groups<a class="anchor" aria-label="anchor" href="#comparison-between-all-biological-groups"></a>
@@ -404,7 +404,7 @@ al. 2024</a>)</span>.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">efit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/limma/man/ebayes.html" class="external-link">eBayes</a></span><span class="op">(</span><span class="va">fit_contrast</span>, robust <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Time for this code chunk to run: 47.98 seconds</p>
+<p>Time for this code chunk to run: 48.03 seconds</p>
 </div>
 <div class="section level2">
 <h2 id="tables-of-top-differentially-expressed-genes">Tables of top differentially expressed genes<a class="anchor" aria-label="anchor" href="#tables-of-top-differentially-expressed-genes"></a>
@@ -631,7 +631,7 @@ heatmap. Setup is a bit more involved.</p>
 <span></span>
 <span><span class="va">heatmap</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <p><img src="shinyDSP_secondary_files/figure-html/heatmap-1.png" width="65%" style="display: block; margin: auto;">Time
-for this code chunk to run: 0.66 seconds</p>
+for this code chunk to run: 0.65 seconds</p>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-liu_standr_2024" class="csl-entry">
 Liu, Ning, Dharmesh D Bhuva, Ahmed Mohamed, Micah Bokelund, Arutha
