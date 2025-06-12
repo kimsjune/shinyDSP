@@ -7,9 +7,9 @@ author:
   email: skim823@uwo.ca
 - name: Marco Mura
   affiliation:
-  - Interstitial Lung Disease Lab, London Health Sciences Center
+  - Interstitial Lung Disease Lab, London Health Sciences Center    
   - Division of Respirology, Department of Medicine, Western University
-  email: marco.mura@lhsc.on.ca
+  email: marco.mura@respirology.site.co
 package: "`r pkg_ver('shinyDSP')`"
 date: "`r doc_date()`"
 output:
