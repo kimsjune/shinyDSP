@@ -12,9 +12,13 @@ selection.
 expression analysis, plotting Volcano and heatmaps, and code chunk execution 
 times.
 
+
 # shinyDSP 0.99.0
 
 ## NEW FEATURES
 
 * Added a `NEWS.md` file to track changes to the package.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 008b0a1 (Updated NEWS.md, tidying up GHA)
