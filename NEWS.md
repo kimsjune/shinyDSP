@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 # shinyDSP 1.0.2
 
+=======
+# shinyDSP 1.1.2
+>>>>>>> 49beacd (Replaced LHSC email addresses, set MM as an author)
 
 ## Bug fixes for peer review
 
@@ -13,7 +17,10 @@ selection.
 expression analysis, plotting Volcano and heatmaps, and code chunk execution 
 times.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> 49beacd (Replaced LHSC email addresses, set MM as an author)
 =======
 >>>>>>> 49beacd (Replaced LHSC email addresses, set MM as an author)
 
