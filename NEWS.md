@@ -24,8 +24,6 @@ expression analysis, plotting Volcano and heatmaps, and code chunk execution
 times.
 
 
-
-
 # shinyDSP 0.99.0
 
 ## NEW FEATURES
