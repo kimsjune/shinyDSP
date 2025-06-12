@@ -1,9 +1,10 @@
-pandoc: 3.1.11
-pkgdown: 2.1.1
+pandoc: '3.2'
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
-  vignette: vignette.html
-last_built: 2024-10-29T04:15Z
+  shinyDSP_secondary: shinyDSP_secondary.html
+  shinyDSP: shinyDSP.html
+last_built: 2025-06-12T05:26Z
 urls:
   reference: http://joonkim.ca/shinyDSP/reference
   article: http://joonkim.ca/shinyDSP/articles
