@@ -1,7 +1,8 @@
 Package: shinyDSP
 Title: A Shiny App For Visualizing Nanostring GeoMx DSP Data
 
-Version: 1.0.1
+Version: 1.0.0
+
 Description: 
     This package is a Shiny app for interactively analyzing and visualizing 
     Nanostring GeoMX Whole Transcriptome Atlas data. Users have the option of 
